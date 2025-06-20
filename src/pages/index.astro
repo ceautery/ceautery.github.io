@@ -1,16 +1,20 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
 
+const allPosts = await getCollection("blog");
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <h1>Things I think about</h1>
+  <ul>
+    {
+      allPosts.map((p) => (
+        <li>
+          <code>{p.data.og.publish_date}</code> -
+          <a href={`/blog/${p.id}/`}> {p.data.og.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
