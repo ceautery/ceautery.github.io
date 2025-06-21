@@ -20,7 +20,11 @@ const tags = data?.og || {};
     <link rel="me" href="https://mastodon.social/@CurtisAutery" />
     <meta name="viewport" content="width=500" />
     <meta charset="UTF-8" />
-    {Object.keys(tags).map((k) => <meta property={k} content={tags[k]} />)}
+    {
+      Object.keys(tags).map((k) => (
+        <meta property={`og:${k}`} content={tags[k]} />
+      ))
+    }
   </head>
   <body>
     <header>
