@@ -2,7 +2,7 @@
 og:
   title: "Local LLMs"
   type: "article"
-  image: "https://autery.net/images/llm/preview.png"
+  image: "https://blog.autery.net/images/llm/preview.png"
   url: "https://autery.net/blog/llm"
   description: "Experimenting with Ollama and Open WebUI on a Macbook"
   author: "Curtis Autery"
