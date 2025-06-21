@@ -1,479 +1,61 @@
-<!doctype html>
-<html>
-  <head>
-    <link rel="me" href="https://mastodon.social/@CurtisAutery" />
-    <meta name="viewport" content="width=500" />
-    <meta charset="UTF-8" />
-    <meta property="title" content="Local LLMs" />
-    <meta property="type" content="article" />
-    <meta property="publish_date" content="2025-05-20" />
-    <meta
-      property="description"
-      content="Experimenting with Ollama and Open WebUI on a Macbook"
-    />
-    <meta property="author" content="Curtis Autery" />
-    <meta
-      property="image"
-      content="https://autery.net/images/llm/preview.png"
-    />
-    <meta property="url" content="https://autery.net/blog/llm" />
-    <style>
-      :root {
-        color-scheme: light dark;
-        --background-color: light-dark(#fff, #2f2f2f);
-        --text-color: light-dark(#000, #fff);
-        --nav-border-color: light-dark(
-          rgba(10, 10, 10, 0.1),
-          rgba(200, 200, 200, 0.1)
-        );
-        --nav-hover-color: light-dark(#f4f4f4, #555);
-        --code-background-color: light-dark(#f0f0f0, #444);
-        --code-color: light-dark(#000, #fff);
-        --blockquote-border-color: light-dark(#eee, #666);
-        --blockquote-color: light-dark(#444, #ccc);
-        --table-border-color: light-dark(#dbdbdb, #555);
-        --table-hover-color: light-dark(#f5f5f5, #444);
-        --link-color: light-dark(#198e53, #66d9ef);
-        --link-hover-color: light-dark(#363636, #fff);
-        --tooltip-background-color: light-dark(#fff, #444);
-        --tooltip-border-color: light-dark(#dbdbdb, #666);
-        --header-background-color: light-dark(
-          rgba(255, 255, 255, 1),
-          rgba(47, 47, 47, 1)
-        );
-      }
-      .katex {
-        font-size: 1.25em;
-      }
-      html {
-        scroll-padding-top: 96px;
-      }
-      body {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        margin: 0;
-        font-family: system-ui;
-        font-size: 1.25em;
-        line-height: 1.5;
-        background-color: var(--background-color);
-        color: var(--text-color);
-      }
-      header {
-        margin-left: 1em;
-        position: sticky;
-        top: 0;
-        width: 100%;
-        background-color: var(--header-background-color);
-        z-index: 1;
-      }
-      nav {
-        margin: 0.5em 0;
-        border-bottom: 3px solid var(--nav-border-color);
-        line-height: 2;
-        max-width: 600px;
-      }
-      nav a {
-        display: inline-block;
-        padding: 0 2em;
-        text-decoration: none;
-        color: inherit;
-      }
-      nav a:hover {
-        background-color: var(--nav-hover-color);
-      }
-      nav a.live {
-        border-bottom: 3px solid #198e53;
-      }
-      article {
-        flex-grow: 1;
-        padding: 1em 15%;
-        margin: 0 14pt;
-      }
-      article:focus {
-        outline: none;
-      }
-      article h1 {
-        text-align: center;
-      }
-      p.hero {
-        display: flex;
-        justify-content: center;
-      }
-      article blockquote {
-        border-left: 5px solid var(--blockquote-border-color);
-        padding-left: 1em;
-        margin-left: 0;
-        color: var(--blockquote-color);
-      }
-      a {
-        color: var(--link-color);
-        text-decoration: none;
-      }
-      a:hover {
-        color: var(--link-hover-color);
-      }
-      code,
-      p.codez {
-        font-family: Menlo, monospace;
-        font-size: 0.875em;
-      }
-      .codez {
-        background-color: var(--code-background-color);
-        padding: 0.75em;
-        color: var(--code-color);
-        overflow: scroll;
-      }
-      p.codez {
-        white-space: pre;
-      }
-      .codez strong {
-        color: #dda790;
-      }
-      .codez em {
-        color: #26d980;
-      }
-      tr:hover {
-        background-color: var(--table-hover-color);
-      }
-      td,
-      th {
-        border: 1px solid var(--table-border-color);
-        padding: 0.5em 0.75em;
-        vertical-align: top;
-      }
-      td {
-        border-width: 0 0 1px;
-      }
-      th {
-        width: 30%;
-        color: var(--link-hover-color);
-        text-align: left;
-        border-width: 0 0 2px;
-      }
-      th:first-of-type {
-        width: 20%;
-      }
-      th:last-of-type {
-        width: 50%;
-      }
-      .math {
-        font-family: Times;
-        font-size: 1.25em;
-      }
-      article pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        overflow: auto;
-        font-size: 90%;
-        background-color: var(--code-background-color);
-        padding: 0.5em;
-      }
-      article p > code {
-        background-color: var(--code-background-color);
-      }
-      article img {
-        max-width: 100%;
-        height: auto;
-      }
-      .tooltip {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: 2px solid var(--tooltip-border-color);
-        padding: 5pt;
-        background: var(--tooltip-background-color);
-      }
-      .hover img:hover + .tooltip,
-      .tooltip:hover {
-        display: inline;
-      }
-      @media screen and (max-width: 1200px) {
-        body {
-          font-size: 1.125em;
-        }
-        article {
-          padding: 1em 10%;
-        }
-      }
-      @media screen and (max-width: 1024px) {
-        body {
-          font-size: 1em;
-        }
-        article {
-          padding: 1em 5%;
-        }
-      }
-      @media screen and (max-width: 900px) {
-        body {
-          font-size: 1em;
-        }
-        article {
-          padding: 1em 0;
-          text-align: left;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      Curtis Autery, pretty ok software writer.
-      <nav><a href="/" class="live">blog</a> <a href="/about">about</a></nav>
-    </header>
-    <article>
-      <h1 id="local-llms">Local LLMs</h1>
-      <p>
-        Findings of an AI luddite spinning up on running LLMs on a Macbook for
-        the first time
-      </p>
-      <h2 id="why">Why?</h2>
-      <p>
-        When ChatGPT launched in late 2022, and shortly thereafter entered the
-        software writers’ zeitgeist, I thought it was pretty neat. It could
-        follow an output template, answer basic questions, and write some pretty
-        awful code. It became part of the conversation in tech news, with
-        C-suite influencer executives who had never heard of LLMs a month before
-        proudly declaring that it would soon displace most tech workers. Shortly
-        after, AI talk was all the rage in the blogosphere and tech podcasts,
-        and eventually it made its way onto the 6 O’clock news and into daily
-        LinkedIn conversations.
-      </p>
-      <p>
-        Yet every time I attempted to use it to write some code at work for me,
-        be it with Copilot autocomplete, or describing to ChatGPT what I wanted,
-        the generated code was more trouble than it was worth. So I stopped
-        using it, and went back to my pre-2022 software writing habits. I did
-        not know it then, but there were some things I could have done to
-        improve my experience, as all my prompts had been 0-shot, where I
-        provided no guardrails or examples. And there were some magic prompting
-        phrases that would have helped, like “let’s take this step by step.”
-        More on that later.
-      </p>
-      <p>
-        There are two “why”s that made me take a second look at LLMs a couple
-        years later (and boy had the average model improved over that time). The
-        first was the response to a new type of scam/fraud RVshare users were
-        being subjected to. I take seriously my duty not to blab company
-        confidential secrets to the open internet, so I’ll just say we were
-        bombarded with a sophisticated social engineering attack that was so new
-        that there were not extant tools to mitigate it. So some clever
-        engineers on my team wrote one.
-      </p>
-      <p>
-        The engineers on my team who had kept an ear to the ground on the AI
-        world created a tool to analyze messages and make decisions based on how
-        fraudulent they looked to an LLM. The impact this had can’t be
-        overstated.
-      </p>
-      <p>
-        The second was the fact that most of the new job postings on the monthly
-        Hacker News “Who’s Hiring?” thread for April and May were related to AI
-        in some way. An example is the first place I applied to in April,
-        Fathom. They have an AI tool that joins your Zoom and Google Meet calls
-        and creates a summary. You can then query an AI about the call’s
-        transcript or summary. Did anyone mention payment integrations? Yes, Joe
-        talked about integrating with Stripe at minute 23.
-      </p>
-      <p>So… I got to work.</p>
-      <h2 id="getting-started-glossary">Getting Started Glossary</h2>
-      <ul>
-        <li>
-          <p>
-            Model - The file or set of files that is the result of training an
-            AI. Internally they can be recurrent neural nets, transformers based
-            on attention mechanisms (see
-            <a href="https://arxiv.org/abs/1706.03762"
-              >Attention is All You Need</a
-            >
-            by Vaswani, et al), or in the case of the LLM world, language
-            models. Gemma, Llama, and Qwen are all models.
-          </p>
-        </li>
-        <li>
-          <p>
-            LLM - Large Language Model. Like a language model, but, you know…
-            large. Large like trained on all of Wikipedia large.
-          </p>
-        </li>
-        <li>
-          <p>
-            Engine - The tool that executes an LLM. There are a few similar
-            terms - local runner, inference engine, deployment platform, offline
-            AI. Ollama and LM Studio are engines.
-          </p>
-        </li>
-        <li>
-          <p>
-            GGUF - One of several file formats for models. GGUF’s load quickly,
-            which makes testing the performance of multiple models a little
-            easier.
-          </p>
-        </li>
-        <li>
-          <p>
-            Hugging Face - An AI ecosystem. It includes a hub of pre-trained
-            models, tools for fine-tuning models, training datasets, and a
-            Heroku-like infrastructure for rapid prototyping. And probably lots
-            of other stuff I haven’t bumped into yet.
-          </p>
-        </li>
-        <li>
-          <p>
-            Ollama - An engine for running models locally, and a model hub. You
-            can use Ollama’s own models, or download from Hugging Face directly,
-            add a Modelfile for it, and import it into Ollama.
-          </p>
-        </li>
-        <li>
-          <p>
-            MoE - Mixture of Experts. Here’s
-            <a
-              href="https://paperswithcode.com/paper/llama-3-meets-moe-efficient-upcycling"
-              >a paper</a
-            >
-            that discusses using MoE models to reduce compute requirements
-            (power consumption) that comes from scaling up LLMs. From what I
-            understand, the basic idea is rather than have one god-tier model
-            that knows all things, a model could instead be split into
-            specialized experts, and the “work” being requested could be broken
-            down into domains. Agile vs. Waterfall is probably a bad analogy,
-            but that’s what MoE reminds me of. Whatever a better analogy might
-            be, MoE is part of the reason why there are good models that can run
-            locally on a Macbook Air.
-          </p>
-        </li>
-        <li>
-          <p>
-            RAG - Retrieval Augmented Generation. Some models and frontends
-            support “tool calling”, where the model has the option to invoke a
-            tool to get more information before generating a response to the
-            user. The tool then fetches something from the internet (usually)
-            which the model doesn’t have access to. It allows a model to, say,
-            get the current weather in Chicago, but keep it from launching nukes
-            and searching for Sarah Connor.
-          </p>
-        </li>
-      </ul>
-      <p>
-        This is by no means a comprehensive list of terms used in the modern AI
-        world, rather it’s just a few odds and ends I needed to sort out before
-        I made much progress.
-      </p>
-      <h2 id="first-steps">First steps</h2>
-      <p>
-        After installing Ollama, talking to your first model is as simple as
-        opening a terminal and typing <code>ollama run &#x3C;model></code>.
-      </p>
-      <p>
-        <img
-          width="1916"
-          height="773"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/01-ollama-first-run.DI2F7sYx_2gnVjs.webp"
-        />
-      </p>
-      <p>
-        Since the model hadn’t been downloaded yet, the first step is to
-        download several files - The model itself (the 4.7 gig one), a license
-        agreement, an Ollama chat template (based on Go’s templating engine,
-        with weirdness like
-        <code
-          >{{ if .System
-          }}&#x3C;|start_header_id|>system&#x3C;|end_header_id|></code
-        >), a params file, and a manifest.
-      </p>
-      <p>
-        After that, you’ll get a <code>>>></code> prompt in the terminal, and
-        you’re talking to the model. It will answer questions, and keep a
-        running context. Outside of this direct interface, Ollama is stateless.
-        Tools making API calls to Ollama need to provide the context including
-        the entire conversation so far.
-      </p>
-      <p>
-        Here I’m asking it a basic science question, and the model is generating
-        a markdown response. While the response is generating, my GPU is maxed
-        out.
-      </p>
-      <p>
-        <img
-          width="1920"
-          height="1080"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/02-gpu.DbprjIK__kr4vg.webp"
-        />
-      </p>
-      <p>
-        This is a tool called
-        <a href="https://github.com/tlkh/asitop">asitop</a> that shows the
-        status of CPUs, GPUs, and the ANE, or “Apple Neural Engine”, which is
-        part of Apple silicon chips. The ANE is a neural processing unit, like
-        Google’s “Tensor Processing Unit” that works with its Tensorflow
-        product. The basic idea is that GPUs are great at parallel operations,
-        which LLMs need, but they were designed for graphics and fast math
-        operations, not specifically for AI applications.
-      </p>
-      <p>
-        It’s possible to convert models to use the ANE, and use Core ML to run
-        them on it, and maybe that’s worth investigating sometime down the road.
-      </p>
-      <h2 id="calling-ollamas-api">Calling Ollama’s API</h2>
-      <p>
-        Starting Ollama with <code>ollama serve</code> will put it in server
-        mode, listening by default on localhost:11434. You can interact with it
-        with tools like the <code>curl</code> command line program, or with a
-        REST client like Postman or Bruno. Here’s a sample call from Bruno that
-        just lists all the installed models.
-      </p>
-      <p>
-        <img
-          width="1916"
-          height="1057"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/03-bruno-models.CrkY-wMg_Zs28dN.webp"
-        />
-      </p>
-      <p>
-        The path I’m posting to, <code>/v1/models</code>, is following the
-        <a href="https://platform.openai.com/docs/api-reference/introduction"
-          >OpenAI API standard</a
-        >, which Ollama supports.
-      </p>
-      <p>
-        But let’s see what happens when I use Bruno to ask the model a question:
-      </p>
-      <p>
-        <img
-          width="1915"
-          height="1025"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/04-bruno-streaming.C2zYA_VG_Z27nqV4.webp"
-        />
-      </p>
-      <p>
-        The path I use here, <code>/api/generate</code>, is for single questions
-        without a chat history context, using
-        <a href="https://github.com/ollama/ollama/blob/main/docs/api.md"
-          >Ollama’s interal API standard</a
-        >. The obviously odd thing about the response is that it’s in multiple
-        lines of JSON, one token per line. This is using a streaming protocol
-        called
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"
-          >server-sent events</a
-        >, sort of like WebSockets, but only one way.
-      </p>
-      <p>
-        Tools that interact with Ollama this way need to be able to turn that
-        into something human readable, possibly outputting each token as it
-        comes across the stream. Here is me doing that with some command line
-        mojo, using curl and jq’s “join” switch to make short work of it:
-      </p>
-      <pre><code>llm # curl -X POST http://localhost:11434/api/generate -d '{
+<!DOCTYPE html><html> <head><link rel="me" href="https://mastodon.social/@CurtisAutery"><meta name="viewport" content="width=500"><meta charset="UTF-8"><meta property="title" content="Local LLMs"><meta property="type" content="article"><meta property="publish_date" content="2025-05-20"><meta property="description" content="Experimenting with Ollama and Open WebUI on a Macbook"><meta property="author" content="Curtis Autery"><meta property="image" content="https://autery.net/images/llm/preview.png"><meta property="url" content="https://autery.net/blog/llm"><style>:root{color-scheme:light dark;--background-color: light-dark(#fff, #2f2f2f);--text-color: light-dark(#000, #fff);--nav-border-color: light-dark( rgba(10, 10, 10, .1), rgba(200, 200, 200, .1) );--nav-hover-color: light-dark(#f4f4f4, #555);--code-background-color: light-dark(#f0f0f0, #444);--code-color: light-dark(#000, #fff);--blockquote-border-color: light-dark(#eee, #666);--blockquote-color: light-dark(#444, #ccc);--table-border-color: light-dark(#dbdbdb, #555);--table-hover-color: light-dark(#f5f5f5, #444);--link-color: light-dark(#198e53, #66d9ef);--link-hover-color: light-dark(#363636, #fff);--tooltip-background-color: light-dark(#fff, #444);--tooltip-border-color: light-dark(#dbdbdb, #666);--header-background-color: light-dark( rgba(255, 255, 255, 1), rgba(47, 47, 47, 1) )}.katex{font-size:1.25em}html{scroll-padding-top:96px}body{display:flex;flex-direction:column;height:100%;margin:0;font-family:system-ui;font-size:1.25em;line-height:1.5;background-color:var(--background-color);color:var(--text-color)}header{margin-left:1em;position:sticky;top:0;width:100%;background-color:var(--header-background-color);z-index:1}nav{margin:.5em 0;border-bottom:3px solid var(--nav-border-color);line-height:2;max-width:600px}nav a{display:inline-block;padding:0 2em;text-decoration:none;color:inherit}nav a:hover{background-color:var(--nav-hover-color)}nav a.live{border-bottom:3px solid #198e53}article{flex-grow:1;padding:1em 15%;margin:0 14pt}article:focus{outline:none}article h1{text-align:center}p.hero{display:flex;justify-content:center}article blockquote{border-left:5px solid var(--blockquote-border-color);padding-left:1em;margin-left:0;color:var(--blockquote-color)}a{color:var(--link-color);text-decoration:none}a:hover{color:var(--link-hover-color)}code,p.codez{font-family:Menlo,monospace;font-size:.875em}.codez{background-color:var(--code-background-color);padding:.75em;color:var(--code-color);overflow:scroll}p.codez{white-space:pre}.codez strong{color:#dda790}.codez em{color:#26d980}tr:hover{background-color:var(--table-hover-color)}td,th{border:1px solid var(--table-border-color);padding:.5em .75em;vertical-align:top}td{border-width:0 0 1px}th{width:30%;color:var(--link-hover-color);text-align:left;border-width:0 0 2px}th:first-of-type{width:20%}th:last-of-type{width:50%}.math{font-family:Times;font-size:1.25em}article pre{white-space:pre-wrap;word-wrap:break-word;overflow:auto;font-size:90%;background-color:var(--code-background-color);padding:.5em}article p>code{background-color:var(--code-background-color)}article img{max-width:100%;height:auto}.tooltip{display:none;position:absolute;top:0;left:0;border:2px solid var(--tooltip-border-color);padding:5pt;background:var(--tooltip-background-color)}.hover img:hover+.tooltip,.tooltip:hover{display:inline}@media screen and (max-width: 1200px){body{font-size:1.125em}article{padding:1em 10%}}@media screen and (max-width: 1024px){body{font-size:1em}article{padding:1em 5%}}@media screen and (max-width: 900px){body{font-size:1em}article{padding:1em 0;text-align:left}}
+</style></head> <body> <header>
+Curtis Autery, pretty ok software writer.
+<nav> <a href="/" class="live">blog</a> <a href="/about">about</a> </nav> </header> <article>  <h1 id="local-llms">Local LLMs</h1>
+<p>Findings of an AI luddite spinning up on running LLMs on a Macbook for the first time</p>
+<h2 id="why">Why?</h2>
+<p>When ChatGPT launched in late 2022, and shortly thereafter entered the software writers’ zeitgeist, I thought it was pretty neat. It could follow an output template, answer basic questions, and write some pretty awful code. It became part of the conversation in tech news, with C-suite influencer executives who had never heard of LLMs a month before proudly declaring that it would soon displace most tech workers. Shortly after, AI talk was all the rage in the blogosphere and tech podcasts, and eventually it made its way onto the 6 O’clock news and into daily LinkedIn conversations.</p>
+<p>Yet every time I attempted to use it to write some code at work for me, be it with Copilot autocomplete, or describing to ChatGPT what I wanted, the generated code was more trouble than it was worth. So I stopped using it, and went back to my pre-2022 software writing habits. I did not know it then, but there were some things I could have done to improve my experience, as all my prompts had been 0-shot, where I provided no guardrails or examples. And there were some magic prompting phrases that would have helped, like “let’s take this step by step.” More on that later.</p>
+<p>There are two “why”s that made me take a second look at LLMs a couple years later (and boy had the average model improved over that time). The first was the response to a new type of scam/fraud RVshare users were being subjected to. I take seriously my duty not to blab company confidential secrets to the open internet, so I’ll just say we were bombarded with a sophisticated social engineering attack that was so new that there were not extant tools to mitigate it. So some clever engineers on my team wrote one.</p>
+<p>The engineers on my team who had kept an ear to the ground on the AI world created a tool to analyze messages and make decisions based on how fraudulent they looked to an LLM. The impact this had can’t be overstated.</p>
+<p>The second was the fact that most of the new job postings on the monthly Hacker News “Who’s Hiring?” thread for April and May were related to AI in some way. An example is the first place I applied to in April, Fathom. They have an AI tool that joins your Zoom and Google Meet calls and creates a summary. You can then query an AI about the call’s transcript or summary. Did anyone mention payment integrations? Yes, Joe talked about integrating with Stripe at minute 23.</p>
+<p>So… I got to work.</p>
+<h2 id="getting-started-glossary">Getting Started Glossary</h2>
+<ul>
+<li>
+<p>Model - The file or set of files that is the result of training an AI. Internally they can be recurrent neural nets, transformers based on attention mechanisms (see <a href="https://arxiv.org/abs/1706.03762">Attention is All You Need</a> by Vaswani, et al), or in the case of the LLM world, language models. Gemma, Llama, and Qwen are all models.</p>
+</li>
+<li>
+<p>LLM - Large Language Model. Like a language model, but, you know… large. Large like trained on all of Wikipedia large.</p>
+</li>
+<li>
+<p>Engine - The tool that executes an LLM. There are a few similar terms - local runner, inference engine, deployment platform, offline AI. Ollama and LM Studio are engines.</p>
+</li>
+<li>
+<p>GGUF - One of several file formats for models. GGUF’s load quickly, which makes testing the performance of multiple models a little easier.</p>
+</li>
+<li>
+<p>Hugging Face - An AI ecosystem. It includes a hub of pre-trained models, tools for fine-tuning models, training datasets, and a Heroku-like infrastructure for rapid prototyping. And probably lots of other stuff I haven’t bumped into yet.</p>
+</li>
+<li>
+<p>Ollama - An engine for running models locally, and a model hub. You can use Ollama’s own models, or download from Hugging Face directly, add a Modelfile for it, and import it into Ollama.</p>
+</li>
+<li>
+<p>MoE - Mixture of Experts. Here’s <a href="https://paperswithcode.com/paper/llama-3-meets-moe-efficient-upcycling">a paper</a> that discusses using MoE models to reduce compute requirements (power consumption) that comes from scaling up LLMs. From what I understand, the basic idea is rather than have one god-tier model that knows all things, a model could instead be split into specialized experts, and the “work” being requested could be broken down into domains. Agile vs. Waterfall is probably a bad analogy, but that’s what MoE reminds me of. Whatever a better analogy might be, MoE is part of the reason why there are good models that can run locally on a Macbook Air.</p>
+</li>
+<li>
+<p>RAG - Retrieval Augmented Generation. Some models and frontends support “tool calling”, where the model has the option to invoke a tool to get more information before generating a response to the user. The tool then fetches something from the internet (usually) which the model doesn’t have access to. It allows a model to, say, get the current weather in Chicago, but keep it from launching nukes and searching for Sarah Connor.</p>
+</li>
+</ul>
+<p>This is by no means a comprehensive list of terms used in the modern AI world, rather it’s just a few odds and ends I needed to sort out before I made much progress.</p>
+<h2 id="first-steps">First steps</h2>
+<p>After installing Ollama, talking to your first model is as simple as opening a terminal and typing <code>ollama run &#x3C;model></code>.</p>
+<p><img  width="1916" height="773" loading="lazy" decoding="async" src="/_astro/01-ollama-first-run.DI2F7sYx_2gnVjs.webp" ></p>
+<p>Since the model hadn’t been downloaded yet, the first step is to download several files - The model itself (the 4.7 gig one), a license agreement, an Ollama chat template (based on Go’s templating engine, with weirdness like <code>{{ if .System }}&#x3C;|start_header_id|>system&#x3C;|end_header_id|></code>), a params file, and a manifest.</p>
+<p>After that, you’ll get a <code>>>></code> prompt in the terminal, and you’re talking to the model. It will answer questions, and keep a running context. Outside of this direct interface, Ollama is stateless. Tools making API calls to Ollama need to provide the context including the entire conversation so far.</p>
+<p>Here I’m asking it a basic science question, and the model is generating a markdown response. While the response is generating, my GPU is maxed out.</p>
+<p><img  width="1920" height="1080" loading="lazy" decoding="async" src="/_astro/02-gpu.DbprjIK__kr4vg.webp" ></p>
+<p>This is a tool called <a href="https://github.com/tlkh/asitop">asitop</a> that shows the status of CPUs, GPUs, and the ANE, or “Apple Neural Engine”, which is part of Apple silicon chips. The ANE is a neural processing unit, like Google’s “Tensor Processing Unit” that works with its Tensorflow product. The basic idea is that GPUs are great at parallel operations, which LLMs need, but they were designed for graphics and fast math operations, not specifically for AI applications.</p>
+<p>It’s possible to convert models to use the ANE, and use Core ML to run them on it, and maybe that’s worth investigating sometime down the road.</p>
+<h2 id="calling-ollamas-api">Calling Ollama’s API</h2>
+<p>Starting Ollama with <code>ollama serve</code> will put it in server mode, listening by default on localhost:11434. You can interact with it with tools like the <code>curl</code> command line program, or with a REST client like Postman or Bruno. Here’s a sample call from Bruno that just lists all the installed models.</p>
+<p><img  width="1916" height="1057" loading="lazy" decoding="async" src="/_astro/03-bruno-models.CrkY-wMg_Zs28dN.webp" ></p>
+<p>The path I’m posting to, <code>/v1/models</code>, is following the <a href="https://platform.openai.com/docs/api-reference/introduction">OpenAI API standard</a>, which Ollama supports.</p>
+<p>But let’s see what happens when I use Bruno to ask the model a question:</p>
+<p><img  width="1915" height="1025" loading="lazy" decoding="async" src="/_astro/04-bruno-streaming.C2zYA_VG_Z27nqV4.webp" ></p>
+<p>The path I use here, <code>/api/generate</code>, is for single questions without a chat history context, using <a href="https://github.com/ollama/ollama/blob/main/docs/api.md">Ollama’s interal API standard</a>. The obviously odd thing about the response is that it’s in multiple lines of JSON, one token per line. This is using a streaming protocol called <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events">server-sent events</a>, sort of like WebSockets, but only one way.</p>
+<p>Tools that interact with Ollama this way need to be able to turn that into something human readable, possibly outputting each token as it comes across the stream. Here is me doing that with some command line mojo, using curl and jq’s “join” switch to make short work of it:</p>
+<pre><code>llm # curl -X POST http://localhost:11434/api/generate -d '{
   "model": "llama3",
   "prompt":"Why is the sky blue?"
  }' > sky-blue-response.json
@@ -507,198 +89,39 @@ This effect is more pronounced during the daytime when the sun is overhead, and 
 So, to summarize, the sky appears blue because of the scattering of sunlight by tiny molecules in the Earth's atmosphere, with the blue wavelength being scattered more efficiently than other colors.%
 llm #
 </code></pre>
-      <h2 id="using-open-webui-to-talk-to-ollama">
-        Using Open WebUI to talk to Ollama
-      </h2>
-      <p>
-        The <a href="https://docs.openwebui.com/">Open WebUI</a> frontend looks
-        similar to ChatGPT. It supports Ollama or any runner that follows the
-        OpenAI API standard, and it supports RAG tool calling. Under the hood
-        it’s python, so I <code>pip install</code>-ed it, but the getting
-        started doc steers users towards the docker image.
-      </p>
-      <p>
-        To get up and running, I started Ollama in debug mode, so I could see
-        API calls in the log…
-      </p>
-      <p>
-        <img
-          width="1919"
-          height="339"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/05-ollama-serve.C8ReN-Ro_Z1wxspX.webp"
-        />
-      </p>
-      <p>
-        Starting Open WebUI for the first time was similar to the initial
-        <code>ollama run</code>, several files were downloaded first. On
-        subsequent startups, the “Fetching 30 files” message still displays.
-      </p>
-      <p>
-        <img
-          width="1917"
-          height="1003"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/06-open-webui-serve.DrLOgXAV_2sc1pR.webp"
-        />
-      </p>
-      <p>
-        At this point, the UI is ready for a browser connection, defaulting to
-        localhost:8080, and in turn Open WebUI fetches the model list from
-        Ollama, and displays this dapper page:
-      </p>
-      <p>
-        <img
-          width="1919"
-          height="1051"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/07-ui.BNFIsn5K_Z1IRjFC.webp"
-        />
-      </p>
-      <p>
-        And now we’re ready to ask some questions. Open WebUI manages the chat
-        history, showing server-sent tokens to the user as they are received,
-        and asking Ollama for a brief description of the chat and an emoji for
-        it, and some high level tags like “technology” that cover the theme of
-        the conversation. Honestly it’s a very nice experience.
-      </p>
-      <p>
-        The UI shows a random set of sample questions as a mini-tutorial for new
-        users. One of them is a basic web development question, giving the UI a
-        chance to show off.
-      </p>
-      <p>
-        <img
-          width="989"
-          height="361"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/08-sample-question.uhRLlt8b_Z2vYsUs.webp"
-        />
-      </p>
-      <p>
-        After asking the question, the Ollama log gets some additional posts to
-        <code>/api/chat</code>, asking the model for a description and some tags
-        like I mentioned above.
-      </p>
-      <p>
-        <img
-          width="1919"
-          height="1001"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/09-ollama-side-conversation.CLCwU-xJ_1jir39.webp"
-        />
-      </p>
-      <p>
-        We’ll come back to that in a minute. What the UI does at this point is
-        even more surprising than the side conversation it’s having with Ollama
-        on the DL. Since we’re asking a web development question, and we’re in a
-        web browser, Open WebUI can actually render what’s being discussed, in
-        this case a page with a sticky nav header.
-      </p>
-      <p>
-        <img
-          width="1916"
-          height="1053"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/10-ui-renders-html.UjtwPh-n_Z1yBNiY.webp"
-        />
-      </p>
-      <p>
-        So how do we see more about this side conversation that showed up in the
-        logs? Why by throwing <a href="https://ngrok.com/">ngrok</a> at it!
-        Ngrok’s offerings have grown since I first started using it, but the
-        <a href="https://ngrok.com/use-cases/developer-preview"
-          >Developer Preview</a
-        >
-        is what I need now. Ngrok creates a temporary subdomain off of
-        <code>ngrok-free.app</code>, redirects traffic there to the user’s local
-        machine, and provides a nice UI to see requests and responses, in this
-        case using pretty-printed JSON.
-      </p>
-      <p>
-        Here I invoke it with a simple <code>ngrok http 11434</code> to see all
-        traffic going to Ollama, and get the following status screen:
-      </p>
-      <p>
-        <img
-          width="2938"
-          height="700"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/11-ngrok-process.BzYYvFOV_V2RbA.webp"
-        />
-      </p>
-      <p>
-        However, Ollama is listening on 127.0.0.1, or localhost. I’ll either
-        need to tell Open WebUI to send localhost as the http
-        <code>Host:</code> header so that Ollama doesn’t balk, or tell Ollama to
-        listen on 0.0.0.0, where it will accept all host headers. I chose the
-        latter, and restarted Ollama with:
-      </p>
-      <pre><code>OLLAMA_HOST=0.0.0.0:11434 ollama serve
+<h2 id="using-open-webui-to-talk-to-ollama">Using Open WebUI to talk to Ollama</h2>
+<p>The <a href="https://docs.openwebui.com/">Open WebUI</a> frontend looks similar to ChatGPT. It supports Ollama or any runner that follows the OpenAI API standard, and it supports RAG tool calling. Under the hood it’s python, so I <code>pip install</code>-ed it, but the getting started doc steers users towards the docker image.</p>
+<p>To get up and running, I started Ollama in debug mode, so I could see API calls in the log…</p>
+<p><img  width="1919" height="339" loading="lazy" decoding="async" src="/_astro/05-ollama-serve.C8ReN-Ro_Z1wxspX.webp" ></p>
+<p>Starting Open WebUI for the first time was similar to the initial <code>ollama run</code>, several files were downloaded first. On subsequent startups, the “Fetching 30 files” message still displays.</p>
+<p><img  width="1917" height="1003" loading="lazy" decoding="async" src="/_astro/06-open-webui-serve.DrLOgXAV_2sc1pR.webp" ></p>
+<p>At this point, the UI is ready for a browser connection, defaulting to localhost:8080, and in turn Open WebUI fetches the model list from Ollama, and displays this dapper page:</p>
+<p><img  width="1919" height="1051" loading="lazy" decoding="async" src="/_astro/07-ui.BNFIsn5K_Z1IRjFC.webp" ></p>
+<p>And now we’re ready to ask some questions. Open WebUI manages the chat history, showing server-sent tokens to the user as they are received, and asking Ollama for a brief description of the chat and an emoji for it, and some high level tags like “technology” that cover the theme of the conversation. Honestly it’s a very nice experience.</p>
+<p>The UI shows a random set of sample questions as a mini-tutorial for new users. One of them is a basic web development question, giving the UI a chance to show off.</p>
+<p><img  width="989" height="361" loading="lazy" decoding="async" src="/_astro/08-sample-question.uhRLlt8b_Z2vYsUs.webp" ></p>
+<p>After asking the question, the Ollama log gets some additional posts to <code>/api/chat</code>, asking the model for a description and some tags like I mentioned above.</p>
+<p><img  width="1919" height="1001" loading="lazy" decoding="async" src="/_astro/09-ollama-side-conversation.CLCwU-xJ_1jir39.webp" ></p>
+<p>We’ll come back to that in a minute. What the UI does at this point is even more surprising than the side conversation it’s having with Ollama on the DL. Since we’re asking a web development question, and we’re in a web browser, Open WebUI can actually render what’s being discussed, in this case a page with a sticky nav header.</p>
+<p><img  width="1916" height="1053" loading="lazy" decoding="async" src="/_astro/10-ui-renders-html.UjtwPh-n_Z1yBNiY.webp" ></p>
+<p>So how do we see more about this side conversation that showed up in the logs? Why by throwing <a href="https://ngrok.com/">ngrok</a> at it! Ngrok’s offerings have grown since I first started using it, but the <a href="https://ngrok.com/use-cases/developer-preview">Developer Preview</a> is what I need now. Ngrok creates a temporary subdomain off of <code>ngrok-free.app</code>, redirects traffic there to the user’s local machine, and provides a nice UI to see requests and responses, in this case using pretty-printed JSON.</p>
+<p>Here I invoke it with a simple <code>ngrok http 11434</code> to see all traffic going to Ollama, and get the following status screen:</p>
+<p><img  width="2938" height="700" loading="lazy" decoding="async" src="/_astro/11-ngrok-process.BzYYvFOV_V2RbA.webp" ></p>
+<p>However, Ollama is listening on 127.0.0.1, or localhost. I’ll either need to tell Open WebUI to send localhost as the http <code>Host:</code> header so that Ollama doesn’t balk, or tell Ollama to listen on 0.0.0.0, where it will accept all host headers. I chose the latter, and restarted Ollama with:</p>
+<pre><code>OLLAMA_HOST=0.0.0.0:11434 ollama serve
 </code></pre>
-      <p>
-        We also have to tell Open WebUI that the Ollama base URL is the ngrok
-        subdomain:
-      </p>
-      <pre><code>OLLAMA_API_BASE_URL=https://8f0b-2603-6080-c63d-a1fe-1cc4-af81-a079-b256.ngrok-free.app open-webui serve
+<p>We also have to tell Open WebUI that the Ollama base URL is the ngrok subdomain:</p>
+<pre><code>OLLAMA_API_BASE_URL=https://8f0b-2603-6080-c63d-a1fe-1cc4-af81-a079-b256.ngrok-free.app open-webui serve
 </code></pre>
-      <p>Now after asking a new question:</p>
-      <p>
-        <img
-          width="2368"
-          height="1042"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/12-ui-roman.D1EFZgsJ_sxSod.webp"
-        />
-      </p>
-      <p>
-        …I can visit the ngrok UI and get details on all the traffic going to
-        Ollama. Here’s the actual question:
-      </p>
-      <p>
-        <img
-          width="2940"
-          height="1628"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/13-ngrok-roman.e20uujGS_1N9YFf.webp"
-        />
-      </p>
-      <p>
-        But you can see there are some additional posts to
-        <code>/api/chat</code>. Let’s look at one of them, and the Ollama reply.
-      </p>
-      <p>
-        <img
-          width="2880"
-          height="1658"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/14-ngrok-side-conversation.cZOiSqYA_1ywuxa.webp"
-        />
-      </p>
-      <p>
-        <img
-          width="671"
-          height="542"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/15-title-response.DteBgX1c_Xq17c.webp"
-        />
-      </p>
-      <p>
-        Let’s pull out just the “content” part of the prompt and look at it
-        closer.
-      </p>
-      <pre><code>### Task:
+<p>Now after asking a new question:</p>
+<p><img  width="2368" height="1042" loading="lazy" decoding="async" src="/_astro/12-ui-roman.D1EFZgsJ_sxSod.webp" ></p>
+<p>…I can visit the ngrok UI and get details on all the traffic going to Ollama. Here’s the actual question:</p>
+<p><img  width="2940" height="1628" loading="lazy" decoding="async" src="/_astro/13-ngrok-roman.e20uujGS_1N9YFf.webp" ></p>
+<p>But you can see there are some additional posts to <code>/api/chat</code>. Let’s look at one of them, and the Ollama reply.</p>
+<p><img  width="2880" height="1658" loading="lazy" decoding="async" src="/_astro/14-ngrok-side-conversation.cZOiSqYA_1ywuxa.webp" ></p>
+<p><img  width="671" height="542" loading="lazy" decoding="async" src="/_astro/15-title-response.DteBgX1c_Xq17c.webp" ></p>
+<p>Let’s pull out just the “content” part of the prompt and look at it closer.</p>
+<pre><code>### Task:
 Generate a concise, 3-5 word title with an emoji summarizing the chat history.
 ### Guidelines:
 - The title should clearly represent the main theme or subject of the conversation.
@@ -726,47 +149,13 @@ This practice was known as "manumission," where a slave's owner would grant them
 Talk about a Roman rags-to-riches story!
 &#x3C;/chat_history>
 </code></pre>
-      <p>
-        This is a good example of a prompt, using tools that a new ChatGPT user
-        may not know are available. This is an “obvious in hindsight” idea. LLMs
-        process natural language, and prompts like this are like instructions on
-        a test, which would be right in an LLM’s wheelhouse. Providing
-        guidelines and examples are powerful tools to help a model generate a
-        better response. Terms like “Zero shot” or “Five shot” reference the
-        number of examples given in a prompt.
-      </p>
-      <p>
-        Techniques like this are discussed in Lee Boonstra’s
-        <a href="https://www.kaggle.com/whitepaper-prompt-engineering"
-          >Prompt Engineering whitepaper</a
-        >, which is a good read for anyone who wants to make more effective use
-        of LLMs.
-      </p>
-      <p>
-        Since this is a side conversation and not part of the natural flow of
-        the user-assistant interaction, the “chat history” was included directly
-        in the prompt, bordered by an XML tag. This is what a normal
-        user-assistant chat history looks like after multiple interactions:
-      </p>
-      <p>
-        <img
-          width="548"
-          height="873"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/16-chat-with-history.By2t-eo4_1OHYX3.webp"
-        />
-      </p>
-      <h2 id="asking-better-coding-questions">
-        Asking better coding questions
-      </h2>
-      <p>
-        A lot of the LLM ecosystem is built on python. What I found in my early
-        days of trying Copilot and ChatGPT is that models could generate valid
-        ruby methods, but that they didn’t have a “feel” for idiomatic ruby.
-        They would write methods like this:
-      </p>
-      <pre><code>def do_thing(n)
+<p>This is a good example of a prompt, using tools that a new ChatGPT user may not know are available. This is an “obvious in hindsight” idea. LLMs process natural language, and prompts like this are like instructions on a test, which would be right in an LLM’s wheelhouse. Providing guidelines and examples are powerful tools to help a model generate a better response. Terms like “Zero shot” or “Five shot” reference the number of examples given in a prompt.</p>
+<p>Techniques like this are discussed in Lee Boonstra’s <a href="https://www.kaggle.com/whitepaper-prompt-engineering">Prompt Engineering whitepaper</a>, which is a good read for anyone who wants to make more effective use of LLMs.</p>
+<p>Since this is a side conversation and not part of the natural flow of the user-assistant interaction, the “chat history” was included directly in the prompt, bordered by an XML tag. This is what a normal user-assistant chat history looks like after multiple interactions:</p>
+<p><img  width="548" height="873" loading="lazy" decoding="async" src="/_astro/16-chat-with-history.By2t-eo4_1OHYX3.webp" ></p>
+<h2 id="asking-better-coding-questions">Asking better coding questions</h2>
+<p>A lot of the LLM ecosystem is built on python. What I found in my early days of trying Copilot and ChatGPT is that models could generate valid ruby methods, but that they didn’t have a “feel” for idiomatic ruby. They would write methods like this:</p>
+<pre><code>def do_thing(n)
   if @cached[n]
     return @cached[n]
   else
@@ -775,25 +164,14 @@ Talk about a Roman rags-to-riches story!
   end
 end
 </code></pre>
-      <p>…instead of something a native rubyist would write, like this:</p>
-      <pre><code>def do_thing(n)
+<p>…instead of something a native rubyist would write, like this:</p>
+<pre><code>def do_thing(n)
   @cached[n] ||= (0...n).map &#x26;method(:calc)
 end
 </code></pre>
-      <p>
-        To me, this has a number of readability improvements, and takes less
-        mental overhead to parse. I had a number of arguments with various
-        models trying to get them to output code in a style I liked. During my
-        foray into using local LLMs, I experimented with using prompts more like
-        the ones mentioned in the Google whitepaper and the Open WebUI request
-        for a title.
-      </p>
-      <p>
-        A basic “is this thing usable” test for LLMs that I use is to have it
-        write code to generate and cache the fibonacci sequence. My first pass
-        at a formatted prompt with an example was this:
-      </p>
-      <pre><code>Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
+<p>To me, this has a number of readability improvements, and takes less mental overhead to parse. I had a number of arguments with various models trying to get them to output code in a style I liked. During my foray into using local LLMs, I experimented with using prompts more like the ones mentioned in the Google whitepaper and the Open WebUI request for a title.</p>
+<p>A basic “is this thing usable” test for LLMs that I use is to have it write code to generate and cache the fibonacci sequence. My first pass at a formatted prompt with an example was this:</p>
+<pre><code>Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
 
 Return just the code.
 
@@ -821,38 +199,13 @@ class Doubler
 end
 ```
 </code></pre>
-      <p>
-        The results? The Llama model that meta.ai uses hit it out of the park…
-      </p>
-      <p>
-        <img
-          width="1279"
-          height="1020"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/17-meta-codegen.Bq-BECcG_Z2hlXsj.webp"
-        />
-      </p>
-      <p>…and the code ran correctly:</p>
-      <p>
-        <img
-          width="1375"
-          height="773"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/18-testing-meta-codegen.X6BanL--_25Tug5.webp"
-        />
-      </p>
-      <p>
-        However, local models struggled with the problem. The worst performer
-        was <code>codellama:7b-instruct</code>, which utterly failed to write
-        usable code after multiple attempts. Among other problems, it got caught
-        in a loop once, generating the same code and explanation repeatedly
-        until I control-C’ed, and in another attempt it snuck some literal
-        python code into the response.
-      </p>
-      <p>Here is the best attempt:</p>
-      <pre><code>~ # ollama run codellama:7b-instruct
+<p>The results? The Llama model that meta.ai uses hit it out of the park…</p>
+<p><img  width="1279" height="1020" loading="lazy" decoding="async" src="/_astro/17-meta-codegen.Bq-BECcG_Z2hlXsj.webp" ></p>
+<p>…and the code ran correctly:</p>
+<p><img  width="1375" height="773" loading="lazy" decoding="async" src="/_astro/18-testing-meta-codegen.X6BanL--_25Tug5.webp" ></p>
+<p>However, local models struggled with the problem. The worst performer was <code>codellama:7b-instruct</code>, which utterly failed to write usable code after multiple attempts. Among other problems, it got caught in a loop once, generating the same code and explanation repeatedly until I control-C’ed, and in another attempt it snuck some literal python code into the response.</p>
+<p>Here is the best attempt:</p>
+<pre><code>~ # ollama run codellama:7b-instruct
 >>> Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
 ...
 ... Return just the code.
@@ -945,12 +298,8 @@ to avoid recomputing the same values multiple times.
 
 >>>
 </code></pre>
-      <p>
-        In both cases, it ignored my request to only return code (I probably
-        needed to move that into the system prompt), and wrote code that
-        generated an invalid sequence.
-      </p>
-      <pre><code>~ # pry
+<p>In both cases, it ignored my request to only return code (I probably needed to move that into the system prompt), and wrote code that generated an invalid sequence.</p>
+<pre><code>~ # pry
 [1] pry(main)> class Fibonacci
 [1] pry(main)>   def initialize
 [1] pry(main)>     # Cache instance variables for memoization
@@ -991,18 +340,9 @@ to avoid recomputing the same values multiple times.
 ~ #
 
 </code></pre>
-      <p>
-        Of note, if <code>get_nth_element</code> has to add new values to the
-        sequence, it returns a naked range (the <code>1..4</code> at the third
-        pry command) instead of an element, and both getter methods keep
-        starting over and appending to the cache variable, generating
-        unpredictable results.
-      </p>
-      <p>
-        The best performer was <code>qwen3:4b</code>. Qwen is a model that by
-        default generates a “think” block, showing its chain of thought.
-      </p>
-      <pre><code>~ # ollama run qwen3:4b
+<p>Of note, if <code>get_nth_element</code> has to add new values to the sequence, it returns a naked range (the <code>1..4</code> at the third pry command) instead of an element, and both getter methods keep starting over and appending to the cache variable, generating unpredictable results.</p>
+<p>The best performer was <code>qwen3:4b</code>. Qwen is a model that by default generates a “think” block, showing its chain of thought.</p>
+<pre><code>~ # ollama run qwen3:4b
 >>> Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
 ...
 ... Return just the code.
@@ -1065,24 +405,10 @@ class Fibonacci
 end
 ```
 </code></pre>
-      <p>
-        Other than a minor style point (the unneeded begin block), I have no
-        complaints about the code, only needing to wait for a 7k think block to
-        generate before the final code started to appear.
-      </p>
-      <p>
-        In both cases, the Code Llama model and Qwen, I could have improved
-        things by simplifying the requirements, and providing a better example.
-        I was using the Doubler class as a style guide, but it wasn’t generating
-        a sequence based on prior values, so the entire example was at best a
-        distraction, linting rules that could be replaced by just piping the
-        output to <code>rubocop -A</code>.
-      </p>
-      <p>
-        What I needed was a better example that more closely matched the
-        problem. Here’s what I came up with:
-      </p>
-      <pre><code>~ # ollama run llama3
+<p>Other than a minor style point (the unneeded begin block), I have no complaints about the code, only needing to wait for a 7k think block to generate before the final code started to appear.</p>
+<p>In both cases, the Code Llama model and Qwen, I could have improved things by simplifying the requirements, and providing a better example. I was using the Doubler class as a style guide, but it wasn’t generating a sequence based on prior values, so the entire example was at best a distraction, linting rules that could be replaced by just piping the output to <code>rubocop -A</code>.</p>
+<p>What I needed was a better example that more closely matched the problem. Here’s what I came up with:</p>
+<pre><code>~ # ollama run llama3
 >>> Write a ruby class that generates the fibonacci sequence.
 ...
 ... ## Guidelines
@@ -1159,87 +485,19 @@ I hope this helps! Let me know if you have any questions.
 
 >>> Send a message (/? for help)
 </code></pre>
-      <p>
-        Much better. I took out the style guide, and changed the example to
-        function more like the Fibonacci calculator would. It could be argued
-        that this was too much hand-holding, and I don’t disagree. For this case
-        I would have been better just writing the Fibonacci class itself, rather
-        than get 90% of the way there with the Doubler class example. Either
-        way… lesson learned. Provide examples that model the important aspects
-        of the prompt, and don’t fret about syntax sugar.
-      </p>
-      <h2 id="writing-a-tool">Writing a tool</h2>
-      <p>
-        Open WebUI supports tool calling (RAG). There are a variety of
-        community-written tools that you can import, or you can
-        <a href="https://docs.openwebui.com/features/plugin/tools/development/"
-          >develop your own</a
-        >. Tools are python scripts that Open WebUI executes. They provide an
-        interface description, which gets passed to the model. The model can
-        then reply with which tool, if any, it wants to use to answer the user’s
-        question, and what parameters to pass to it.
-      </p>
-      <p>
-        I scaffolded up a proof of concept tool to query the Project Gutenberg
-        database by means of an API at
-        <a href="https://gutendex.com/">gutendex.com</a>. It’s very simple, just
-        choosing one of two query params (“search” or “topic”), and doing an
-        HTTP GET. Here’s what I came up with:
-      </p>
-      <p>
-        <img
-          width="1920"
-          height="1020"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/19-gutendex-tool.CQnXbDA6_1UcaIm.webp"
-        />
-      </p>
-      <p>
-        Once you import a community tool, or save one of your own, it becomes
-        available in the UI.
-      </p>
-      <p>
-        <img
-          width="872"
-          height="514"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/20-enable-tool.B7Re22JV_Z1dPaIC.webp"
-        />
-      </p>
-      <p>
-        After enabling the tool, Open WebUI will advertise it to Ollama in
-        subsequent messages. Here it is in use, from the UI’s point of view:
-      </p>
-      <p>
-        <img
-          width="1620"
-          height="709"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/21-gutendex-results.TJxUm5fK_Z1qgnxS.webp"
-        />
-      </p>
-      <p>
-        I added in some debug statements to show the query params, the final
-        URL, and the filtered JSON response:
-      </p>
-      <p>
-        <img
-          width="1920"
-          height="1023"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/22-ollama-gutendex-queries.pY3ugKyV_auLD1.webp"
-        />
-      </p>
-      <p>
-        Under the hood, what do queries that include tools look like? I fired up
-        our trusty friend ngrok, turned on the Gutenberg tool, and then asked
-        about H.G. Wells. Here’s the initial post from Open WebUI to Ollama:
-      </p>
-      <pre><code>{
+<p>Much better. I took out the style guide, and changed the example to function more like the Fibonacci calculator would. It could be argued that this was too much hand-holding, and I don’t disagree. For this case I would have been better just writing the Fibonacci class itself, rather than get 90% of the way there with the Doubler class example. Either way… lesson learned. Provide examples that model the important aspects of the prompt, and don’t fret about syntax sugar.</p>
+<h2 id="writing-a-tool">Writing a tool</h2>
+<p>Open WebUI supports tool calling (RAG). There are a variety of community-written tools that you can import, or you can <a href="https://docs.openwebui.com/features/plugin/tools/development/">develop your own</a>. Tools are python scripts that Open WebUI executes. They provide an interface description, which gets passed to the model. The model can then reply with which tool, if any, it wants to use to answer the user’s question, and what parameters to pass to it.</p>
+<p>I scaffolded up a proof of concept tool to query the Project Gutenberg database by means of an API at <a href="https://gutendex.com/">gutendex.com</a>. It’s very simple, just choosing one of two query params (“search” or “topic”), and doing an HTTP GET. Here’s what I came up with:</p>
+<p><img  width="1920" height="1020" loading="lazy" decoding="async" src="/_astro/19-gutendex-tool.CQnXbDA6_1UcaIm.webp" ></p>
+<p>Once you import a community tool, or save one of your own, it becomes available in the UI.</p>
+<p><img  width="872" height="514" loading="lazy" decoding="async" src="/_astro/20-enable-tool.B7Re22JV_Z1dPaIC.webp" ></p>
+<p>After enabling the tool, Open WebUI will advertise it to Ollama in subsequent messages. Here it is in use, from the UI’s point of view:</p>
+<p><img  width="1620" height="709" loading="lazy" decoding="async" src="/_astro/21-gutendex-results.TJxUm5fK_Z1qgnxS.webp" ></p>
+<p>I added in some debug statements to show the query params, the final URL, and the filtered JSON response:</p>
+<p><img  width="1920" height="1023" loading="lazy" decoding="async" src="/_astro/22-ollama-gutendex-queries.pY3ugKyV_auLD1.webp" ></p>
+<p>Under the hood, what do queries that include tools look like? I fired up our trusty friend ngrok, turned on the Gutenberg tool, and then asked about H.G. Wells. Here’s the initial post from Open WebUI to Ollama:</p>
+<pre><code>{
     "model": "llama3:latest",
     "messages": [
         {
@@ -1254,11 +512,8 @@ I hope this helps! Let me know if you have any questions.
     "stream": false
 }
 </code></pre>
-      <p>
-        The UI adds a system prompt that declares what tools are available, and
-        how to use them. Here’s a pretty print of the system prompt:
-      </p>
-      <pre><code>Available Tools: [{"name": "gutenberg_api", "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ", "parameters": {"properties": {"query_type": {"description": "Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.", "type": "string"}, "query_value": {"description": "Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.", "type": "string"}}, "type": "object"}}]
+<p>The UI adds a system prompt that declares what tools are available, and how to use them. Here’s a pretty print of the system prompt:</p>
+<pre><code>Available Tools: [{"name": "gutenberg_api", "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ", "parameters": {"properties": {"query_type": {"description": "Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.", "type": "string"}, "query_value": {"description": "Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.", "type": "string"}}, "type": "object"}}]
 
 Your task is to choose and return the correct tool(s) from the list of available tools based on the query. Follow these guidelines:
 
@@ -1281,8 +536,8 @@ The format for the JSON response is strictly:
   ]
 }
 </code></pre>
-      <p>…and here’s a pretty-print of the Available Tools object:</p>
-      <pre><code>[{
+<p>…and here’s a pretty-print of the Available Tools object:</p>
+<pre><code>[{
     "name": "gutenberg_api",
     "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ",
     "parameters":
@@ -1304,13 +559,8 @@ The format for the JSON response is strictly:
     }
 }]
 </code></pre>
-      <p>
-        This is very similar to the “write a concise title” side conversation
-        from earlier, except giving Ollama the instructions as a system prompt,
-        overriding any default behavior, talk like a pirate mods, etc. Here’s
-        Ollama’s response:
-      </p>
-      <pre><code>{
+<p>This is very similar to the “write a concise title” side conversation from earlier, except giving Ollama the instructions as a system prompt, overriding any default behavior, talk like a pirate mods, etc. Here’s Ollama’s response:</p>
+<pre><code>{
     "model": "llama3:latest",
     "created_at": "2025-05-20T14:21:33.9222Z",
     "message": {
@@ -1327,14 +577,8 @@ The format for the JSON response is strictly:
     "eval_duration": 2139375834
 }
 </code></pre>
-      <p>
-        It said that yes, I’d like to use the Gutenberg tool to answer a
-        Gutenberg question, with the query terms “search” and “H.G. Wells”. At
-        this point, the UI executes the <code>gutenberg_api</code> method with
-        those params. It makes an HTTP call to gutendex.com, filters the
-        results, and passes them back to Ollama as a new message:
-      </p>
-      <pre><code>{
+<p>It said that yes, I’d like to use the Gutenberg tool to answer a Gutenberg question, with the query terms “search” and “H.G. Wells”. At this point, the UI executes the <code>gutenberg_api</code> method with those params. It makes an HTTP call to gutendex.com, filters the results, and passes them back to Ollama as a new message:</p>
+<pre><code>{
     "model": "llama3:latest",
     "messages": [
         {
@@ -1345,37 +589,9 @@ The format for the JSON response is strictly:
     "stream": true
 }
 </code></pre>
-      <p>
-        Oops. Unfortunately the query itself went sideways, probably because all
-        the HG Wells books are listed with the author “Wells, H. G. (Herbert
-        George)”, a gentle reminder that integration with a third-party API is
-        hard.
-      </p>
-      <p>
-        Lastly, Ollama responds with a streaming one-line-per-token response,
-        which when joined together says:
-      </p>
-      <pre><code>According to the output from `gutendex_fetcher/gutenberg_api`, there is only 1 Gutenberg entry for H.G. Wells. Specifically, it's a book about him titled "The World of H.G. Wells" by Van Wyck Brooks.
+<p>Oops. Unfortunately the query itself went sideways, probably because all the HG Wells books are listed with the author “Wells, H. G. (Herbert George)”, a gentle reminder that integration with a third-party API is hard.</p>
+<p>Lastly, Ollama responds with a streaming one-line-per-token response, which when joined together says:</p>
+<pre><code>According to the output from `gutendex_fetcher/gutenberg_api`, there is only 1 Gutenberg entry for H.G. Wells. Specifically, it's a book about him titled "The World of H.G. Wells" by Van Wyck Brooks.
 </code></pre>
-      <p>
-        After these experiments, I’m more tuned into the LLM world than I was
-        before. Unsurprisingly, a lot of ChatGTP-adjacent content is showing up
-        in my Reddit feed now, which shows that there’s quite a lot of activity
-        in getting models shrunk down enough to use locally (e.g.,
-        <a
-          href="https://www.reddit.com/r/LocalLLaMA/comments/1kryybf/mistralaidevstralsmall2505_hugging_face/"
-          >Devstral-Small</a
-        >
-        that you can use with OpenHands with commands like “Go clone this repo,
-        and fix all the broken tests”, and watch the agent go to town).
-      </p>
-      <p>
-        But we still have a long way to go. Even the larger LLMs like Meta.ai
-        are still giving untrustworthy answers while expending ice cap-melting
-        levels of energy. But every day we seem to get closer to something
-        reliable. Right now we’re somewhere between GLaDOS and Friend Computer,
-        but we’re getting there.
-      </p>
-    </article>
-  </body>
-</html>
+<p>After these experiments, I’m more tuned into the LLM world than I was before. Unsurprisingly, a lot of ChatGTP-adjacent content is showing up in my Reddit feed now, which shows that there’s quite a lot of activity in getting models shrunk down enough to use locally (e.g., <a href="https://www.reddit.com/r/LocalLLaMA/comments/1kryybf/mistralaidevstralsmall2505_hugging_face/">Devstral-Small</a> that you can use with OpenHands with commands like “Go clone this repo, and fix all the broken tests”, and watch the agent go to town).</p>
+<p>But we still have a long way to go. Even the larger LLMs like Meta.ai are still giving untrustworthy answers while expending ice cap-melting levels of energy. But every day we seem to get closer to something reliable. Right now we’re somewhere between GLaDOS and Friend Computer, but we’re getting there.</p>  </article> </body></html>
