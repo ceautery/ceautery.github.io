@@ -2,14 +2,14 @@
 import "../styles/global.css";
 
 const { data } = Astro.props;
-const tags = data?.og || {};
+const ogTags = ["title", "type", "image", "url", "description"];
 ---
 
-<html lang="en-US">
+<html lang="en">
   <head>
-    {data?.og?.title && <title>{data.og.title}</title>}
+    {(<title>{data.title}</title>)}
     {
-      data?.hasMath && (
+      data.hasMath && (
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
@@ -23,18 +23,14 @@ const tags = data?.og || {};
     <meta charset="UTF-8" />
     <meta name="author" content="Curtis Autery" />
     {
-      data?.publish_date && (
+      data.date && (
         <meta
           property="article:published_time"
-          content={`${data.publish_date}T12:00:00-05:00`}
+          content={`${data.date}T12:00:00-05:00`}
         />
       )
     }
-    {
-      Object.keys(tags).map((k) => (
-        <meta name={k} property={`og:${k}`} content={tags[k]} />
-      ))
-    }
+    {ogTags.map((tag) => <meta property={`og:${tag}`} content={data[tag]} />)}
   </head>
   <body>
     <header>

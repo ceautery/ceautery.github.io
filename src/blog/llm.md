@@ -1,11 +1,10 @@
 ---
-og:
-  title: "Local LLMs"
-  type: "article"
-  image: "https://blog.autery.net/images/llm/preview.png"
-  url: "https://blog.autery.net/blog/llm/"
-  description: "Experimenting with Ollama and Open WebUI on a Macbook"
-publish_date: "2025-05-20"
+title: "Local LLMs"
+type: "article"
+image: "https://blog.autery.net/images/llm/preview.png"
+url: "https://blog.autery.net/blog/llm/"
+description: "Running local LLMs with Ollama and Open WebUI, and using with Bruno and ngrok to see what makes it all tick."
+date: "2025-05-20"
 hasMath: false
 ---
 
@@ -51,7 +50,7 @@ This is by no means a comprehensive list of terms used in the modern AI world, r
 
 After installing Ollama, talking to your first model is as simple as opening a terminal and typing `ollama run <model>`.
 
-![](../assets/llm/01-ollama-first-run.png)
+![Shell session running ollama and asking llama3 'Why is the sky blue?'](../assets/llm/01-ollama-first-run.png)
 
 Since the model hadn't been downloaded yet, the first step is to download several files - The model itself (the 4.7 gig one), a license agreement, an Ollama chat template (based on Go's templating engine, with weirdness like `{{ if .System }}<|start_header_id|>system<|end_header_id|>`), a params file, and a manifest.
 
@@ -59,7 +58,7 @@ After that, you'll get a `>>>` prompt in the terminal, and you're talking to the
 
 Here I'm asking it a basic science question, and the model is generating a markdown response. While the response is generating, my GPU is maxed out.
 
-![](../assets/llm/02-gpu.png)
+![asitop utility showing a maxed out GPU while ollama is answering a question](../assets/llm/02-gpu.png)
 
 This is a tool called [asitop](https://github.com/tlkh/asitop) that shows the status of CPUs, GPUs, and the ANE, or "Apple Neural Engine", which is part of Apple silicon chips. The ANE is a neural processing unit, like Google's "Tensor Processing Unit" that works with its Tensorflow product. The basic idea is that GPUs are great at parallel operations, which LLMs need, but they were designed for graphics and fast math operations, not specifically for AI applications.
 
@@ -69,13 +68,13 @@ It's possible to convert models to use the ANE, and use Core ML to run them on i
 
 Starting Ollama with `ollama serve` will put it in server mode, listening by default on localhost:11434. You can interact with it with tools like the `curl` command line program, or with a REST client like Postman or Bruno. Here's a sample call from Bruno that just lists all the installed models.
 
-![](../assets/llm/03-bruno-models.png)
+![Bruno REST client getting a list of models from ollama](../assets/llm/03-bruno-models.png)
 
 The path I'm posting to, `/v1/models`, is following the [OpenAI API standard](https://platform.openai.com/docs/api-reference/introduction), which Ollama supports.
 
 But let's see what happens when I use Bruno to ask the model a question:
 
-![](../assets/llm/04-bruno-streaming.png)
+![Bruno client showing LLM answering a question one token at a time using server-sent events](../assets/llm/04-bruno-streaming.png)
 
 The path I use here, `/api/generate`, is for single questions without a chat history context, using [Ollama's interal API standard](https://github.com/ollama/ollama/blob/main/docs/api.md). The obviously odd thing about the response is that it's in multiple lines of JSON, one token per line. This is using a streaming protocol called [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events), sort of like WebSockets, but only one way.
 
@@ -123,35 +122,35 @@ The [Open WebUI](https://docs.openwebui.com/) frontend looks similar to ChatGPT.
 
 To get up and running, I started Ollama in debug mode, so I could see API calls in the log...
 
-![](../assets/llm/05-ollama-serve.png)
+![Shell session running 'ollama serve', showing initial config requests from Open WebUI](../assets/llm/05-ollama-serve.png)
 
 Starting Open WebUI for the first time was similar to the initial `ollama run`, several files were downloaded first. On subsequent startups, the "Fetching 30 files" message still displays.
 
-![](../assets/llm/06-open-webui-serve.png)
+![Shell session starting Open WebUI and showing initial requests from web client](../assets/llm/06-open-webui-serve.png)
 
 At this point, the UI is ready for a browser connection, defaulting to localhost:8080, and in turn Open WebUI fetches the model list from Ollama, and displays this dapper page:
 
-![](../assets/llm/07-ui.png)
+![Open WebUI user interface](../assets/llm/07-ui.png)
 
 And now we're ready to ask some questions. Open WebUI manages the chat history, showing server-sent tokens to the user as they are received, and asking Ollama for a brief description of the chat and an emoji for it, and some high level tags like "technology" that cover the theme of the conversation. Honestly it's a very nice experience.
 
 The UI shows a random set of sample questions as a mini-tutorial for new users. One of them is a basic web development question, giving the UI a chance to show off.
 
-![](../assets/llm/08-sample-question.png)
+![Open WebUI showing the sample 'show me a code snippet' prompt](../assets/llm/08-sample-question.png)
 
 After asking the question, the Ollama log gets some additional posts to `/api/chat`, asking the model for a description and some tags like I mentioned above.
 
-![](../assets/llm/09-ollama-side-conversation.png)
+![ollama log output showing extra questions from Open WebUI](../assets/llm/09-ollama-side-conversation.png)
 
 We'll come back to that in a minute. What the UI does at this point is even more surprising than the side conversation it's having with Ollama on the DL. Since we're asking a web development question, and we're in a web browser, Open WebUI can actually render what's being discussed, in this case a page with a sticky nav header.
 
-![](../assets/llm/10-ui-renders-html.png)
+![Open WebUI showing generated HTML and CSS, and also rendering it as a web page](../assets/llm/10-ui-renders-html.png)
 
 So how do we see more about this side conversation that showed up in the logs? Why by throwing [ngrok](https://ngrok.com/) at it! Ngrok's offerings have grown since I first started using it, but the [Developer Preview](https://ngrok.com/use-cases/developer-preview) is what I need now. Ngrok creates a temporary subdomain off of `ngrok-free.app`, redirects traffic there to the user's local machine, and provides a nice UI to see requests and responses, in this case using pretty-printed JSON.
 
 Here I invoke it with a simple `ngrok http 11434` to see all traffic going to Ollama, and get the following status screen:
 
-![](../assets/llm/11-ngrok-process.png)
+![Shell session starting ngrok](../assets/llm/11-ngrok-process.png)
 
 However, Ollama is listening on 127.0.0.1, or localhost. I'll either need to tell Open WebUI to send localhost as the http `Host:` header so that Ollama doesn't balk, or tell Ollama to listen on 0.0.0.0, where it will accept all host headers. I chose the latter, and restarted Ollama with:
 
@@ -163,17 +162,17 @@ We also have to tell Open WebUI that the Ollama base URL is the ngrok subdomain:
 
 Now after asking a new question:
 
-![](../assets/llm/12-ui-roman.png)
+![Open WebUI showing llama response for a fun fact about Rome](../assets/llm/12-ui-roman.png)
 
 ...I can visit the ngrok UI and get details on all the traffic going to Ollama. Here's the actual question:
 
-![](../assets/llm/13-ngrok-roman.png)
+![ngrok logs showing extra calls to ollama](../assets/llm/13-ngrok-roman.png)
 
 But you can see there are some additional posts to `/api/chat`. Let's look at one of them, and the Ollama reply.
 
-![](../assets/llm/14-ngrok-side-conversation.png)
+![ngrok showing Open WebUI asking model for a conversation title](../assets/llm/14-ngrok-side-conversation.png)
 
-![](../assets/llm/15-title-response.png)
+![ngrok log showing ollama's generated conversation title](../assets/llm/15-title-response.png)
 
 Let's pull out just the "content" part of the prompt and look at it closer.
 
@@ -213,7 +212,7 @@ Techniques like this are discussed in Lee Boonstra's [Prompt Engineering whitepa
 
 Since this is a side conversation and not part of the natural flow of the user-assistant interaction, the "chat history" was included directly in the prompt, bordered by an XML tag. This is what a normal user-assistant chat history looks like after multiple interactions:
 
-![](../assets/llm/16-chat-with-history.png)
+![ngrok showing chat history posted as new prompt](../assets/llm/16-chat-with-history.png)
 
 ## Asking better coding questions
 
@@ -272,11 +271,11 @@ A basic "is this thing usable" test for LLMs that I use is to have it write code
 
 The results? The Llama model that meta.ai uses hit it out of the park...
 
-![](../assets/llm/17-meta-codegen.png)
+![meta.ai showing good ruby solution for generating Fibonacci numbers](../assets/llm/17-meta-codegen.png)
 
 ...and the code ran correctly:
 
-![](../assets/llm/18-testing-meta-codegen.png)
+![pry REPL testing of meta.ai Fibonacci solution](../assets/llm/18-testing-meta-codegen.png)
 
 However, local models struggled with the problem. The worst performer was `codellama:7b-instruct`, which utterly failed to write usable code after multiple attempts. Among other problems, it got caught in a loop once, generating the same code and explanation repeatedly until I control-C'ed, and in another attempt it snuck some literal python code into the response.
 
@@ -578,19 +577,19 @@ Open WebUI supports tool calling (RAG). There are a variety of community-written
 
 I scaffolded up a proof of concept tool to query the Project Gutenberg database by means of an API at [gutendex.com](https://gutendex.com/). It's very simple, just choosing one of two query params ("search" or "topic"), and doing an HTTP GET. Here's what I came up with:
 
-![](../assets/llm/19-gutendex-tool.png)
+![Open WebUI showing a python tool for fetching Project Gutenberg data](../assets/llm/19-gutendex-tool.png)
 
 Once you import a community tool, or save one of your own, it becomes available in the UI.
 
-![](../assets/llm/20-enable-tool.png)
+![Enabling the new tool for the current Open WebUI conversation](../assets/llm/20-enable-tool.png)
 
 After enabling the tool, Open WebUI will advertise it to Ollama in subsequent messages. Here it is in use, from the UI's point of view:
 
-![](../assets/llm/21-gutendex-results.png)
+![llama3 successfully using tool calling to find the number of Frankenstein downloads](../assets/llm/21-gutendex-results.png)
 
 I added in some debug statements to show the query params, the final URL, and the filtered JSON response:
 
-![](../assets/llm/22-ollama-gutendex-queries.png)
+![Open WebUI logs showing tool calling requests and responses](../assets/llm/22-ollama-gutendex-queries.png)
 
 Under the hood, what do queries that include tools look like? I fired up our trusty friend ngrok, turned on the Gutenberg tool, and then asked about H.G. Wells. Here's the initial post from Open WebUI to Ollama:
 

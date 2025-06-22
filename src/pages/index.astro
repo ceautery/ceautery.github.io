@@ -3,16 +3,24 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 
 const allPosts = await getCollection("blog");
+const data = {
+  title: "Bytes",
+  type: "website",
+  image: "https://blog.autery.net/images/plate.jpg",
+  url: "https://blog.autery.net/",
+  description: "A minimalist blog from a pretty ok software writer",
+};
 ---
 
-<BaseLayout>
-  <h1>Things I think about</h1>
+<BaseLayout data={data}>
+  <h1>Bytes</h1>
+  <div>Things I think about</div>
   <ul>
     {
       allPosts.map((p) => (
         <li>
-          <code>{p.data.og.publish_date}</code> -
-          <a href={`/blog/${p.id}/`}> {p.data.og.title}</a>
+          <code>{p.data.date}</code> -
+          <a href={`/blog/${p.id}/`}> {p.data.title}</a>
         </li>
       ))
     }
