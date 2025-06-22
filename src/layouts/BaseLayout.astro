@@ -5,8 +5,9 @@ const { data } = Astro.props;
 const tags = data?.og || {};
 ---
 
-<html>
+<html lang="en-US">
   <head>
+    {data?.og?.title && <title>{data.og.title}</title>}
     {
       data?.hasMath && (
         <link
@@ -20,9 +21,18 @@ const tags = data?.og || {};
     <link rel="me" href="https://mastodon.social/@CurtisAutery" />
     <meta name="viewport" content="width=500" />
     <meta charset="UTF-8" />
+    <meta name="author" content="Curtis Autery" />
+    {
+      data?.publish_date && (
+        <meta
+          property="article:published_time"
+          content={`${data.publish_date}T12:00:00-05:00`}
+        />
+      )
+    }
     {
       Object.keys(tags).map((k) => (
-        <meta property={`og:${k}`} content={tags[k]} />
+        <meta name={k} property={`og:${k}`} content={tags[k]} />
       ))
     }
   </head>

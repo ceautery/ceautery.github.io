@@ -7,12 +7,11 @@ const blog = defineCollection({
     og: z.object({
       title: z.string(),
       type: z.string(),
-      publish_date: z.string(),
       description: z.string(),
-      author: z.string(),
       image: z.string(),
       url: z.string(),
     }),
+    publish_date: z.string(),
     hasMath: z.boolean(),
   }),
 });

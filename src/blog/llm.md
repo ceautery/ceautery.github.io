@@ -3,10 +3,9 @@ og:
   title: "Local LLMs"
   type: "article"
   image: "https://blog.autery.net/images/llm/preview.png"
-  url: "https://autery.net/blog/llm"
+  url: "https://blog.autery.net/blog/llm/"
   description: "Experimenting with Ollama and Open WebUI on a Macbook"
-  author: "Curtis Autery"
-  publish_date: "2025-05-20"
+publish_date: "2025-05-20"
 hasMath: false
 ---
 
