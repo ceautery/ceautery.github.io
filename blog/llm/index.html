@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="en">
   <head>
     <title>Local LLMs</title>
     <link rel="me" href="https://mastodon.social/@CurtisAutery" />
@@ -10,22 +10,16 @@
       property="article:published_time"
       content="2025-05-20T12:00:00-05:00"
     />
-    <meta name="title" property="og:title" content="Local LLMs" />
-    <meta name="type" property="og:type" content="article" />
+    <meta property="og:title" content="Local LLMs" />
+    <meta property="og:type" content="article" />
     <meta
-      name="description"
-      property="og:description"
-      content="Experimenting with Ollama and Open WebUI on a Macbook"
-    />
-    <meta
-      name="image"
       property="og:image"
       content="https://blog.autery.net/images/llm/preview.png"
     />
+    <meta property="og:url" content="https://blog.autery.net/blog/llm/" />
     <meta
-      name="url"
-      property="og:url"
-      content="https://blog.autery.net/blog/llm/"
+      property="og:description"
+      content="Running local LLMs with Ollama and Open WebUI, and using with Bruno and ngrok to see what makes it all tick."
     />
     <style>
       :root {
@@ -104,6 +98,7 @@
         outline: none;
       }
       article h1 {
+        font-size: 30px;
         text-align: center;
       }
       p.hero {
@@ -377,6 +372,7 @@
       </p>
       <p>
         <img
+          alt="Shell session running ollama and asking llama3 &amp;#x27;Why is the sky blue?&amp;#x27;"
           width="1916"
           height="773"
           loading="lazy"
@@ -408,6 +404,7 @@
       </p>
       <p>
         <img
+          alt="asitop utility showing a maxed out GPU while ollama is answering a question"
           width="1920"
           height="1080"
           loading="lazy"
@@ -439,6 +436,7 @@
       </p>
       <p>
         <img
+          alt="Bruno REST client getting a list of models from ollama"
           width="1916"
           height="1057"
           loading="lazy"
@@ -457,6 +455,7 @@
       </p>
       <p>
         <img
+          alt="Bruno client showing LLM answering a question one token at a time using server-sent events"
           width="1915"
           height="1025"
           loading="lazy"
@@ -533,6 +532,7 @@ llm #
       </p>
       <p>
         <img
+          alt="Shell session running &amp;#x27;ollama serve&amp;#x27;, showing initial config requests from Open WebUI"
           width="1919"
           height="339"
           loading="lazy"
@@ -547,6 +547,7 @@ llm #
       </p>
       <p>
         <img
+          alt="Shell session starting Open WebUI and showing initial requests from web client"
           width="1917"
           height="1003"
           loading="lazy"
@@ -561,6 +562,7 @@ llm #
       </p>
       <p>
         <img
+          alt="Open WebUI user interface"
           width="1919"
           height="1051"
           loading="lazy"
@@ -582,6 +584,7 @@ llm #
       </p>
       <p>
         <img
+          alt="Open WebUI showing the sample &amp;#x27;show me a code snippet&amp;#x27; prompt"
           width="989"
           height="361"
           loading="lazy"
@@ -596,6 +599,7 @@ llm #
       </p>
       <p>
         <img
+          alt="ollama log output showing extra questions from Open WebUI"
           width="1919"
           height="1001"
           loading="lazy"
@@ -612,6 +616,7 @@ llm #
       </p>
       <p>
         <img
+          alt="Open WebUI showing generated HTML and CSS, and also rendering it as a web page"
           width="1916"
           height="1053"
           loading="lazy"
@@ -637,6 +642,7 @@ llm #
       </p>
       <p>
         <img
+          alt="Shell session starting ngrok"
           width="2938"
           height="700"
           loading="lazy"
@@ -662,6 +668,7 @@ llm #
       <p>Now after asking a new question:</p>
       <p>
         <img
+          alt="Open WebUI showing llama response for a fun fact about Rome"
           width="2368"
           height="1042"
           loading="lazy"
@@ -675,6 +682,7 @@ llm #
       </p>
       <p>
         <img
+          alt="ngrok logs showing extra calls to ollama"
           width="2940"
           height="1628"
           loading="lazy"
@@ -688,6 +696,7 @@ llm #
       </p>
       <p>
         <img
+          alt="ngrok showing Open WebUI asking model for a conversation title"
           width="2880"
           height="1658"
           loading="lazy"
@@ -697,6 +706,7 @@ llm #
       </p>
       <p>
         <img
+          alt="ngrok log showing ollama&amp;#x27;s generated conversation title"
           width="671"
           height="542"
           loading="lazy"
@@ -760,6 +770,7 @@ Talk about a Roman rags-to-riches story!
       </p>
       <p>
         <img
+          alt="ngrok showing chat history posted as new prompt"
           width="548"
           height="873"
           loading="lazy"
@@ -836,6 +847,7 @@ end
       </p>
       <p>
         <img
+          alt="meta.ai showing good ruby solution for generating Fibonacci numbers"
           width="1279"
           height="1020"
           loading="lazy"
@@ -846,6 +858,7 @@ end
       <p>…and the code ran correctly:</p>
       <p>
         <img
+          alt="pry REPL testing of meta.ai Fibonacci solution"
           width="1375"
           height="773"
           loading="lazy"
@@ -1198,6 +1211,7 @@ I hope this helps! Let me know if you have any questions.
       </p>
       <p>
         <img
+          alt="Open WebUI showing a python tool for fetching Project Gutenberg data"
           width="1920"
           height="1020"
           loading="lazy"
@@ -1211,6 +1225,7 @@ I hope this helps! Let me know if you have any questions.
       </p>
       <p>
         <img
+          alt="Enabling the new tool for the current Open WebUI conversation"
           width="872"
           height="514"
           loading="lazy"
@@ -1224,6 +1239,7 @@ I hope this helps! Let me know if you have any questions.
       </p>
       <p>
         <img
+          alt="llama3 successfully using tool calling to find the number of Frankenstein downloads"
           width="1620"
           height="709"
           loading="lazy"
@@ -1237,6 +1253,7 @@ I hope this helps! Let me know if you have any questions.
       </p>
       <p>
         <img
+          alt="Open WebUI logs showing tool calling requests and responses"
           width="1920"
           height="1023"
           loading="lazy"
