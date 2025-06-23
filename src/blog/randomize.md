@@ -3,6 +3,7 @@ url: "/blog/randomize/"
 title: "Using Discrete Logarithms to Randomize a Million Integers"
 description: "Using Discrete Logarithms to Randomize a Million Integers"
 date: "2025-04-08"
+hasMath: true
 ---
 
 # Using Discrete Logarithms to Randomize a Million Integers
@@ -48,7 +49,7 @@ The naive solution to see if a number is a primitive root is to generate all 999
 
 Do all cyclic groups have 1 as the last digit? Yes, based on an identity from modular arithmetic, namely Fermat’s Little Theorem. It states that for any prime p:
 
-`$a^p \equiv a\pmod p$`
+$a^p \equiv a\pmod p$
 
 Raising an arbitrary number a to prime p is congruent to a modulo p. Saying that in coder-speak, we get:
 
@@ -61,7 +62,7 @@ Raising any number to the 999983rd power, and dividing by 999983, gives a remain
 
 If we take the math equation, and divide each side by a, we get:
 
-`$a^{p-1} \equiv 1 \pmod p$`
+$a^{p-1} \equiv 1 \pmod p$
 
 …or…
 
@@ -151,7 +152,7 @@ The first thing we know about primitive roots is exactly how many there will be 
 
 The totient of a number is the count of numbers less than it that are coprime to it (their only common factor is 1). They were introduced as a concept by Euler, as a corollary to Fermat’s little theorem, but to cover both prime and composite numbers. Totients are usually expressed with the Greek letter φ (phi). Euler’s theorem states that for any a and n that are coprime to each other:
 
-`$a^{\phi(n)} \equiv 1 \pmod n$`
+$a^{\phi(n)} \equiv 1 \pmod n$
 
 And if n is prime and a is less than n, this is exactly Fermat’s little theorem, because the totient of a prime will always be one less than it… because everything is coprime to a prime.
 
@@ -333,15 +334,15 @@ This works for any prime factors of a composite number that are coprime. If m an
 
 That’s 5 columns times 4 rows, for 20 numbers under 25 that are coprime to it. This can be represented by this identity (and in these equations φ(n) will mean totient(n):
 
-`$\phi(p^k) = p^{k-1}(p-1)$`
+$\phi(p^k) = p^{k-1}(p-1)$
 
 If we multiply that by p/p, we can express the equation a little more usefully:
 
-`$\phi(p^k) = p^k \frac{p-1}{p}$`
+$\phi(p^k) = p^k \frac{p-1}{p}$
 
 This also works if we’re looking for the totient of a prime not raised to any power – where k is 1:
 
-`$\phi(p) = p \frac{p-1}{p}$`
+$\phi(p) = p \frac{p-1}{p}$
 
 Which simplifies to just p - 1.
 
@@ -352,29 +353,31 @@ It seems like we’re out in the weeds now, but there’s one fact that brings t
 => 16
 ```
 
-`$40 = 8 \times 5 = 2^3 \times 5$`
+$40 = 8 \times 5 = 2^3 \times 5$
 
 8 and 5 are coprime to each other, so:
 
-`$\phi(8 \times 5) = \phi(8) \times \phi(5)$`
+$\phi(8 \times 5) = \phi(8) \times \phi(5)$
 
 Using our prime-to-a-power formula, the totients of 8 and 5 are:
 
-`$\phi(8) = 8 \times \frac{1}{2} , \phi(5) = 5 \times \frac{4}{5}$`
+$\phi(8) = 8 \times \frac{1}{2} , \phi(5) = 5 \times \frac{4}{5}$
 
 Multiplying them together to get the totient of 40, we have:
 
-`$8 \times \frac{1}{2} \times 5 \times \frac{4}{5}$`
+$8 \times \frac{1}{2} \times 5 \times \frac{4}{5}$
 
 If we multiply 8 and 5 in the above equation, we get one that contains the original number we’re finding the totient of, and fractions based on each of its unique prime factors:
 
-`$40 \times \frac{1}{2} \times \frac{4}{5}$`
+$40 \times \frac{1}{2} \times \frac{4}{5}$
 
 And that brings us to our final formula:
 
-`$$\phi(n) = n\prod_{p|n} \frac{p - 1}{p}$`
+$$
+\phi(n) = n\prod_{p|n} \frac{p - 1}{p}
+$$
 
-The totient of any number, is the original number times `$\frac{p - 1}{p}$` for each of it’s unique prime factors. In Ruby, we can represent that formula like this:
+The totient of any number, is the original number times $\frac{p - 1}{p}$ for each of it’s unique prime factors. In Ruby, we can represent that formula like this:
 
 ```pry
 [27] pry(main)> def totient(n)
