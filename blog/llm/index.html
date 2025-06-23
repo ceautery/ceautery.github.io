@@ -5,25 +5,22 @@
     <link rel="me" href="https://mastodon.social/@CurtisAutery" />
     <meta name="viewport" content="width=500" />
     <meta charset="UTF-8" />
-    <meta name="author" content="Curtis Autery" />
-    <meta
-      name="description"
-      content="Running local LLMs with Ollama and Open WebUI, and using with Bruno and ngrok to see what makes it all tick."
-    />
-    <meta
-      property="article:published_time"
-      content="2025-05-20T12:00:00-05:00"
-    />
+    <meta property="og:url" content="https://blog.autery.net/blog/llm/" />
     <meta property="og:title" content="Local LLMs" />
     <meta property="og:type" content="article" />
     <meta
       property="og:image"
       content="https://blog.autery.net/images/llm/preview.png"
     />
-    <meta property="og:url" content="https://blog.autery.net/blog/llm/" />
     <meta
+      name="description"
       property="og:description"
       content="Running local LLMs with Ollama and Open WebUI, and using with Bruno and ngrok to see what makes it all tick."
+    />
+    <meta name="author" content="Curtis Autery" />
+    <meta
+      property="article:published_time"
+      content="2025-05-20T12:00:00-05:00"
     />
     <style>
       :root {
@@ -193,6 +190,9 @@
         border: 2px solid var(--tooltip-border-color);
         padding: 5pt;
         background: var(--tooltip-background-color);
+      }
+      p.hover {
+        position: relative;
       }
       .hover img:hover + .tooltip,
       .tooltip:hover {
@@ -486,40 +486,44 @@
         comes across the stream. Here is me doing that with some command line
         mojo, using curl and jq’s “join” switch to make short work of it:
       </p>
-      <pre><code>llm # curl -X POST http://localhost:11434/api/generate -d '{
-  "model": "llama3",
-  "prompt":"Why is the sky blue?"
- }' > sky-blue-response.json
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 37081    0 37022  100    59   1966      3  0:00:19  0:00:18  0:00:01  2345
-llm # head -3 sky-blue-response.json
-{"model":"llama3","created_at":"2025-05-09T14:46:30.873537Z","response":"The","done":false}
-{"model":"llama3","created_at":"2025-05-09T14:46:30.921277Z","response":" sky","done":false}
-{"model":"llama3","created_at":"2025-05-09T14:46:30.967993Z","response":" appears","done":false}
-llm # cat sky-blue-response.json | jq '.response' | head -3
-"The"
-" sky"
-" appears"
-llm # cat sky-blue-response.json | jq -j '.response'
-The sky appears blue because of a phenomenon called Rayleigh scattering, which is the scattering of light by small particles or molecules in the atmosphere. The color we see in the sky is actually a combination of two factors: the color of the sun and the way that light interacts with the tiny molecules of gases in the Earth's atmosphere.
-
-Here's what happens:
-
-1. The sun emits white light, which contains all the colors of the visible spectrum (red, orange, yellow, green, blue, indigo, and violet).
-2. When this light travels through the Earth's atmosphere, it encounters tiny molecules of gases like nitrogen (N2) and oxygen (O2). These molecules are much smaller than the wavelength of light.
-3. The shorter, blue wavelengths of light are scattered more efficiently by these small molecules than the longer, red wavelengths. This is because the small molecules are more effective at scattering shorter wavelengths.
-4. As a result, the blue light is distributed throughout the atmosphere, giving the sky its blue appearance.
-
-This effect is more pronounced during the daytime when the sun is overhead, and the amount of scattered light is greatest. The color of the sky can also be affected by other factors like:
-
-* Atmospheric conditions: Dust, pollution, and water vapor in the air can scatter light in different ways, changing the apparent color of the sky.
-* Time of day: During sunrise and sunset, the sun's rays have to travel through more of the Earth's atmosphere, which scatters shorter wavelengths even more, making the sky appear more red or orange.
-* Altitude: The color of the sky can change at higher elevations due to changes in atmospheric conditions.
-
-So, to summarize, the sky appears blue because of the scattering of sunlight by tiny molecules in the Earth's atmosphere, with the blue wavelength being scattered more efficiently than other colors.%
-llm #
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>llm # curl -X POST http://localhost:11434/api/generate -d '{</span></span>
+<span class="line"><span>  "model": "llama3",</span></span>
+<span class="line"><span>  "prompt":"Why is the sky blue?"</span></span>
+<span class="line"><span> }' > sky-blue-response.json</span></span>
+<span class="line"><span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current</span></span>
+<span class="line"><span>                                 Dload  Upload   Total   Spent    Left  Speed</span></span>
+<span class="line"><span>100 37081    0 37022  100    59   1966      3  0:00:19  0:00:18  0:00:01  2345</span></span>
+<span class="line"><span>llm # head -3 sky-blue-response.json</span></span>
+<span class="line"><span>{"model":"llama3","created_at":"2025-05-09T14:46:30.873537Z","response":"The","done":false}</span></span>
+<span class="line"><span>{"model":"llama3","created_at":"2025-05-09T14:46:30.921277Z","response":" sky","done":false}</span></span>
+<span class="line"><span>{"model":"llama3","created_at":"2025-05-09T14:46:30.967993Z","response":" appears","done":false}</span></span>
+<span class="line"><span>llm # cat sky-blue-response.json | jq '.response' | head -3</span></span>
+<span class="line"><span>"The"</span></span>
+<span class="line"><span>" sky"</span></span>
+<span class="line"><span>" appears"</span></span>
+<span class="line"><span>llm # cat sky-blue-response.json | jq -j '.response'</span></span>
+<span class="line"><span>The sky appears blue because of a phenomenon called Rayleigh scattering, which is the scattering of light by small particles or molecules in the atmosphere. The color we see in the sky is actually a combination of two factors: the color of the sun and the way that light interacts with the tiny molecules of gases in the Earth's atmosphere.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Here's what happens:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. The sun emits white light, which contains all the colors of the visible spectrum (red, orange, yellow, green, blue, indigo, and violet).</span></span>
+<span class="line"><span>2. When this light travels through the Earth's atmosphere, it encounters tiny molecules of gases like nitrogen (N2) and oxygen (O2). These molecules are much smaller than the wavelength of light.</span></span>
+<span class="line"><span>3. The shorter, blue wavelengths of light are scattered more efficiently by these small molecules than the longer, red wavelengths. This is because the small molecules are more effective at scattering shorter wavelengths.</span></span>
+<span class="line"><span>4. As a result, the blue light is distributed throughout the atmosphere, giving the sky its blue appearance.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>This effect is more pronounced during the daytime when the sun is overhead, and the amount of scattered light is greatest. The color of the sky can also be affected by other factors like:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>* Atmospheric conditions: Dust, pollution, and water vapor in the air can scatter light in different ways, changing the apparent color of the sky.</span></span>
+<span class="line"><span>* Time of day: During sunrise and sunset, the sun's rays have to travel through more of the Earth's atmosphere, which scatters shorter wavelengths even more, making the sky appear more red or orange.</span></span>
+<span class="line"><span>* Altitude: The color of the sky can change at higher elevations due to changes in atmospheric conditions.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>So, to summarize, the sky appears blue because of the scattering of sunlight by tiny molecules in the Earth's atmosphere, with the blue wavelength being scattered more efficiently than other colors.%</span></span>
+<span class="line"><span>llm #</span></span></code></pre>
       <h2 id="using-open-webui-to-talk-to-ollama">
         Using Open WebUI to talk to Ollama
       </h2>
@@ -661,14 +665,22 @@ llm #
         listen on 0.0.0.0, where it will accept all host headers. I chose the
         latter, and restarted Ollama with:
       </p>
-      <pre><code>OLLAMA_HOST=0.0.0.0:11434 ollama serve
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>OLLAMA_HOST=0.0.0.0:11434 ollama serve</span></span></code></pre>
       <p>
         We also have to tell Open WebUI that the Ollama base URL is the ngrok
         subdomain:
       </p>
-      <pre><code>OLLAMA_API_BASE_URL=https://8f0b-2603-6080-c63d-a1fe-1cc4-af81-a079-b256.ngrok-free.app open-webui serve
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>OLLAMA_API_BASE_URL=https://8f0b-2603-6080-c63d-a1fe-1cc4-af81-a079-b256.ngrok-free.app open-webui serve</span></span></code></pre>
       <p>Now after asking a new question:</p>
       <p>
         <img
@@ -722,34 +734,38 @@ llm #
         Let’s pull out just the “content” part of the prompt and look at it
         closer.
       </p>
-      <pre><code>### Task:
-Generate a concise, 3-5 word title with an emoji summarizing the chat history.
-### Guidelines:
-- The title should clearly represent the main theme or subject of the conversation.
-- Use emojis that enhance understanding of the topic, but avoid quotation marks or special formatting.
-- Write the title in the chat's primary language; default to English if multilingual.
-- Prioritize accuracy over excessive creativity; keep it clear and simple.
-### Output:
-JSON format: { "title": "your concise title here" }
-### Examples:
-- { "title": "📉 Stock Market Trends" },
-- { "title": "🍪 Perfect Chocolate Chip Recipe" },
-- { "title": "Evolution of Music Streaming" },
-- { "title": "Remote Work Productivity Tips" },
-- { "title": "Artificial Intelligence in Healthcare" },
-- { "title": "🎮 Video Game Development Insights" }
-### Chat History:
-&#x3C;chat_history>
-USER: Tell me a random fun fact about the Roman Empire
-ASSISTANT: Here's one!
-
-Did you know that in ancient Rome, it was common for slaves to be set free as a reward for exceptional service or bravery? In fact, the Latin phrase "libertus" (meaning "freedman") became synonymous with freedom and social mobility. Many famous Roman writers, such as Marcus Aurelius and Seneca, were even freedmen themselves!
-
-This practice was known as "manumission," where a slave's owner would grant them their freedom in exchange for loyalty, skill, or other forms of service. It was considered a great honor to be set free by one's master, and many freed slaves went on to become successful businesspeople, politicians, or even military leaders!
-
-Talk about a Roman rags-to-riches story!
-&#x3C;/chat_history>
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>### Task:</span></span>
+<span class="line"><span>Generate a concise, 3-5 word title with an emoji summarizing the chat history.</span></span>
+<span class="line"><span>### Guidelines:</span></span>
+<span class="line"><span>- The title should clearly represent the main theme or subject of the conversation.</span></span>
+<span class="line"><span>- Use emojis that enhance understanding of the topic, but avoid quotation marks or special formatting.</span></span>
+<span class="line"><span>- Write the title in the chat's primary language; default to English if multilingual.</span></span>
+<span class="line"><span>- Prioritize accuracy over excessive creativity; keep it clear and simple.</span></span>
+<span class="line"><span>### Output:</span></span>
+<span class="line"><span>JSON format: { "title": "your concise title here" }</span></span>
+<span class="line"><span>### Examples:</span></span>
+<span class="line"><span>- { "title": "📉 Stock Market Trends" },</span></span>
+<span class="line"><span>- { "title": "🍪 Perfect Chocolate Chip Recipe" },</span></span>
+<span class="line"><span>- { "title": "Evolution of Music Streaming" },</span></span>
+<span class="line"><span>- { "title": "Remote Work Productivity Tips" },</span></span>
+<span class="line"><span>- { "title": "Artificial Intelligence in Healthcare" },</span></span>
+<span class="line"><span>- { "title": "🎮 Video Game Development Insights" }</span></span>
+<span class="line"><span>### Chat History:</span></span>
+<span class="line"><span>&#x3C;chat_history></span></span>
+<span class="line"><span>USER: Tell me a random fun fact about the Roman Empire</span></span>
+<span class="line"><span>ASSISTANT: Here's one!</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Did you know that in ancient Rome, it was common for slaves to be set free as a reward for exceptional service or bravery? In fact, the Latin phrase "libertus" (meaning "freedman") became synonymous with freedom and social mobility. Many famous Roman writers, such as Marcus Aurelius and Seneca, were even freedmen themselves!</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>This practice was known as "manumission," where a slave's owner would grant them their freedom in exchange for loyalty, skill, or other forms of service. It was considered a great honor to be set free by one's master, and many freed slaves went on to become successful businesspeople, politicians, or even military leaders!</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Talk about a Roman rags-to-riches story!</span></span>
+<span class="line"><span>&#x3C;/chat_history></span></span></code></pre>
       <p>
         This is a good example of a prompt, using tools that a new ChatGPT user
         may not know are available. This is an “obvious in hindsight” idea. LLMs
@@ -791,20 +807,28 @@ Talk about a Roman rags-to-riches story!
         ruby methods, but that they didn’t have a “feel” for idiomatic ruby.
         They would write methods like this:
       </p>
-      <pre><code>def do_thing(n)
-  if @cached[n]
-    return @cached[n]
-  else
-    @cached[n] = (0..n-1).map { |i| calc(i) }
-    return @cached[n]
-  end
-end
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>def do_thing(n)</span></span>
+<span class="line"><span>  if @cached[n]</span></span>
+<span class="line"><span>    return @cached[n]</span></span>
+<span class="line"><span>  else</span></span>
+<span class="line"><span>    @cached[n] = (0..n-1).map { |i| calc(i) }</span></span>
+<span class="line"><span>    return @cached[n]</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span></code></pre>
       <p>…instead of something a native rubyist would write, like this:</p>
-      <pre><code>def do_thing(n)
-  @cached[n] ||= (0...n).map &#x26;method(:calc)
-end
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>def do_thing(n)</span></span>
+<span class="line"><span>  @cached[n] ||= (0...n).map &#x26;method(:calc)</span></span>
+<span class="line"><span>end</span></span></code></pre>
       <p>
         To me, this has a number of readability improvements, and takes less
         mental overhead to parse. I had a number of arguments with various
@@ -818,34 +842,38 @@ end
         write code to generate and cache the fibonacci sequence. My first pass
         at a formatted prompt with an example was this:
       </p>
-      <pre><code>Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
-
-Return just the code.
-
-##Style guide##
-
-* Prefer instance methods over class methods
-* Prefer the conditional assignment operator (`||=`) over if/ternary logic
-* Prefer `x...n` ranges to `x..(n-1)`
-* Omit unneeded return statements
-* Memoize results
-
-##Example##
-
-```ruby
-class Doubler
-  def initialize
-    # Cache instance variable for memoization
-    @doubles = { 1 => 2, 2 => 4 }
-  end
-
-  def double(n)
-    # Return cached value, or set cached value and return it
-    @doubles[n] ||= n * 2
-  end
-end
-```
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Return just the code.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>##Style guide##</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>* Prefer instance methods over class methods</span></span>
+<span class="line"><span>* Prefer the conditional assignment operator (`||=`) over if/ternary logic</span></span>
+<span class="line"><span>* Prefer `x...n` ranges to `x..(n-1)`</span></span>
+<span class="line"><span>* Omit unneeded return statements</span></span>
+<span class="line"><span>* Memoize results</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>##Example##</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>```ruby</span></span>
+<span class="line"><span>class Doubler</span></span>
+<span class="line"><span>  def initialize</span></span>
+<span class="line"><span>    # Cache instance variable for memoization</span></span>
+<span class="line"><span>    @doubles = { 1 => 2, 2 => 4 }</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def double(n)</span></span>
+<span class="line"><span>    # Return cached value, or set cached value and return it</span></span>
+<span class="line"><span>    @doubles[n] ||= n * 2</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span>```</span></span></code></pre>
       <p>
         The results? The Llama model that meta.ai uses hit it out of the park…
       </p>
@@ -879,145 +907,153 @@ end
         python code into the response.
       </p>
       <p>Here is the best attempt:</p>
-      <pre><code>~ # ollama run codellama:7b-instruct
->>> Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
-...
-... Return just the code.
-...
-... ##Style guide##
-...
-... * Prefer instance methods over class methods
-... * Prefer the conditional assignment operator (`||=`) over if/ternary logic
-... * Prefer `x...n` ranges to `x..(n-1)`
-... * Omit unneeded return statements
-... * Memoize results
-...
-... ##Example##
-...
-... ```ruby
-... class Doubler
-...   def initialize
-...     # Cache instance variable for memoization
-...     @doubles = { 1 => 2, 2 => 4 }
-...   end
-...
-...   def double(n)
-...     # Return cached value, or set cached value and return it
-...     @doubles[n] ||= n * 2
-...   end
-... end
-... ```
-```ruby
-class Fibonacci
-  def initialize
-    # Cache instance variables for memoization
-    @fib_seq = [0, 1]
-    @first_n_elements = nil
-    @nth_element = nil
-  end
-
-  def get_first_n_elements(n)
-    return @first_n_elements if @first_n_elements &#x26;&#x26; n &#x3C;= @fib_seq.length
-
-    (1..n-1).each do |i|
-      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])
-    end
-
-    @first_n_elements = @fib_seq.take(n)
-  end
-
-  def get_nth_element(n)
-    return @nth_element if @nth_element &#x26;&#x26; n == @fib_seq.length
-
-    (1..n-1).each do |i|
-      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])
-    end
-
-    @nth_element = @fib_seq[n]
-  end
-end
-```
-Note that the `get_first_n_elements` method caches the first `n` elements of the Fibonacci sequence, while the `get_nth_element` method caches the `n`-th     element. This is done to avoid
-recomputing the same values multiple times.
-
-Also note that the class uses instance variables to store the cached values, and memoization is used to avoid recomputing the same values multiple times.
-
->>> Rewrite this without using the `@first_n_elements` and `@nth_element` instance variables. Remember to only return the code.
-```ruby
-class Fibonacci
-  def initialize
-    # Cache instance variables for memoization
-    @fib_seq = [0, 1]
-  end
-
-  def get_first_n_elements(n)
-    return @fib_seq.take(n) if n &#x3C;= @fib_seq.length
-
-    (1..n-1).each do |i|
-      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])
-    end
-  end
-
-  def get_nth_element(n)
-    return @fib_seq[n] if n &#x3C;= @fib_seq.length
-
-    (1..n-1).each do |i|
-      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])
-    end
-  end
-end
-```
-Note that the `get_first_n_elements` method now returns the first `n` elements of the Fibonacci sequence, while the `get_nth_element` method now returns     the `n`-th element. This is done
-to avoid recomputing the same values multiple times.
-
->>>
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>~ # ollama run codellama:7b-instruct</span></span>
+<span class="line"><span>>>> Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... Return just the code.</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... ##Style guide##</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... * Prefer instance methods over class methods</span></span>
+<span class="line"><span>... * Prefer the conditional assignment operator (`||=`) over if/ternary logic</span></span>
+<span class="line"><span>... * Prefer `x...n` ranges to `x..(n-1)`</span></span>
+<span class="line"><span>... * Omit unneeded return statements</span></span>
+<span class="line"><span>... * Memoize results</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... ##Example##</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... ```ruby</span></span>
+<span class="line"><span>... class Doubler</span></span>
+<span class="line"><span>...   def initialize</span></span>
+<span class="line"><span>...     # Cache instance variable for memoization</span></span>
+<span class="line"><span>...     @doubles = { 1 => 2, 2 => 4 }</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>...   def double(n)</span></span>
+<span class="line"><span>...     # Return cached value, or set cached value and return it</span></span>
+<span class="line"><span>...     @doubles[n] ||= n * 2</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>... end</span></span>
+<span class="line"><span>... ```</span></span>
+<span class="line"><span>```ruby</span></span>
+<span class="line"><span>class Fibonacci</span></span>
+<span class="line"><span>  def initialize</span></span>
+<span class="line"><span>    # Cache instance variables for memoization</span></span>
+<span class="line"><span>    @fib_seq = [0, 1]</span></span>
+<span class="line"><span>    @first_n_elements = nil</span></span>
+<span class="line"><span>    @nth_element = nil</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def get_first_n_elements(n)</span></span>
+<span class="line"><span>    return @first_n_elements if @first_n_elements &#x26;&#x26; n &#x3C;= @fib_seq.length</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    (1..n-1).each do |i|</span></span>
+<span class="line"><span>      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    @first_n_elements = @fib_seq.take(n)</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def get_nth_element(n)</span></span>
+<span class="line"><span>    return @nth_element if @nth_element &#x26;&#x26; n == @fib_seq.length</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    (1..n-1).each do |i|</span></span>
+<span class="line"><span>      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    @nth_element = @fib_seq[n]</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span>```</span></span>
+<span class="line"><span>Note that the `get_first_n_elements` method caches the first `n` elements of the Fibonacci sequence, while the `get_nth_element` method caches the `n`-th     element. This is done to avoid</span></span>
+<span class="line"><span>recomputing the same values multiple times.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Also note that the class uses instance variables to store the cached values, and memoization is used to avoid recomputing the same values multiple times.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>>>> Rewrite this without using the `@first_n_elements` and `@nth_element` instance variables. Remember to only return the code.</span></span>
+<span class="line"><span>```ruby</span></span>
+<span class="line"><span>class Fibonacci</span></span>
+<span class="line"><span>  def initialize</span></span>
+<span class="line"><span>    # Cache instance variables for memoization</span></span>
+<span class="line"><span>    @fib_seq = [0, 1]</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def get_first_n_elements(n)</span></span>
+<span class="line"><span>    return @fib_seq.take(n) if n &#x3C;= @fib_seq.length</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    (1..n-1).each do |i|</span></span>
+<span class="line"><span>      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def get_nth_element(n)</span></span>
+<span class="line"><span>    return @fib_seq[n] if n &#x3C;= @fib_seq.length</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    (1..n-1).each do |i|</span></span>
+<span class="line"><span>      @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span>```</span></span>
+<span class="line"><span>Note that the `get_first_n_elements` method now returns the first `n` elements of the Fibonacci sequence, while the `get_nth_element` method now returns     the `n`-th element. This is done</span></span>
+<span class="line"><span>to avoid recomputing the same values multiple times.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>>>></span></span></code></pre>
       <p>
         In both cases, it ignored my request to only return code (I probably
         needed to move that into the system prompt), and wrote code that
         generated an invalid sequence.
       </p>
-      <pre><code>~ # pry
-[1] pry(main)> class Fibonacci
-[1] pry(main)>   def initialize
-[1] pry(main)>     # Cache instance variables for memoization
-[1] pry(main)>     @fib_seq = [0, 1]
-[1] pry(main)>   end
-[1] pry(main)>
-[1] pry(main)>   def get_first_n_elements(n)
-[1] pry(main)>     return @fib_seq.take(n) if n &#x3C;= @fib_seq.length
-[1] pry(main)>
-[1] pry(main)>     (1..n-1).each do |i|
-[1] pry(main)>       @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])
-[1] pry(main)>     end
-[1] pry(main)>   end
-[1] pry(main)>
-[1] pry(main)>   def get_nth_element(n)
-[1] pry(main)>     return @fib_seq[n] if n &#x3C;= @fib_seq.length
-[1] pry(main)>
-[1] pry(main)>     (1..n-1).each do |i|
-[1] pry(main)>       @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])
-[1] pry(main)>     end
-[1] pry(main)>   end
-[1] pry(main)> end
-=> :get_nth_element
-[2] pry(main)> f = Fibonacci.new
-=> #&#x3C;Fibonacci:0x000000011f9ee948 @fib_seq=[0, 1]>
-[3] pry(main)> f.get_nth_element(5)
-=> 1..4
-[4] pry(main)> f
-=> #&#x3C;Fibonacci:0x000000011f9ee948 @fib_seq=[0, 1, 1, 2, 3, 5]>
-[5] pry(main)> f.get_first_n_elements(5)
-=> [0, 1, 1, 2, 3]
-[6] pry(main)> f.get_first_n_elements(15)
-=> 1..14
-[7] pry(main)> f
-=> #&#x3C;Fibonacci:0x000000011f9ee948 @fib_seq=[0, 1, 1, 2, 3, 5, 1, 2, 3, 5, 8, 6, 3, 5, 8, 13, 14, 9, 8, 13]>
-[8] pry(main)>
-
-~ #
-
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>~ # pry</span></span>
+<span class="line"><span>[1] pry(main)> class Fibonacci</span></span>
+<span class="line"><span>[1] pry(main)>   def initialize</span></span>
+<span class="line"><span>[1] pry(main)>     # Cache instance variables for memoization</span></span>
+<span class="line"><span>[1] pry(main)>     @fib_seq = [0, 1]</span></span>
+<span class="line"><span>[1] pry(main)>   end</span></span>
+<span class="line"><span>[1] pry(main)></span></span>
+<span class="line"><span>[1] pry(main)>   def get_first_n_elements(n)</span></span>
+<span class="line"><span>[1] pry(main)>     return @fib_seq.take(n) if n &#x3C;= @fib_seq.length</span></span>
+<span class="line"><span>[1] pry(main)></span></span>
+<span class="line"><span>[1] pry(main)>     (1..n-1).each do |i|</span></span>
+<span class="line"><span>[1] pry(main)>       @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])</span></span>
+<span class="line"><span>[1] pry(main)>     end</span></span>
+<span class="line"><span>[1] pry(main)>   end</span></span>
+<span class="line"><span>[1] pry(main)></span></span>
+<span class="line"><span>[1] pry(main)>   def get_nth_element(n)</span></span>
+<span class="line"><span>[1] pry(main)>     return @fib_seq[n] if n &#x3C;= @fib_seq.length</span></span>
+<span class="line"><span>[1] pry(main)></span></span>
+<span class="line"><span>[1] pry(main)>     (1..n-1).each do |i|</span></span>
+<span class="line"><span>[1] pry(main)>       @fib_seq.push(@fib_seq[i] + @fib_seq[i-1])</span></span>
+<span class="line"><span>[1] pry(main)>     end</span></span>
+<span class="line"><span>[1] pry(main)>   end</span></span>
+<span class="line"><span>[1] pry(main)> end</span></span>
+<span class="line"><span>=> :get_nth_element</span></span>
+<span class="line"><span>[2] pry(main)> f = Fibonacci.new</span></span>
+<span class="line"><span>=> #&#x3C;Fibonacci:0x000000011f9ee948 @fib_seq=[0, 1]></span></span>
+<span class="line"><span>[3] pry(main)> f.get_nth_element(5)</span></span>
+<span class="line"><span>=> 1..4</span></span>
+<span class="line"><span>[4] pry(main)> f</span></span>
+<span class="line"><span>=> #&#x3C;Fibonacci:0x000000011f9ee948 @fib_seq=[0, 1, 1, 2, 3, 5]></span></span>
+<span class="line"><span>[5] pry(main)> f.get_first_n_elements(5)</span></span>
+<span class="line"><span>=> [0, 1, 1, 2, 3]</span></span>
+<span class="line"><span>[6] pry(main)> f.get_first_n_elements(15)</span></span>
+<span class="line"><span>=> 1..14</span></span>
+<span class="line"><span>[7] pry(main)> f</span></span>
+<span class="line"><span>=> #&#x3C;Fibonacci:0x000000011f9ee948 @fib_seq=[0, 1, 1, 2, 3, 5, 1, 2, 3, 5, 8, 6, 3, 5, 8, 13, 14, 9, 8, 13]></span></span>
+<span class="line"><span>[8] pry(main)></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>~ #</span></span>
+<span class="line"><span></span></span></code></pre>
       <p>
         Of note, if <code>get_nth_element</code> has to add new values to the
         sequence, it returns a naked range (the <code>1..4</code> at the third
@@ -1029,69 +1065,73 @@ to avoid recomputing the same values multiple times.
         The best performer was <code>qwen3:4b</code>. Qwen is a model that by
         default generates a “think” block, showing its chain of thought.
       </p>
-      <pre><code>~ # ollama run qwen3:4b
->>> Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.
-...
-... Return just the code.
-(truncated)
-...   def double(n)
-...     # Return cached value, or set cached value and return it
-...     @doubles[n] ||= n * 2
-...   end
-... end
-... ```
-&#x3C;think>
-Okay, I need to write a Ruby class that generates the Fibonacci sequence. The user wants getter methods for the nth element and the first n elements.     Also, there's a style guide to
-follow. Let me think about how to approach this.
-
-First, the Fibonacci sequence starts with 0 and 1, and each subsequent number is the sum of the previous two. So, for the nth element, maybe I should have     an instance variable that
-stores the sequence, but since it's a class, maybe it's better to compute it on the fly with memoization.
-
-Wait, the style guide says to prefer instance methods over class methods. So the class will have an initialize method, and then instance methods for     getting the nth element and the
-first n elements.
-
-Memoization is important here. So, perhaps I can store the Fibonacci numbers in a hash, where the keys are the indices, and the values are the numbers.     That way, when I calculate a
-number, I can store it so that future calls are faster.
-
-Let me think about the initialize method. Maybe I should initialize a hash to hold the Fibonacci numbers. The base cases are 0 and 1. Wait, but Fibonacci     sequence can be defined with 0
-as the first element. Let me check: the 0th element is 0, 1st is 1, 2nd is 1, 3rd is 2, etc. Or sometimes it's considered starting with 1, 1, 2... So
-(~150 lines truncated)
-So the code is as written above. Let me check again the style guide points:
-
-- Prefer instance methods over class methods: the class has an initialize method, and instance methods nth_element and first_n_elements. So that's correct.
-
-- Prefer ||= over if/ternary: the code uses ||=, and the code inside the begin...end is not using if/ternary, but the code is using a begin...end block.     But in the code, the begin...end
-is used to handle the case where n is 0 or 1. But the code is written with the ||= operator. So that's acceptable.
-
-- Ranges: (0...n) is used, which is correct.
-
-- No unneeded return statements: the code returns the values via the methods.
-
-- Memoization: the @fib hash is used to store the computed values. So that's correct.
-
-So the code should be correct. Now, the user wants the code to be written as per the example. The example has the initialize method with an instance     variable, and the method uses ||=.
-
-So the code should be correct.
-&#x3C;/think>
-
-```ruby
-class Fibonacci
-  def initialize
-    @fib = { 0 => 0, 1 => 1 }
-  end
-
-  def nth_element(n)
-    @fib[n] ||= begin
-      @fib[n-1] + @fib[n-2]
-    end
-  end
-
-  def first_n_elements(n)
-    (0...n).map { |i| nth_element(i) }
-  end
-end
-```
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>~ # ollama run qwen3:4b</span></span>
+<span class="line"><span>>>> Write a ruby class that generates the fibonacci sequence. Include getter methods for the nth element, and the first n elements.</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... Return just the code.</span></span>
+<span class="line"><span>(truncated)</span></span>
+<span class="line"><span>...   def double(n)</span></span>
+<span class="line"><span>...     # Return cached value, or set cached value and return it</span></span>
+<span class="line"><span>...     @doubles[n] ||= n * 2</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>... end</span></span>
+<span class="line"><span>... ```</span></span>
+<span class="line"><span>&#x3C;think></span></span>
+<span class="line"><span>Okay, I need to write a Ruby class that generates the Fibonacci sequence. The user wants getter methods for the nth element and the first n elements.     Also, there's a style guide to</span></span>
+<span class="line"><span>follow. Let me think about how to approach this.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>First, the Fibonacci sequence starts with 0 and 1, and each subsequent number is the sum of the previous two. So, for the nth element, maybe I should have     an instance variable that</span></span>
+<span class="line"><span>stores the sequence, but since it's a class, maybe it's better to compute it on the fly with memoization.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Wait, the style guide says to prefer instance methods over class methods. So the class will have an initialize method, and then instance methods for     getting the nth element and the</span></span>
+<span class="line"><span>first n elements.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Memoization is important here. So, perhaps I can store the Fibonacci numbers in a hash, where the keys are the indices, and the values are the numbers.     That way, when I calculate a</span></span>
+<span class="line"><span>number, I can store it so that future calls are faster.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Let me think about the initialize method. Maybe I should initialize a hash to hold the Fibonacci numbers. The base cases are 0 and 1. Wait, but Fibonacci     sequence can be defined with 0</span></span>
+<span class="line"><span>as the first element. Let me check: the 0th element is 0, 1st is 1, 2nd is 1, 3rd is 2, etc. Or sometimes it's considered starting with 1, 1, 2... So</span></span>
+<span class="line"><span>(~150 lines truncated)</span></span>
+<span class="line"><span>So the code is as written above. Let me check again the style guide points:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- Prefer instance methods over class methods: the class has an initialize method, and instance methods nth_element and first_n_elements. So that's correct.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- Prefer ||= over if/ternary: the code uses ||=, and the code inside the begin...end is not using if/ternary, but the code is using a begin...end block.     But in the code, the begin...end</span></span>
+<span class="line"><span>is used to handle the case where n is 0 or 1. But the code is written with the ||= operator. So that's acceptable.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- Ranges: (0...n) is used, which is correct.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- No unneeded return statements: the code returns the values via the methods.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- Memoization: the @fib hash is used to store the computed values. So that's correct.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>So the code should be correct. Now, the user wants the code to be written as per the example. The example has the initialize method with an instance     variable, and the method uses ||=.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>So the code should be correct.</span></span>
+<span class="line"><span>&#x3C;/think></span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>```ruby</span></span>
+<span class="line"><span>class Fibonacci</span></span>
+<span class="line"><span>  def initialize</span></span>
+<span class="line"><span>    @fib = { 0 => 0, 1 => 1 }</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def nth_element(n)</span></span>
+<span class="line"><span>    @fib[n] ||= begin</span></span>
+<span class="line"><span>      @fib[n-1] + @fib[n-2]</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def first_n_elements(n)</span></span>
+<span class="line"><span>    (0...n).map { |i| nth_element(i) }</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span>```</span></span></code></pre>
       <p>
         Other than a minor style point (the unneeded begin block), I have no
         complaints about the code, only needing to wait for a 7k think block to
@@ -1109,83 +1149,87 @@ end
         What I needed was a better example that more closely matched the
         problem. Here’s what I came up with:
       </p>
-      <pre><code>~ # ollama run llama3
->>> Write a ruby class that generates the fibonacci sequence.
-...
-... ## Guidelines
-...
-... * Include getter methods for the nth element, and the first n elements.
-... * Memoize results as they are calculated
-...
-... ## Example
-...
-... ```ruby
-... class Doubler
-...   def initialize
-...     @doubles = { 1 => 2, 2 => 4 }
-...   end
-...
-...   def nth(n)
-...     @doubles[n] ||= calculate_double(n)
-...   end
-...
-...   def first_n(n)
-...     (1..n).map &#x26;method(:nth)
-...   end
-...
-...   private
-...
-...   def calculate_double(n)
-...     nth(n - 1) + 2
-...   end
-... end
-... ```
-Here is a Ruby class that generates the Fibonacci sequence:
-```ruby
-class FibSequence
-  attr_reader :fib_cache
-
-  def initialize
-    @fib_cache = { 0 => 0, 1 => 1 }
-  end
-
-  def nth(n)
-    @fib_cache[n] ||= calculate_fibonacci(n)
-  end
-
-  def first_n(n)
-    (0..n-1).map &#x26;method(:nth)
-  end
-
-  private
-
-  def calculate_fibonacci(n)
-    if n &#x3C;= 1
-      n
-    else
-      nth(n-1) + nth(n-2)
-    end
-  end
-end
-```
-Here's a brief explanation of the code:
-
-* The class has an instance variable `@fib_cache` that serves as a cache for previously calculated Fibonacci numbers. We use this to memoize results, so     we don't have to recalculate the
-same values multiple times.
-* The `nth` method returns the nth Fibonacci number. If the value is already cached, it returns the cached result; otherwise, it calculates the value     using the recursive formula and
-stores it in the cache for future reference.
-* The `first_n` method returns an array of the first `n` Fibonacci numbers.
-
-You can use this class like so:
-```ruby
-fib = FibSequence.new
-puts fib.nth(5) # prints 3
-puts fib.first_n(10).inspect # prints [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
-```
-I hope this helps! Let me know if you have any questions.
-
->>> Send a message (/? for help)
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>~ # ollama run llama3</span></span>
+<span class="line"><span>>>> Write a ruby class that generates the fibonacci sequence.</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... ## Guidelines</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... * Include getter methods for the nth element, and the first n elements.</span></span>
+<span class="line"><span>... * Memoize results as they are calculated</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... ## Example</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>... ```ruby</span></span>
+<span class="line"><span>... class Doubler</span></span>
+<span class="line"><span>...   def initialize</span></span>
+<span class="line"><span>...     @doubles = { 1 => 2, 2 => 4 }</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>...   def nth(n)</span></span>
+<span class="line"><span>...     @doubles[n] ||= calculate_double(n)</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>...   def first_n(n)</span></span>
+<span class="line"><span>...     (1..n).map &#x26;method(:nth)</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>...   private</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>...   def calculate_double(n)</span></span>
+<span class="line"><span>...     nth(n - 1) + 2</span></span>
+<span class="line"><span>...   end</span></span>
+<span class="line"><span>... end</span></span>
+<span class="line"><span>... ```</span></span>
+<span class="line"><span>Here is a Ruby class that generates the Fibonacci sequence:</span></span>
+<span class="line"><span>```ruby</span></span>
+<span class="line"><span>class FibSequence</span></span>
+<span class="line"><span>  attr_reader :fib_cache</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def initialize</span></span>
+<span class="line"><span>    @fib_cache = { 0 => 0, 1 => 1 }</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def nth(n)</span></span>
+<span class="line"><span>    @fib_cache[n] ||= calculate_fibonacci(n)</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def first_n(n)</span></span>
+<span class="line"><span>    (0..n-1).map &#x26;method(:nth)</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  private</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  def calculate_fibonacci(n)</span></span>
+<span class="line"><span>    if n &#x3C;= 1</span></span>
+<span class="line"><span>      n</span></span>
+<span class="line"><span>    else</span></span>
+<span class="line"><span>      nth(n-1) + nth(n-2)</span></span>
+<span class="line"><span>    end</span></span>
+<span class="line"><span>  end</span></span>
+<span class="line"><span>end</span></span>
+<span class="line"><span>```</span></span>
+<span class="line"><span>Here's a brief explanation of the code:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>* The class has an instance variable `@fib_cache` that serves as a cache for previously calculated Fibonacci numbers. We use this to memoize results, so     we don't have to recalculate the</span></span>
+<span class="line"><span>same values multiple times.</span></span>
+<span class="line"><span>* The `nth` method returns the nth Fibonacci number. If the value is already cached, it returns the cached result; otherwise, it calculates the value     using the recursive formula and</span></span>
+<span class="line"><span>stores it in the cache for future reference.</span></span>
+<span class="line"><span>* The `first_n` method returns an array of the first `n` Fibonacci numbers.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>You can use this class like so:</span></span>
+<span class="line"><span>```ruby</span></span>
+<span class="line"><span>fib = FibSequence.new</span></span>
+<span class="line"><span>puts fib.nth(5) # prints 3</span></span>
+<span class="line"><span>puts fib.first_n(10).inspect # prints [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]</span></span>
+<span class="line"><span>```</span></span>
+<span class="line"><span>I hope this helps! Let me know if you have any questions.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>>>> Send a message (/? for help)</span></span></code></pre>
       <p>
         Much better. I took out the style guide, and changed the example to
         function more like the Fibonacci calculator would. It could be argued
@@ -1270,94 +1314,110 @@ I hope this helps! Let me know if you have any questions.
         our trusty friend ngrok, turned on the Gutenberg tool, and then asked
         about H.G. Wells. Here’s the initial post from Open WebUI to Ollama:
       </p>
-      <pre><code>{
-    "model": "llama3:latest",
-    "messages": [
-        {
-            "role": "system",
-            "content": "Available Tools: [{\"name\": \"gutenberg_api\", \"description\": \"\\n        Fetch data from the Project Gutenberg API.\\n\\n        \", \"parameters\": {\"properties\": {\"query_type\": {\"description\": \"Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.\", \"type\": \"string\"}, \"query_value\": {\"description\": \"Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.\", \"type\": \"string\"}}, \"type\": \"object\"}}]\n\nYour task is to choose and return the correct tool(s) from the list of available tools based on the query. Follow these guidelines:\n\n- Return only the JSON object, without any additional text or explanation.\n\n- If no tools match the query, return an empty array: \n   {\n     \"tool_calls\": []\n   }\n\n- If one or more tools match the query, construct a JSON response containing a \"tool_calls\" array with objects that include:\n   - \"name\": The tool's name.\n   - \"parameters\": A dictionary of required parameters and their corresponding values.\n\nThe format for the JSON response is strictly:\n{\n  \"tool_calls\": [\n    {\"name\": \"toolName1\", \"parameters\": {\"key1\": \"value1\"}},\n    {\"name\": \"toolName2\", \"parameters\": {\"key2\": \"value2\"}}\n  ]\n}"
-        },
-        {
-            "role": "user",
-            "content": "Query: History:\nUSER: \"\"\"How many Gutenberg entries are there for H.G. Wells?\"\"\"\nQuery: How many Gutenberg entries are there for H.G. Wells?"
-        }
-    ],
-    "stream": false
-}
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>{</span></span>
+<span class="line"><span>    "model": "llama3:latest",</span></span>
+<span class="line"><span>    "messages": [</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            "role": "system",</span></span>
+<span class="line"><span>            "content": "Available Tools: [{\"name\": \"gutenberg_api\", \"description\": \"\\n        Fetch data from the Project Gutenberg API.\\n\\n        \", \"parameters\": {\"properties\": {\"query_type\": {\"description\": \"Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.\", \"type\": \"string\"}, \"query_value\": {\"description\": \"Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.\", \"type\": \"string\"}}, \"type\": \"object\"}}]\n\nYour task is to choose and return the correct tool(s) from the list of available tools based on the query. Follow these guidelines:\n\n- Return only the JSON object, without any additional text or explanation.\n\n- If no tools match the query, return an empty array: \n   {\n     \"tool_calls\": []\n   }\n\n- If one or more tools match the query, construct a JSON response containing a \"tool_calls\" array with objects that include:\n   - \"name\": The tool's name.\n   - \"parameters\": A dictionary of required parameters and their corresponding values.\n\nThe format for the JSON response is strictly:\n{\n  \"tool_calls\": [\n    {\"name\": \"toolName1\", \"parameters\": {\"key1\": \"value1\"}},\n    {\"name\": \"toolName2\", \"parameters\": {\"key2\": \"value2\"}}\n  ]\n}"</span></span>
+<span class="line"><span>        },</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            "role": "user",</span></span>
+<span class="line"><span>            "content": "Query: History:\nUSER: \"\"\"How many Gutenberg entries are there for H.G. Wells?\"\"\"\nQuery: How many Gutenberg entries are there for H.G. Wells?"</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    ],</span></span>
+<span class="line"><span>    "stream": false</span></span>
+<span class="line"><span>}</span></span></code></pre>
       <p>
         The UI adds a system prompt that declares what tools are available, and
         how to use them. Here’s a pretty print of the system prompt:
       </p>
-      <pre><code>Available Tools: [{"name": "gutenberg_api", "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ", "parameters": {"properties": {"query_type": {"description": "Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.", "type": "string"}, "query_value": {"description": "Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.", "type": "string"}}, "type": "object"}}]
-
-Your task is to choose and return the correct tool(s) from the list of available tools based on the query. Follow these guidelines:
-
-- Return only the JSON object, without any additional text or explanation.
-
-- If no tools match the query, return an empty array:
-   {
-     "tool_calls": []
-   }
-
-- If one or more tools match the query, construct a JSON response containing a "tool_calls" array with objects that include:
-   - "name": The tool's name.
-   - "parameters": A dictionary of required parameters and their corresponding values.
-
-The format for the JSON response is strictly:
-{
-  "tool_calls": [
-    {"name": "toolName1", "parameters": {"key1": "value1"}},
-    {"name": "toolName2", "parameters": {"key2": "value2"}}
-  ]
-}
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>Available Tools: [{"name": "gutenberg_api", "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ", "parameters": {"properties": {"query_type": {"description": "Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.", "type": "string"}, "query_value": {"description": "Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.", "type": "string"}}, "type": "object"}}]</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Your task is to choose and return the correct tool(s) from the list of available tools based on the query. Follow these guidelines:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- Return only the JSON object, without any additional text or explanation.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- If no tools match the query, return an empty array:</span></span>
+<span class="line"><span>   {</span></span>
+<span class="line"><span>     "tool_calls": []</span></span>
+<span class="line"><span>   }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>- If one or more tools match the query, construct a JSON response containing a "tool_calls" array with objects that include:</span></span>
+<span class="line"><span>   - "name": The tool's name.</span></span>
+<span class="line"><span>   - "parameters": A dictionary of required parameters and their corresponding values.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>The format for the JSON response is strictly:</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>  "tool_calls": [</span></span>
+<span class="line"><span>    {"name": "toolName1", "parameters": {"key1": "value1"}},</span></span>
+<span class="line"><span>    {"name": "toolName2", "parameters": {"key2": "value2"}}</span></span>
+<span class="line"><span>  ]</span></span>
+<span class="line"><span>}</span></span></code></pre>
       <p>…and here’s a pretty-print of the Available Tools object:</p>
-      <pre><code>[{
-    "name": "gutenberg_api",
-    "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ",
-    "parameters":
-    {
-        "properties":
-        {
-            "query_type":
-            {
-                "description": "Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.",
-                "type": "string"
-            },
-            "query_value":
-            {
-                "description": "Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.",
-                "type": "string"
-            }
-        },
-        "type": "object"
-    }
-}]
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>[{</span></span>
+<span class="line"><span>    "name": "gutenberg_api",</span></span>
+<span class="line"><span>    "description": "\n        Fetch data from the Project Gutenberg API.\n\n        ",</span></span>
+<span class="line"><span>    "parameters":</span></span>
+<span class="line"><span>    {</span></span>
+<span class="line"><span>        "properties":</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            "query_type":</span></span>
+<span class="line"><span>            {</span></span>
+<span class="line"><span>                "description": "Type of query. Use only 'search' or 'topic'. Use 'search' for title and author names, and 'topic' for general subjects or keywords.",</span></span>
+<span class="line"><span>                "type": "string"</span></span>
+<span class="line"><span>            },</span></span>
+<span class="line"><span>            "query_value":</span></span>
+<span class="line"><span>            {</span></span>
+<span class="line"><span>                "description": "Value for the query. Omit any prefixes, just use the raw author name, title, or general subject to search for.",</span></span>
+<span class="line"><span>                "type": "string"</span></span>
+<span class="line"><span>            }</span></span>
+<span class="line"><span>        },</span></span>
+<span class="line"><span>        "type": "object"</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span>}]</span></span></code></pre>
       <p>
         This is very similar to the “write a concise title” side conversation
         from earlier, except giving Ollama the instructions as a system prompt,
         overriding any default behavior, talk like a pirate mods, etc. Here’s
         Ollama’s response:
       </p>
-      <pre><code>{
-    "model": "llama3:latest",
-    "created_at": "2025-05-20T14:21:33.9222Z",
-    "message": {
-        "role": "assistant",
-        "content": "{\n    \"tool_calls\": [\n        {\n            \"name\": \"gutenberg_api\",\n            \"parameters\": {\"query_type\": \"search\", \"query_value\": \"H.G. Wells\"}\n        }\n    ]\n}"
-    },
-    "done_reason": "stop",
-    "done": true,
-    "total_duration": 10320286417,
-    "load_duration": 3704954167,
-    "prompt_eval_count": 354,
-    "prompt_eval_duration": 4471744708,
-    "eval_count": 45,
-    "eval_duration": 2139375834
-}
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>{</span></span>
+<span class="line"><span>    "model": "llama3:latest",</span></span>
+<span class="line"><span>    "created_at": "2025-05-20T14:21:33.9222Z",</span></span>
+<span class="line"><span>    "message": {</span></span>
+<span class="line"><span>        "role": "assistant",</span></span>
+<span class="line"><span>        "content": "{\n    \"tool_calls\": [\n        {\n            \"name\": \"gutenberg_api\",\n            \"parameters\": {\"query_type\": \"search\", \"query_value\": \"H.G. Wells\"}\n        }\n    ]\n}"</span></span>
+<span class="line"><span>    },</span></span>
+<span class="line"><span>    "done_reason": "stop",</span></span>
+<span class="line"><span>    "done": true,</span></span>
+<span class="line"><span>    "total_duration": 10320286417,</span></span>
+<span class="line"><span>    "load_duration": 3704954167,</span></span>
+<span class="line"><span>    "prompt_eval_count": 354,</span></span>
+<span class="line"><span>    "prompt_eval_duration": 4471744708,</span></span>
+<span class="line"><span>    "eval_count": 45,</span></span>
+<span class="line"><span>    "eval_duration": 2139375834</span></span>
+<span class="line"><span>}</span></span></code></pre>
       <p>
         It said that yes, I’d like to use the Gutenberg tool to answer a
         Gutenberg question, with the query terms “search” and “H.G. Wells”. At
@@ -1365,17 +1425,21 @@ The format for the JSON response is strictly:
         those params. It makes an HTTP call to gutendex.com, filters the
         results, and passes them back to Ollama as a new message:
       </p>
-      <pre><code>{
-    "model": "llama3:latest",
-    "messages": [
-        {
-            "role": "user",
-            "content": "How many Gutenberg entries are there for H.G. Wells?\n\nTool `gutendex_fetcher/gutenberg_api` Output: {\n  \"count\": 1,\n  \"titles\": [\n    {\n      \"title\": \"The World of H.G. Wells\",\n      \"author\": \"Brooks, Van Wyck\",\n      \"downloads\": 161\n    }\n  ]\n}"
-        }
-    ],
-    "stream": true
-}
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>{</span></span>
+<span class="line"><span>    "model": "llama3:latest",</span></span>
+<span class="line"><span>    "messages": [</span></span>
+<span class="line"><span>        {</span></span>
+<span class="line"><span>            "role": "user",</span></span>
+<span class="line"><span>            "content": "How many Gutenberg entries are there for H.G. Wells?\n\nTool `gutendex_fetcher/gutenberg_api` Output: {\n  \"count\": 1,\n  \"titles\": [\n    {\n      \"title\": \"The World of H.G. Wells\",\n      \"author\": \"Brooks, Van Wyck\",\n      \"downloads\": 161\n    }\n  ]\n}"</span></span>
+<span class="line"><span>        }</span></span>
+<span class="line"><span>    ],</span></span>
+<span class="line"><span>    "stream": true</span></span>
+<span class="line"><span>}</span></span></code></pre>
       <p>
         Oops. Unfortunately the query itself went sideways, probably because all
         the HG Wells books are listed with the author “Wells, H. G. (Herbert
@@ -1386,8 +1450,12 @@ The format for the JSON response is strictly:
         Lastly, Ollama responds with a streaming one-line-per-token response,
         which when joined together says:
       </p>
-      <pre><code>According to the output from `gutendex_fetcher/gutenberg_api`, there is only 1 Gutenberg entry for H.G. Wells. Specifically, it's a book about him titled "The World of H.G. Wells" by Van Wyck Brooks.
-</code></pre>
+      <pre
+        class="astro-code syntax-theme"
+        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
+        tabindex="0"
+        data-language="plaintext"
+      ><code><span class="line"><span>According to the output from `gutendex_fetcher/gutenberg_api`, there is only 1 Gutenberg entry for H.G. Wells. Specifically, it's a book about him titled "The World of H.G. Wells" by Van Wyck Brooks.</span></span></code></pre>
       <p>
         After these experiments, I’m more tuned into the LLM world than I was
         before. Unsurprisingly, a lot of ChatGTP-adjacent content is showing up
