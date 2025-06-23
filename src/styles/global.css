@@ -198,6 +198,10 @@ article img {
   background: var(--tooltip-background-color);
 }
 
+p.hover {
+  position: relative;
+}
+
 .hover img:hover + .tooltip,
 .tooltip:hover {
   display: inline;

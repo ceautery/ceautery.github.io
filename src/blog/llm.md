@@ -1,11 +1,10 @@
 ---
+url: "/blog/llm/"
 title: "Local LLMs"
 type: "article"
-image: "https://blog.autery.net/images/llm/preview.png"
-url: "https://blog.autery.net/blog/llm/"
+image: "/images/llm/preview.png"
 description: "Running local LLMs with Ollama and Open WebUI, and using with Bruno and ngrok to see what makes it all tick."
 date: "2025-05-20"
-hasMath: false
 ---
 
 # Local LLMs

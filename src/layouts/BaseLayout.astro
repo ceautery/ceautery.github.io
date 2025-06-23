@@ -2,7 +2,7 @@
 import "../styles/global.css";
 
 const { data } = Astro.props;
-const ogTags = ["title", "type", "image", "url", "description"];
+const baseURL = "https://blog.autery.net";
 ---
 
 <html lang="en">
@@ -21,8 +21,16 @@ const ogTags = ["title", "type", "image", "url", "description"];
     <link rel="me" href="https://mastodon.social/@CurtisAutery" />
     <meta name="viewport" content="width=500" />
     <meta charset="UTF-8" />
+    <meta property="og:url" content={`${baseURL}${data.url}`} />
+    <meta property="og:title" content={data.title} />
+    <meta property="og:type" content={data.type} />
+    <meta property="og:image" content={`${baseURL}${data.image}`} />
+    <meta
+      name="description"
+      property="og:description"
+      content={data.description}
+    />
     <meta name="author" content="Curtis Autery" />
-    <meta name="description" content={data.description} />
     {
       data.date && (
         <meta
@@ -31,9 +39,7 @@ const ogTags = ["title", "type", "image", "url", "description"];
         />
       )
     }
-    {ogTags.map((tag) => <meta property={`og:${tag}`} content={data[tag]} />)}
-  </head>
-  <body>
+  </head><body>
     <header>
       Curtis Autery, pretty ok software writer.
 
