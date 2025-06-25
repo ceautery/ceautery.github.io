@@ -1,394 +1,68 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <title>How to download a web page</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
-      integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP"
-      crossorigin="anonymous"
-    />
-    <link rel="me" href="https://mastodon.social/@CurtisAutery" />
-    <meta name="viewport" content="width=500" />
-    <meta charset="UTF-8" />
-    <meta
-      property="og:url"
-      content="https://blog.autery.net/blog/download-webpage/"
-    />
-    <meta property="og:title" content="How to download a web page" />
-    <meta property="og:type" content="article" />
-    <meta
-      property="og:image"
-      content="https://blog.autery.net/images/plate.jpg"
-    />
-    <meta
-      name="description"
-      property="og:description"
-      content="Exploring shell commands, the HTTP protocol, and AJAX requests. (Written before I converted to the fetch API)"
-    />
-    <meta name="author" content="Curtis Autery" />
-    <meta
-      property="article:published_time"
-      content="2017-06-01T12:00:00-05:00"
-    />
-    <style>
-      :root {
-        color-scheme: light dark;
-        --background-color: light-dark(#fff, #2f2f2f);
-        --text-color: light-dark(#000, #fff);
-        --nav-border-color: light-dark(
-          rgba(10, 10, 10, 0.1),
-          rgba(200, 200, 200, 0.1)
-        );
-        --nav-hover-color: light-dark(#f4f4f4, #555);
-        --code-background-color: #222;
-        --code-color: #e1e4e8;
-        --blockquote-border-color: light-dark(#eee, #666);
-        --blockquote-color: light-dark(#444, #ccc);
-        --table-border-color: light-dark(#dbdbdb, #555);
-        --table-hover-color: light-dark(#f5f5f5, #444);
-        --link-color: light-dark(#17874f, #66d9ef);
-        --link-hover-color: light-dark(#363636, #fff);
-        --tooltip-background-color: light-dark(#fff, #444);
-        --tooltip-border-color: light-dark(#dbdbdb, #666);
-        --header-background-color: light-dark(
-          rgba(255, 255, 255, 1),
-          rgba(47, 47, 47, 1)
-        );
-      }
-      .katex {
-        font-size: 1.25em;
-      }
-      html {
-        scroll-padding-top: 96px;
-      }
-      body {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        margin: 0;
-        font-family: system-ui;
-        font-size: 1.25em;
-        line-height: 1.5;
-        background-color: var(--background-color);
-        color: var(--text-color);
-      }
-      header {
-        margin-left: 1em;
-        position: sticky;
-        top: 0;
-        width: 100%;
-        background-color: var(--header-background-color);
-        z-index: 1;
-      }
-      nav {
-        margin: 0.5em 0;
-        border-bottom: 3px solid var(--nav-border-color);
-        line-height: 2;
-        max-width: 600px;
-      }
-      nav a {
-        display: inline-block;
-        padding: 0 2em;
-        text-decoration: none;
-        color: inherit;
-      }
-      nav a:hover {
-        background-color: var(--nav-hover-color);
-      }
-      nav a.live {
-        border-bottom: 3px solid #198e53;
-      }
-      article {
-        flex-grow: 1;
-        padding: 1em 15%;
-        margin: 0 14pt;
-      }
-      article h1 {
-        font-size: 30px;
-        text-align: center;
-      }
-      p.hero {
-        display: flex;
-        justify-content: center;
-      }
-      article blockquote {
-        border-left: 5px solid var(--blockquote-border-color);
-        padding-left: 1em;
-        margin-left: 0;
-        color: var(--blockquote-color);
-      }
-      a {
-        color: var(--link-color);
-        text-decoration: none;
-      }
-      a:hover {
-        color: var(--link-hover-color);
-      }
-      :not(pre) > code {
-        padding: 0.2em 0.4em;
-      }
-      :not(.codez) > code {
-        font-size: 0.875em;
-      }
-      code,
-      .codez {
-        font-family: Menlo, monospace;
-        color: var(--code-color);
-        background-color: var(--code-background-color);
-      }
-      .codez {
-        font-size: 0.875em;
-        overflow: scroll;
-        padding: 0 0.75em;
-        white-space: pre;
-      }
-      .codez pre {
-        padding: 0;
-      }
-      .codez strong {
-        color: #dda790;
-      }
-      .codez em {
-        color: #26d980;
-      }
-      tr:hover {
-        background-color: var(--table-hover-color);
-      }
-      td,
-      th {
-        border: 1px solid var(--table-border-color);
-        padding: 0.5em 0.75em;
-        vertical-align: top;
-      }
-      td {
-        border-width: 0 0 1px;
-      }
-      th {
-        width: 30%;
-        color: var(--link-hover-color);
-        text-align: left;
-        border-width: 0 0 2px;
-      }
-      th:first-of-type {
-        width: 20%;
-      }
-      th:last-of-type {
-        width: 50%;
-      }
-      .math {
-        font-family: Times;
-        font-size: 1.25em;
-      }
-      article pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        overflow: auto;
-        padding: 0.75em;
-      }
-      article img {
-        max-width: 100%;
-        height: auto;
-      }
-      .tooltip {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: 2px solid var(--tooltip-border-color);
-        padding: 5pt;
-        background: var(--tooltip-background-color);
-      }
-      p.hover {
-        position: relative;
-      }
-      .hover img:hover + .tooltip,
-      .tooltip:hover {
-        display: inline;
-      }
-      @media screen and (max-width: 1200px) {
-        body {
-          font-size: 1.125em;
-        }
-        article {
-          padding: 1em 10%;
-        }
-      }
-      @media screen and (max-width: 1024px) {
-        body {
-          font-size: 1em;
-        }
-        article {
-          padding: 1em 5%;
-        }
-      }
-      @media screen and (max-width: 900px) {
-        body {
-          font-size: 1em;
-        }
-        article {
-          padding: 1em 0;
-          text-align: left;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      Curtis Autery, pretty ok software writer.
-      <nav><a href="/" class="live">blog</a> <a href="/about">about</a></nav>
-    </header>
-    <article>
-      <p>This post will show you:</p>
-      <ul>
-        <li>Linux/macOS shell commands</li>
-        <li>Downloading a web resource with HTTP commands</li>
-        <li>The OSI model</li>
-        <li>JSON data</li>
-        <li>How to make an AJAX request in a Chrome developer console</li>
-      </ul>
-      <h3 id="part-1-downloading-a-web-page-the-hard-way">
-        Part 1: Downloading a web page, the hard way
-      </h3>
+<!DOCTYPE html><html lang="en"> <head><title>How to download a web page</title><link rel="me" href="https://mastodon.social/@CurtisAutery"><meta name="viewport" content="width=500"><meta charset="UTF-8"><meta property="og:url" content="https://blog.autery.net/blog/download-webpage/"><meta property="og:title" content="How to download a web page"><meta property="og:type" content="article"><meta property="og:image" content="https://blog.autery.net/images/plate.jpg"><meta name="description" property="og:description" content="Exploring shell commands, the HTTP protocol, and AJAX requests. (Written before I converted to the fetch API)"><meta name="author" content="Curtis Autery"><meta property="article:published_time" content="2017-06-01T12:00:00-05:00"><style>:root{color-scheme:light dark;--background-color: light-dark(#fff, #2f2f2f);--text-color: light-dark(#000, #fff);--nav-border-color: light-dark( rgba(10, 10, 10, .1), rgba(200, 200, 200, .1) );--nav-hover-color: light-dark(#f4f4f4, #555);--code-background-color: #222;--code-color: #e1e4e8;--blockquote-border-color: light-dark(#eee, #666);--blockquote-color: light-dark(#444, #ccc);--table-border-color: light-dark(#dbdbdb, #555);--table-hover-color: light-dark(#f5f5f5, #444);--link-color: light-dark(#17874f, #66d9ef);--link-hover-color: light-dark(#363636, #fff);--tooltip-background-color: light-dark(#fff, #444);--tooltip-border-color: light-dark(#dbdbdb, #666);--header-background-color: light-dark( rgba(255, 255, 255, 1), rgba(47, 47, 47, 1) )}.katex{font-size:1.25em}html{scroll-padding-top:96px}body{display:flex;flex-direction:column;height:100%;margin:0;font-family:system-ui;font-size:1.25em;line-height:1.5;background-color:var(--background-color);color:var(--text-color)}header{margin-left:1em;position:sticky;top:0;width:100%;background-color:var(--header-background-color);z-index:1}nav{margin:.5em 0;border-bottom:3px solid var(--nav-border-color);line-height:2;max-width:600px}nav a{display:inline-block;padding:0 2em;text-decoration:none;color:inherit}nav a:hover{background-color:var(--nav-hover-color)}nav a.live{border-bottom:3px solid #198e53}article{flex-grow:1;padding:1em 15%;margin:0 14pt}article h1{font-size:30px;text-align:center}p.hero{display:flex;justify-content:center}article blockquote{border-left:5px solid var(--blockquote-border-color);padding-left:1em;margin-left:0;color:var(--blockquote-color)}a{color:var(--link-color);text-decoration:none}a:hover{color:var(--link-hover-color)}:not(pre)>code{padding:.2em .4em}:not(.codez)>code{font-size:.875em}code,.codez{font-family:Menlo,monospace;color:var(--code-color);background-color:var(--code-background-color)}.codez{font-size:.875em;overflow:scroll;padding:0 .75em;white-space:pre}.codez pre{padding:0}.codez strong{color:#dda790}.codez em{color:#26d980}tr:hover{background-color:var(--table-hover-color)}td,th{border:1px solid var(--table-border-color);padding:.5em .75em;vertical-align:top}td{border-width:0 0 1px}th{width:30%;color:var(--link-hover-color);text-align:left;border-width:0 0 2px}th:first-of-type{width:20%}th:last-of-type{width:50%}.math{font-family:Times;font-size:1.25em}article pre{white-space:pre-wrap;word-wrap:break-word;overflow:auto;padding:.75em}article img{max-width:100%;height:auto}.tooltip{display:none;position:absolute;top:0;left:0;border:2px solid var(--tooltip-border-color);padding:5pt;background:var(--tooltip-background-color)}p.hover{position:relative}.hover img:hover+.tooltip,.tooltip:hover{display:inline}@media screen and (max-width: 1200px){body{font-size:1.125em}article{padding:1em 10%}}@media screen and (max-width: 1024px){body{font-size:1em}article{padding:1em 5%}}@media screen and (max-width: 900px){body{font-size:1em}article{padding:1em 0;text-align:left}}
+</style></head><body> <header>
+Curtis Autery, pretty ok software writer.
+<nav> <a href="/" class="live">blog</a> <a href="/about">about</a> </nav> </header> <article>  <p>This post will show you:</p>
+<ul>
+<li>Linux/macOS shell commands</li>
+<li>Downloading a web resource with HTTP commands</li>
+<li>The OSI model</li>
+<li>JSON data</li>
+<li>How to make an AJAX request in a Chrome developer console</li>
+</ul>
+<h3 id="part-1-downloading-a-web-page-the-hard-way">Part 1: Downloading a web page, the hard way</h3>
 
-      <table>
-        <thead>
-          <tr>
-            <th align="left">Tools</th>
-            <th align="left">Tech</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/MacOS_Sierra">macOS</a>
-            </td>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29"
-                >Bash</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/ITerm2">iTerm2</a>
-            </td>
-            <td align="left">
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP"
-                >HTTP</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/Telnet">Telnet</a>
-            </td>
-            <td align="left">
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML"
-                >HTML</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td align="left"></td>
-            <td align="left">
-              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p>
-        <em
-          >(A few months after originally publishing this, Apple removed telnet
-          from macos’s default apps)</em
-        >
-      </p>
-      <p>
-        There exists a website, <a href="http://example.com">example.com</a>,
-        which is exactly what its name suggests. It happens to be the easiest
-        location on the Internet to show how basic
-        <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol"
-          >HTTP</a
-        >
-        requests work, and has a concise and spiffy example of good
-        <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> and
-        <a href="https://en.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a>
-        usage. The site looks like this in a desktop-sized browser:
-      </p>
-      <p>
-        <img
-          alt="example.com on a desktop browser"
-          width="734"
-          height="451"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/example-normal.CEPwZtdt_Z1GyxTK.webp"
-        />
-      </p>
-      <p>…and like this on a phone:</p>
-      <p>
-        <img
-          alt="example.com on a mobile browser"
-          width="450"
-          height="798"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/example-mobile.DuK_uY4L_20duel.webp"
-        />
-      </p>
-      <p>
-        The lack of a rounded border and larger grey background on the mobile
-        version is done with a simple stylesheet rule, which we’ll touch on very
-        briefly below. It’s beyond the scope of this post to teach web
-        development, and besides, a better resource than I could write already
-        exists, the Mozilla Developer Network’s excellent series
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website"
-          >Getting started with the Web</a
-        >.
-      </p>
-      <p>
-        What follows is a shell session log of me downloading the example.com
-        web page using the most primitive of tools: Telnet and manually-entered
-        HTTP commands. I’m using the iTerm 2 terminal emulator on a MacBook
-        using the default Bash shell. If you’re not familiar with all those
-        terms, the table above has some Wikipedia links to them, but if you
-        don’t want to get sidetracked looking things up now, it’s enough to know
-        that I’m using keyboard commands to do the same thing a web browser
-        does.
-      </p>
-      <p>
-        So here is me, asking to get the resource <code>/</code> (the root page)
-        from example.com, that I’ve connected to on
-        <a href="https://en.wikipedia.org/wiki/Port_%28computer_networking%29"
-          >port</a
-        >
-        80, the default port for web servers, and the response that the web
-        server gives back:
-      </p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong> <em>telnet</em> <strong>telnet></strong>
-          <em>open example.com 80</em>
-          Trying 93.184.216.34… Connected to example.com. Escape character is
-          ’^]’.
-          <em>GET / HTTP/1.1</em>
-          <em>Host: example.com</em>
-          <em>Connection: close</em>
-        </p>
-        <p>
-          HTTP/1.1 200 OK Cache-Control: max-age=604800 Content-Type: text/html
-          Date: Thu, 01 Jun 2017 07:57:30 GMT Etag: “359670651+gzip+ident”
-          Expires: Thu, 08 Jun 2017 07:57:30 GMT Last-Modified: Fri, 09 Aug 2013
-          23:54:35 GMT Server: ECS (mdw/1275) Vary: Accept-Encoding X-Cache: HIT
-          Content-Length: 1270 Connection: close
-        </p>
-        <pre
-          class="astro-code syntax-theme"
-          style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-          tabindex="0"
-          data-language="html"
-        ><code><span class="line"><span style="color:#E1E4E8">&#x3C;!</span><span style="color:#85E89D">doctype</span><span style="color:#B392F0"> html</span><span style="color:#E1E4E8">></span></span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Tools</th><th align="left">Tech</th></tr></thead><tbody><tr><td align="left"><a href="https://en.wikipedia.org/wiki/MacOS_Sierra">macOS</a></td><td align="left"><a href="https://en.wikipedia.org/wiki/Bash_%28Unix_shell%29">Bash</a></td></tr><tr><td align="left"><a href="https://en.wikipedia.org/wiki/ITerm2">iTerm2</a></td><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP">HTTP</a></td></tr><tr><td align="left"><a href="https://en.wikipedia.org/wiki/Telnet">Telnet</a></td><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></td></tr><tr><td align="left"></td><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></td></tr></tbody></table>
+<p><em>(A few months after originally publishing this, Apple removed telnet from macos’s default apps)</em></p>
+<p>There exists a website, <a href="http://example.com">example.com</a>, which is exactly what its name suggests. It happens to be the easiest location on the Internet to show how basic <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> requests work, and has a concise and spiffy example of good <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> and <a href="https://en.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a> usage. The site looks like this in a desktop-sized browser:</p>
+<p><img alt="example.com on a desktop browser" width="734" height="451" loading="lazy" decoding="async" src="/_astro/example-normal.CEPwZtdt_Z1GyxTK.webp" ></p>
+<p>…and like this on a phone:</p>
+<p><img alt="example.com on a mobile browser" width="450" height="798" loading="lazy" decoding="async" src="/_astro/example-mobile.DuK_uY4L_20duel.webp" ></p>
+<p>The lack of a rounded border and larger grey background on the mobile version is done with a simple stylesheet rule, which we’ll touch on very briefly below. It’s beyond the scope of this post to teach web development, and besides, a better resource than I could write already exists, the Mozilla Developer Network’s excellent series <a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started/Your_first_website">Getting started with the Web</a>.</p>
+<p>What follows is a shell session log of me downloading the example.com web page using the most primitive of tools: Telnet and manually-entered HTTP commands. I’m using the iTerm 2 terminal emulator on a MacBook using the default Bash shell. If you’re not familiar with all those terms, the table above has some Wikipedia links to them, but if you don’t want to get sidetracked looking things up now, it’s enough to know that I’m using keyboard commands to do the same thing a web browser does.</p>
+<p>So here is me, asking to get the resource <code>/</code> (the root page) from example.com, that I’ve connected to on <a href="https://en.wikipedia.org/wiki/Port_%28computer_networking%29">port</a> 80, the default port for web servers, and the response that the web server gives back:</p>
+<div class="codez"><p><strong>~ #</strong> <em>telnet</em>
+<strong>telnet></strong> <em>open example.com 80</em>
+Trying 93.184.216.34…
+Connected to example.com.
+Escape character is ’^]’.
+<em>GET / HTTP/1.1</em>
+<em>Host: example.com</em>
+<em>Connection: close</em></p><p>HTTP/1.1 200 OK
+Cache-Control: max-age=604800
+Content-Type: text/html
+Date: Thu, 01 Jun 2017 07:57:30 GMT
+Etag: “359670651+gzip+ident”
+Expires: Thu, 08 Jun 2017 07:57:30 GMT
+Last-Modified: Fri, 09 Aug 2013 23:54:35 GMT
+Server: ECS (mdw/1275)
+Vary: Accept-Encoding
+X-Cache: HIT
+Content-Length: 1270
+Connection: close</p><pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;!</span><span style="color:#85E89D">doctype</span><span style="color:#B392F0"> html</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">>Example Domain&#x3C;/</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">></span></span>
@@ -443,98 +117,36 @@
 <span class="line"><span style="color:#E1E4E8">      &#x3C;/</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span>
-<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre>
-        <p>Connection closed by foreign host. <strong>~ #</strong></p>
-      </div>
-      <p>Let’s break this down into logical chunks.</p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong> <em>telnet</em> <strong>telnet></strong>
-          <em>open example.com 80</em>
-        </p>
-      </div>
-      <p>
-        The <code>~ #</code> in orange is my system’s command prompt.
-        <code>~</code> in Unix-speak means your home directory, and
-        <code>#</code> is a common symbol to show a user where to start typing
-        their next command. I run the program “telnet”, which gives me its own
-        prompt. I tell it to open a connection to the server “example.com” on
-        port 80, the default server port for unencrypted web traffic.
-      </p>
-      <pre
-        class="astro-code syntax-theme"
-        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-        tabindex="0"
-        data-language="plaintext"
-      ><code><span class="line"><span>Trying 93.184.216.34...</span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre><p>Connection closed by foreign host.
+<strong>~ #</strong></p></div>
+<p>Let’s break this down into logical chunks.</p>
+<div class="codez"><p><strong>~ #</strong> <em>telnet</em>
+<strong>telnet></strong> <em>open example.com 80</em></p></div>
+<p>The <code>~ #</code> in orange is my system’s command prompt. <code>~</code> in Unix-speak means your home directory, and <code>#</code> is a common symbol to show a user where to start typing their next command. I run the program “telnet”, which gives me its own prompt. I tell it to open a connection to the server “example.com” on port 80, the default server port for unencrypted web traffic.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Trying 93.184.216.34...</span></span>
 <span class="line"><span>Connected to example.com.</span></span>
 <span class="line"><span>Escape character is '^]'.</span></span></code></pre>
-      <p>
-        The telnet program then tells me what IP address it is trying to connect
-        to (it found the address by using a
-        <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>
-        lookup of the site name I gave it), and almost immediately that it had
-        connected, and what to type to get back to a command prompt. In this
-        case, <code>^]</code> means to hold down “control” and then press the
-        right bracket key. Until I do that, everything I type gets sent to the
-        example.com server.
-      </p>
-      <div class="codez">
-        <p>
-          <em>GET / HTTP/1.1</em>
-          <em>Host: example.com</em>
-          <em>Connection: close</em>
-        </p>
-      </div>
-      <p>
-        This is what I typed after connecting, to request the
-        <code>/</code> resource. “HTTP/1.1” is the protocol I said I wanted to
-        use, and I said I intended to request the resource from example.com.
-        It’s possible to run more than one web site on a server, so it’s
-        important to say who you think you’re talking to. The “Connection:
-        close” line means tells the server that I am only going to request this
-        one thing, and that it’s safe to close the connection afterwards.
-      </p>
-      <p>
-        The blank line at the end is important; you can send an arbitrary list
-        of attributes to a web server, identifying cookies for the site, the
-        name of your browser, what type of compression you support, what plugins
-        you have installed, etc. The blank line indicates you don’t have
-        anything else to advertise to the server, and it can start sending you a
-        response.
-      </p>
-      <div class="codez">
-        <p>
-          HTTP/1.1 200 OK Cache-Control: max-age=604800 Content-Type: text/html
-          Date: Thu, 01 Jun 2017 07:57:30 GMT Etag: “359670651+gzip+ident”
-          Expires: Thu, 08 Jun 2017 07:57:30 GMT Last-Modified: Fri, 09 Aug 2013
-          23:54:35 GMT Server: ECS (mdw/1275) Vary: Accept-Encoding X-Cache: HIT
-          Content-Length: 1270 Connection: close
-        </p>
-      </div>
-      <p>
-        This is the header of the HTTP response to my GET request. The top line
-        is the response code, 200, which means that the server found the
-        resource I asked for, and then it proceeds to tell me things about the
-        response I may want to keep track of - what it’s
-        <a href="https://en.wikipedia.org/wiki/Media_type">content type</a> is,
-        when it was created, how long I can expect it to be up to date (a week,
-        in this case), and how many characters long it is.
-      </p>
-      <p>
-        Once again, the blank line is significant, indicating the end of the
-        header section, and the beginning of the response body - the “file”
-        part. In this case, the “body” is an HTML file representing a small web
-        page with some styling, and a single link to another site. The file
-        itself is also broken down into a header and a body, that a browser
-        would know how to parse. Let’s start digging into that.
-      </p>
-      <pre
-        class="astro-code syntax-theme"
-        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-        tabindex="0"
-        data-language="html"
-      ><code><span class="line"><span style="color:#E1E4E8">&#x3C;!</span><span style="color:#85E89D">doctype</span><span style="color:#B392F0"> html</span><span style="color:#E1E4E8">></span></span>
+<p>The telnet program then tells me what IP address it is trying to connect to (it found the address by using a <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> lookup of the site name I gave it), and almost immediately that it had connected, and what to type to get back to a command prompt. In this case, <code>^]</code> means to hold down “control” and then press the right bracket key. Until I do that, everything I type gets sent to the example.com server.</p>
+<div class="codez"><p><em>GET / HTTP/1.1</em>
+<em>Host: example.com</em>
+<em>Connection: close</em></p></div>
+<p>This is what I typed after connecting, to request the <code>/</code> resource. “HTTP/1.1” is the protocol I said I wanted to use, and I said I intended to request the resource from example.com. It’s possible to run more than one web site on a server, so it’s important to say who you think you’re talking to. The “Connection: close” line means tells the server that I am only going to request this one thing, and that it’s safe to close the connection afterwards.</p>
+<p>The blank line at the end is important; you can send an arbitrary list of attributes to a web server, identifying cookies for the site, the name of your browser, what type of compression you support, what plugins you have installed, etc. The blank line indicates you don’t have anything else to advertise to the server, and it can start sending you a response.</p>
+<div class="codez"><p>HTTP/1.1 200 OK
+Cache-Control: max-age=604800
+Content-Type: text/html
+Date: Thu, 01 Jun 2017 07:57:30 GMT
+Etag: “359670651+gzip+ident”
+Expires: Thu, 08 Jun 2017 07:57:30 GMT
+Last-Modified: Fri, 09 Aug 2013 23:54:35 GMT
+Server: ECS (mdw/1275)
+Vary: Accept-Encoding
+X-Cache: HIT
+Content-Length: 1270
+Connection: close</p></div>
+<p>This is the header of the HTTP response to my GET request. The top line is the response code, 200, which means that the server found the resource I asked for, and then it proceeds to tell me things about the response I may want to keep track of - what it’s <a href="https://en.wikipedia.org/wiki/Media_type">content type</a> is, when it was created, how long I can expect it to be up to date (a week, in this case), and how many characters long it is.</p>
+<p>Once again, the blank line is significant, indicating the end of the header section, and the beginning of the response body - the “file” part. In this case, the “body” is an HTML file representing a small web page with some styling, and a single link to another site. The file itself is also broken down into a header and a body, that a browser would know how to parse. Let’s start digging into that.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;!</span><span style="color:#85E89D">doctype</span><span style="color:#B392F0"> html</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">>Example Domain&#x3C;/</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">></span></span>
@@ -546,55 +158,12 @@
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#6A737D">  &#x3C;!-- body --></span></span>
 <span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre>
-      <p>
-        The very first line is the doctype declaration. In the past, giving
-        browsers hints about what flavor of HTML content was about to happen
-        would trigger different browser rendering modes. If you poke around in
-        tech forums, you’ll occasionally see references to “quirks mode” vs.
-        “standards mode”. At this point in the web development space, the HTML
-        standard is fluid, and updated frequently, and the doctype declaration
-        is less significant, but old-timers like me still like to see it, mainly
-        because we’re a bunch of cranks.
-      </p>
-      <p>
-        HTML “tags” are delimited by “angle brackets”, meaning less-than and
-        greater-than signs - <code>&#x3C;</code> and <code>></code>. Some tags
-        have a corresponding closing tag. <code>&#x3C;html></code> has
-        <code>&#x3C;/html></code> at the end of the file,
-        <code>&#x3C;head></code> has <code>&#x3C;/head></code> at the end of the
-        header section, and anything between them is a child of the header.
-        Other tags are self-closing, like the <code>&#x3C;meta></code> tags in
-        the header. By convention, self-closing tags end with <code>/></code>,
-        but browsers can still make sense of them if the slash is omitted. In
-        fact, browsers are pretty good about making sense of pages that don’t
-        100% adhere to the standards, which is important, because the HTML spec
-        and browser versions aren’t in sync with each other.
-      </p>
-      <p>
-        The meta tags in this example show two ways of defining the character
-        set, <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a> being the
-        most common at the moment, as well as a viewport definition, which is a
-        hint to mobile browsers on what size to make the virtual browser window,
-        and how far to zoom in. In this case, we’re locking the browser width to
-        the size of the phone, and not zooming.
-      </p>
-      <p>
-        In this example, I’ve replaced the style and body sections with comment
-        tags. Starting a tag with <code>&#x3C;!--</code> and ending it with
-        <code>--></code> tells a browser to ignore that part when showing the
-        page. Other programs can key off of HTML comments and perform special
-        functions. The site generator for this blog,
-        <a href="http://jekyllrb.com/">Jekyll</a>, looks for a comment tag
-        <code>&#x3C;!--more--></code> to delimit where a post’s excerpt ends,
-        and can display small parts of each post on the site’s main page.
-      </p>
-      <p>Let’s take a closer look at example.com’s stylesheet:</p>
-      <pre
-        class="astro-code syntax-theme"
-        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-        tabindex="0"
-        data-language="html"
-      ><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">style</span><span style="color:#B392F0"> type</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"text/css"</span><span style="color:#E1E4E8">></span></span>
+<p>The very first line is the doctype declaration. In the past, giving browsers hints about what flavor of HTML content was about to happen would trigger different browser rendering modes. If you poke around in tech forums, you’ll occasionally see references to “quirks mode” vs. “standards mode”. At this point in the web development space, the HTML standard is fluid, and updated frequently, and the doctype declaration is less significant, but old-timers like me still like to see it, mainly because we’re a bunch of cranks.</p>
+<p>HTML “tags” are delimited by “angle brackets”, meaning less-than and greater-than signs - <code>&#x3C;</code> and <code>></code>. Some tags have a corresponding closing tag. <code>&#x3C;html></code> has <code>&#x3C;/html></code> at the end of the file, <code>&#x3C;head></code> has <code>&#x3C;/head></code> at the end of the header section, and anything between them is a child of the header. Other tags are self-closing, like the <code>&#x3C;meta></code> tags in the header. By convention, self-closing tags end with <code>/></code>, but browsers can still make sense of them if the slash is omitted. In fact, browsers are pretty good about making sense of pages that don’t 100% adhere to the standards, which is important, because the HTML spec and browser versions aren’t in sync with each other.</p>
+<p>The meta tags in this example show two ways of defining the character set, <a href="https://en.wikipedia.org/wiki/UTF-8">UTF-8</a> being the most common at the moment, as well as a viewport definition, which is a hint to mobile browsers on what size to make the virtual browser window, and how far to zoom in. In this case, we’re locking the browser width to the size of the phone, and not zooming.</p>
+<p>In this example, I’ve replaced the style and body sections with comment tags. Starting a tag with <code>&#x3C;!--</code> and ending it with <code>--></code> tells a browser to ignore that part when showing the page. Other programs can key off of HTML comments and perform special functions. The site generator for this blog, <a href="http://jekyllrb.com/">Jekyll</a>, looks for a comment tag <code>&#x3C;!--more--></code> to delimit where a post’s excerpt ends, and can display small parts of each post on the site’s main page.</p>
+<p>Let’s take a closer look at example.com’s stylesheet:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">style</span><span style="color:#B392F0"> type</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"text/css"</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#85E89D">  body</span><span style="color:#E1E4E8"> {</span></span>
 <span class="line"><span style="color:#79B8FF">    background-color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#f0f0f2</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#79B8FF">    margin</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">;</span></span>
@@ -625,39 +194,11 @@
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
 <span class="line"><span style="color:#E1E4E8">  }</span></span>
 <span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">style</span><span style="color:#E1E4E8">></span></span></code></pre>
-      <p>
-        In a stylesheet, each setting starts with a
-        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors"
-          >selector</a
-        >, followed by a block of parameters delimited by curly-braces -
-        <code>{</code> and <code>}</code>. If my setting was
-        <code>div { display: none; }</code>, then all the “div” HTML blocks of
-        my page would be hidden.
-      </p>
-      <p>
-        On example.com, there are two competing settings for the page’s main
-        body and it’s div tag. The second block of settings is inside of a
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries"
-          >media query</a
-        >
-        that fires for any browser whose width is 700 pixels or less. Try it out
-        - head on over to <a href="http://example.com/">example.com</a>, and
-        shrink the page until the left and right borders touch the white box.
-      </p>
-      <p>
-        Stylesheets are a whole field of study, so I won’t get too deep into
-        them right now. If you want a puzzle to unravel outside the scope of
-        this post, figure out why some of the colors above are defined with 6
-        hex characters, and others with just 3.
-      </p>
-      <p>The body of the page is a little more straightforward:</p>
-      <pre
-        class="astro-code syntax-theme"
-        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-        tabindex="0"
-        data-language="html"
-      ><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span>
+<p>In a stylesheet, each setting starts with a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors">selector</a>, followed by a block of parameters delimited by curly-braces - <code>{</code> and <code>}</code>. If my setting was <code>div { display: none; }</code>, then all the “div” HTML blocks of my page would be hidden.</p>
+<p>On example.com, there are two competing settings for the page’s main body and it’s div tag. The second block of settings is inside of a <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries">media query</a> that fires for any browser whose width is 700 pixels or less. Try it out - head on over to <a href="http://example.com/">example.com</a>, and shrink the page until the left and right borders touch the white box.</p>
+<p>Stylesheets are a whole field of study, so I won’t get too deep into them right now. If you want a puzzle to unravel outside the scope of this post, figure out why some of the colors above are defined with 6 hex characters, and others with just 3.</p>
+<p>The body of the page is a little more straightforward:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">>Example Domain&#x3C;/</span><span style="color:#85E89D">h1</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">></span></span>
@@ -668,141 +209,54 @@
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">>&#x3C;</span><span style="color:#85E89D">a</span><span style="color:#B392F0"> href</span><span style="color:#E1E4E8">=</span><span style="color:#9ECBFF">"http://www.iana.org/domains/example"</span><span style="color:#E1E4E8">>More information...&#x3C;/</span><span style="color:#85E89D">a</span><span style="color:#E1E4E8">>&#x3C;/</span><span style="color:#85E89D">p</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">div</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span></code></pre>
-      <p>
-        The body contains a single div tag, whose only purpose is to be a
-        container for the white box with rounded corners. The
-        <code>&#x3C;h1></code> tag is a heading, implying larger text, and the 1
-        declaring it’s place in a heirarchy from 1 - 6. There has been some
-        struggle in the tech community to re-educate fogies such as myself to
-        think of tags as a document’s organization structure, and use
-        stylesheets for layout instructions. In the early days of HTML, tags
-        such as <code>&#x3C;font></code> and <code>&#x3C;center></code> were
-        used to control the way a page looked, but that style of web page design
-        is deprecated now in favor of using CSS and various box models. What we
-        have now is pretty good, and a great deal more concise than what we
-        started with in the 90s, but the road to get there was pretty bumpy.
-      </p>
-      <p>
-        Lastly, under the heading text are a couple of paragraph definitions,
-        one with plain text, the other with an “anchor”, or link, to the IANA
-        site, which declares that example.com is reserved, and not up for grabs.
-      </p>
-      <h3 id="part-2-redirecting-to-https">Part 2: Redirecting to HTTPS</h3>
+<p>The body contains a single div tag, whose only purpose is to be a container for the white box with rounded corners. The <code>&#x3C;h1></code> tag is a heading, implying larger text, and the 1 declaring it’s place in a heirarchy from 1 - 6. There has been some struggle in the tech community to re-educate fogies such as myself to think of tags as a document’s organization structure, and use stylesheets for layout instructions. In the early days of HTML, tags such as <code>&#x3C;font></code> and <code>&#x3C;center></code> were used to control the way a page looked, but that style of web page design is deprecated now in favor of using CSS and various box models. What we have now is pretty good, and a great deal more concise than what we started with in the 90s, but the road to get there was pretty bumpy.</p>
+<p>Lastly, under the heading text are a couple of paragraph definitions, one with plain text, the other with an “anchor”, or link, to the IANA site, which declares that example.com is reserved, and not up for grabs.</p>
+<h3 id="part-2-redirecting-to-https">Part 2: Redirecting to HTTPS</h3>
 
-      <table>
-        <thead>
-          <tr>
-            <th align="left">Tools</th>
-            <th align="left">Tech</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/Dig_%28command%29">Dig</a>
-            </td>
-            <td align="left">
-              <a
-                href="https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security"
-                >TLS</a
-              >
-            </td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a>
-            </td>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/OSI_model">OSI model</a>
-            </td>
-          </tr>
-          <tr>
-            <td align="left"></td>
-            <td align="left">
-              <a
-                href="https://web.archive.org/web/20210610092146/https://developer.mozilla.org/en-US/docs/Mozilla/Security/x509_Certificates"
-                >X509 certificates</a
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p>
-        Connections over the Internet between two machines are pretty abstract.
-        They combine everything from the cord plugged into your router (or the
-        Wifi signal to it), to how bytes are delimited, to how your local
-        network card’s address is mapped to an Internet address, to how packets
-        are acknowledged, to how files are reassembled from the parts the sender
-        breaks them into, to how your web browser interprets and displays all
-        the files it receives. These connections and behaviors are defined in
-        scores of protocol definitions and display standards, where each
-        protocol exists on (at least) one layer of the “Open Systems
-        Interconnection” (or OSI) model.
-      </p>
-      <p>
-        While we were connecting using Telnet to example.com to download it’s
-        root page, our
-        <a href="https://en.wikipedia.org/wiki/Presentation_layer"
-          >presentation layer</a
-        >
-        was unencrypted. An attacker who controlled one of the routers between
-        us and the server could, in theory, have recorded the raw content of our
-        session, and pieced together a history of what we did.
-      </p>
-      <p>
-        Encrypted web traffic happens using HTTPS, which is a combination of an
-        encrypted presentation layer, and plain old HTTP over that connection on
-        the
-        <a href="https://en.wikipedia.org/wiki/Application_layer"
-          >application layer</a
-        >. Websites that are HTTPS-only will typically listen for unencrypted
-        connections on port 80, and tell connecting clients where to find the
-        same resource over HTTPS on port 443.
-      </p>
-      <p>
-        I own two sites that do this very thing, both hosted on the same server
-        at the same IP address. This is me using the “dig” application to look
-        up the IP address for both domains. The “+short” option means to
-        truncate everything in the output except the actual IP address of the
-        server, as referenced by the domain name’s
-        <a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types"
-          >A record</a
-        >:
-      </p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong> <em>dig appsbykids.org +short</em>
-          138.197.24.38
-          <strong>~ #</strong> <em>dig mokg.club +short</em>
-          138.197.24.38
-          <strong>~ #</strong>
-        </p>
-      </div>
-      <p>
-        The telnet session below shows me connecting to that IP address, and
-        doing a GET request for both site’s root page.
-      </p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong> <em>telnet</em> <strong>telnet></strong>
-          <em>open 138.197.24.38 80</em>
-          Trying 138.197.24.38… Connected to 138.197.24.38. Escape character is
-          ’^]’.
-          <em>GET / HTTP/1.1</em>
-          <em>Host: appsbykids.org</em>
-        </p>
-        <p>
-          HTTP/1.1 301 Moved Permanently Server: nginx/1.10.0 (Ubuntu) Date:
-          Thu, 01 Jun 2017 11:59:13 GMT Content-Type: text/html Content-Length:
-          194 Connection: keep-alive Location:
-          <a href="https://appsbykids.org/">https://appsbykids.org/</a>
-        </p>
-        <pre
-          class="astro-code syntax-theme"
-          style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-          tabindex="0"
-          data-language="html"
-        ><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Tools</th><th align="left">Tech</th></tr></thead><tbody><tr><td align="left"><a href="https://en.wikipedia.org/wiki/Dig_%28command%29">Dig</a></td><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security">TLS</a></td></tr><tr><td align="left"><a href="https://en.wikipedia.org/wiki/OpenSSL">OpenSSL</a></td><td align="left"><a href="https://en.wikipedia.org/wiki/OSI_model">OSI model</a></td></tr><tr><td align="left"></td><td align="left"><a href="https://web.archive.org/web/20210610092146/https://developer.mozilla.org/en-US/docs/Mozilla/Security/x509_Certificates">X509 certificates</a></td></tr></tbody></table>
+<p>Connections over the Internet between two machines are pretty abstract. They combine everything from the cord plugged into your router (or the Wifi signal to it), to how bytes are delimited, to how your local network card’s address is mapped to an Internet address, to how packets are acknowledged, to how files are reassembled from the parts the sender breaks them into, to how your web browser interprets and displays all the files it receives. These connections and behaviors are defined in scores of protocol definitions and display standards, where each protocol exists on (at least) one layer of the “Open Systems Interconnection” (or OSI) model.</p>
+<p>While we were connecting using Telnet to example.com to download it’s root page, our <a href="https://en.wikipedia.org/wiki/Presentation_layer">presentation layer</a> was unencrypted. An attacker who controlled one of the routers between us and the server could, in theory, have recorded the raw content of our session, and pieced together a history of what we did.</p>
+<p>Encrypted web traffic happens using HTTPS, which is a combination of an encrypted presentation layer, and plain old HTTP over that connection on the <a href="https://en.wikipedia.org/wiki/Application_layer">application layer</a>. Websites that are HTTPS-only will typically listen for unencrypted connections on port 80, and tell connecting clients where to find the same resource over HTTPS on port 443.</p>
+<p>I own two sites that do this very thing, both hosted on the same server at the same IP address. This is me using the “dig” application to look up the IP address for both domains. The “+short” option means to truncate everything in the output except the actual IP address of the server, as referenced by the domain name’s <a href="https://en.wikipedia.org/wiki/List_of_DNS_record_types">A record</a>:</p>
+<div class="codez"><p><strong>~ #</strong> <em>dig appsbykids.org +short</em>
+138.197.24.38
+<strong>~ #</strong> <em>dig mokg.club +short</em>
+138.197.24.38
+<strong>~ #</strong></p></div>
+<p>The telnet session below shows me connecting to that IP address, and doing a GET request for both site’s root page.</p>
+<div class="codez"><p><strong>~ #</strong> <em>telnet</em>
+<strong>telnet></strong> <em>open 138.197.24.38 80</em>
+Trying 138.197.24.38…
+Connected to 138.197.24.38.
+Escape character is ’^]’.
+<em>GET / HTTP/1.1</em>
+<em>Host: appsbykids.org</em></p><p>HTTP/1.1 301 Moved Permanently
+Server: nginx/1.10.0 (Ubuntu)
+Date: Thu, 01 Jun 2017 11:59:13 GMT
+Content-Type: text/html
+Content-Length: 194
+Connection: keep-alive
+Location: <a href="https://appsbykids.org/">https://appsbykids.org/</a></p><pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">>301 Moved Permanently&#x3C;/</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
@@ -811,20 +265,14 @@
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">hr</span><span style="color:#E1E4E8"> /></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#FDAEB7;font-style:italic">center</span><span style="color:#E1E4E8">>nginx/1.10.0 (Ubuntu)&#x3C;/</span><span style="color:#FDAEB7;font-style:italic">center</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span>
-<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre>
-        <p><em>GET / HTTP/1.1</em> <em>Host: mokg.club</em></p>
-        <p>
-          HTTP/1.1 301 Moved Permanently Server: nginx/1.10.0 (Ubuntu) Date:
-          Thu, 01 Jun 2017 11:59:30 GMT Content-Type: text/html Content-Length:
-          194 Connection: keep-alive Location:
-          <a href="https://mokg.club/">https://mokg.club/</a>
-        </p>
-        <pre
-          class="astro-code syntax-theme"
-          style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-          tabindex="0"
-          data-language="html"
-        ><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre><p><em>GET / HTTP/1.1</em>
+<em>Host: mokg.club</em></p><p>HTTP/1.1 301 Moved Permanently
+Server: nginx/1.10.0 (Ubuntu)
+Date: Thu, 01 Jun 2017 11:59:30 GMT
+Content-Type: text/html
+Content-Length: 194
+Connection: keep-alive
+Location: <a href="https://mokg.club/">https://mokg.club/</a></p><pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="html"><code><span class="line"><span style="color:#E1E4E8">&#x3C;</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">>301 Moved Permanently&#x3C;/</span><span style="color:#85E89D">title</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">head</span><span style="color:#E1E4E8">></span></span>
@@ -833,37 +281,14 @@
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">hr</span><span style="color:#E1E4E8"> /></span></span>
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#FDAEB7;font-style:italic">center</span><span style="color:#E1E4E8">>nginx/1.10.0 (Ubuntu)&#x3C;/</span><span style="color:#FDAEB7;font-style:italic">center</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span>
-<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre>
-        <p>
-          <em>^]</em> <strong>telnet></strong> <em>close</em>
-          Connection closed.
-          <strong>telnet></strong> <em>quit</em> <strong>~ #</strong>
-        </p>
-      </div>
-      <p>
-        In both cases, the HTTP response code was 301 instead of 200, and the
-        “Location” record of the header showed the same resource I was trying to
-        download, but changing the URL type to HTTPS. At this point, a web
-        browser would kick over to secure mode, and try to download the same
-        resource over a TLS connection on port 443.
-      </p>
-      <p>
-        We can’t do that over Telnet, since it doesn’t have any encryption
-        widgets built in, but we can use the program OpenSSL to start a TLS
-        session as a client, exchange encryption keys with the server, and give
-        us a prompt to run HTTP commands. That looks like this:
-      </p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong>
-          <em>openssl s_client -connect appsbykids.org:443</em>
-        </p>
-        <pre
-          class="astro-code syntax-theme"
-          style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-          tabindex="0"
-          data-language="plaintext"
-        ><code><span class="line"><span>CONNECTED(00000003)</span></span>
+<span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre><p><em>^]</em>
+<strong>telnet></strong> <em>close</em>
+Connection closed.
+<strong>telnet></strong> <em>quit</em>
+<strong>~ #</strong></p></div>
+<p>In both cases, the HTTP response code was 301 instead of 200, and the “Location” record of the header showed the same resource I was trying to download, but changing the URL type to HTTPS. At this point, a web browser would kick over to secure mode, and try to download the same resource over a TLS connection on port 443.</p>
+<p>We can’t do that over Telnet, since it doesn’t have any encryption widgets built in, but we can use the program OpenSSL to start a TLS session as a client, exchange encryption keys with the server, and give us a prompt to run HTTP commands. That looks like this:</p>
+<div class="codez"><p><strong>~ #</strong> <em>openssl s_client -connect appsbykids.org:443</em></p><pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>CONNECTED(00000003)</span></span>
 <span class="line"><span>depth=1 /C=US/O=Let's Encrypt/CN=Let's Encrypt Authority X3</span></span>
 <span class="line"><span>verify error:num=20:unable to get local issuer certificate</span></span>
 <span class="line"><span>verify return:0</span></span>
@@ -933,23 +358,17 @@
 <span class="line"><span>Timeout : 300 (sec)</span></span>
 <span class="line"><span>Verify return code: 0 (ok)</span></span>
 <span class="line"><span></span></span>
-<span class="line"><span>---</span></span></code></pre>
-        <p>
-          <em>GET /files/final.ino HTTP/1.1</em> <em>Host: appsbykids.org</em>
-        </p>
-        <p>
-          HTTP/1.1 200 OK Server: nginx/1.10.0 (Ubuntu) Date: Tue, 23 May 2017
-          15:42:11 GMT Content-Type: application/octet-stream Content-Length:
-          885 Last-Modified: Mon, 09 Jan 2017 18:25:42 GMT Connection:
-          keep-alive ETag: “5873d5a6-375” Strict-Transport-Security:
-          max-age=15768000 Accept-Ranges: bytes
-        </p>
-        <pre
-          class="astro-code syntax-theme"
-          style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-          tabindex="0"
-          data-language="c"
-        ><code><span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8"> MAXPINS </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 11</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span>---</span></span></code></pre><p><em>GET /files/final.ino HTTP/1.1</em>
+<em>Host: appsbykids.org</em></p><p>HTTP/1.1 200 OK
+Server: nginx/1.10.0 (Ubuntu)
+Date: Tue, 23 May 2017 15:42:11 GMT
+Content-Type: application/octet-stream
+Content-Length: 885
+Last-Modified: Mon, 09 Jan 2017 18:25:42 GMT
+Connection: keep-alive
+ETag: “5873d5a6-375”
+Strict-Transport-Security: max-age=15768000
+Accept-Ranges: bytes</p><pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="c"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8"> MAXPINS </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 11</span><span style="color:#E1E4E8">;</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8"> tPins</span><span style="color:#F97583">[]</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">15</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">16</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">17</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">18</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">19</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">22</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">23</span><span style="color:#E1E4E8">};</span></span>
 <span class="line"><span style="color:#F97583">const</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8"> notes</span><span style="color:#F97583">[]</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">62</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">64</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">65</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">67</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">69</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">71</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">72</span><span style="color:#E1E4E8">};</span></span>
 <span class="line"></span>
@@ -987,157 +406,64 @@
 <span class="line"><span style="color:#F97583">  while</span><span style="color:#E1E4E8"> (usbMIDI.</span><span style="color:#B392F0">read</span><span style="color:#E1E4E8">()) {</span></span>
 <span class="line"><span style="color:#6A737D">  // ignore incoming messages</span></span>
 <span class="line"><span style="color:#E1E4E8">  }</span></span>
-<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
-        <p>DONE <strong>~ #</strong></p>
-      </div>
-      <p>
-        OpenSSL did some auto-negotiation, finding the best encryption type to
-        use with the server, and displayed back to me some information about the
-        certificate chain, and server’s certificate. The certificate is in X.509
-        format, which encodes the issuer, how long the cert is valid, the
-        encryption algorithm used, and the
-        <a href="https://en.wikipedia.org/wiki/Public-key_cryptography"
-          >public key</a
-        >
-        that I should use to encrypt data. The server keeps the private key,
-        which it uses to decrypt what I’ve encrypted. This type of encryption is
-        called Assymetrical, or just “public key”, and is, like CSS, its own
-        field of study, way outside the scope this post. I wrote a
-        <a
-          href="http://cautery.blogspot.com/2012/06/rsa-encryption-and-other-sun-tzu.html"
-          >Blogger post</a
-        >
-        some years back on the math behind RSA, a popular variant of public key
-        encryption, if you want to dive a little deeper.
-      </p>
-      <p>
-        After the key exchange, the rest of the OpenSSL session behaves just
-        like the Telnet sessions above, which I then used to download the source
-        code to an Arduino program.
-      </p>
-      <h3 id="part-3-an-actual-api-call">Part 3: An actual API call</h3>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><p>DONE
+<strong>~ #</strong></p></div>
+<p>OpenSSL did some auto-negotiation, finding the best encryption type to use with the server, and displayed back to me some information about the certificate chain, and server’s certificate. The certificate is in X.509 format, which encodes the issuer, how long the cert is valid, the encryption algorithm used, and the <a href="https://en.wikipedia.org/wiki/Public-key_cryptography">public key</a> that I should use to encrypt data. The server keeps the private key, which it uses to decrypt what I’ve encrypted. This type of encryption is called Assymetrical, or just “public key”, and is, like CSS, its own field of study, way outside the scope this post. I wrote a <a href="http://cautery.blogspot.com/2012/06/rsa-encryption-and-other-sun-tzu.html">Blogger post</a> some years back on the math behind RSA, a popular variant of public key encryption, if you want to dive a little deeper.</p>
+<p>After the key exchange, the rest of the OpenSSL session behaves just like the Telnet sessions above, which I then used to download the source code to an Arduino program.</p>
+<h3 id="part-3-an-actual-api-call">Part 3: An actual API call</h3>
 
-      <table>
-        <thead>
-          <tr>
-            <th align="left">Tech</th>
-            <th align="left">Tool</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td align="left">
-              <a
-                href="https://en.wikipedia.org/wiki/Application_programming_interface"
-                >API</a
-              >
-            </td>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/Google_Chrome">Chrome</a>
-            </td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-                >Javascript</a
-              >
-            </td>
-            <td align="left"></td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a
-                href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Network_requests"
-                >AJAX</a
-              >
-            </td>
-            <td align="left"></td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>
-            </td>
-            <td align="left"></td>
-          </tr>
-          <tr>
-            <td align="left">
-              <a
-                href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions"
-                >Regular Expressions</a
-              >
-            </td>
-            <td align="left"></td>
-          </tr>
-        </tbody>
-      </table>
-      <p>
-        “API” is a nebulous term that programmers use to mean a few different
-        things. The name the acronym stands for, Application Programming
-        Interface, doesn’t really clear things up.
-      </p>
-      <p>
-        At it’s core, an API is a list of commands that something can call. Web
-        browsers provide some features, like AudioBuffer, or
-        SpeechRecognitionResult, that can be accessed from the Javascript
-        programming language directly. The browser talks to your operating
-        system with system commands to allocate memory, draw windows on the
-        screen, and request access to an Internet connection. Web sites
-        sometimes provide answers to questions - what’s my account balance? how
-        many messages are in my inbox? - without rendering an entire HTML page,
-        but instead returning just a chunk of data that the browser does
-        something with. All of these are examples of making API calls.
-      </p>
-      <p>
-        The site teleport.org (defunct as of late 2023), which provides data on
-        cities intended to help people decide where to move, has a search box
-        where you can type in a city name, and get a list of matching names to
-        choose from. Here I am using that to search for London:
-      </p>
-      <p>
-        <img
-          alt="a teleport.org search for london"
-          width="1244"
-          height="787"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/london.DjL9UPtv_Z27XbF2.webp"
-        />
-      </p>
-      <p>
-        The most likely candidate, London England, is on the top, and then a
-        handful of other Londons show up in different states of the US. Teleport
-        provides a public API that can be called with a city name, which returns
-        a block of JSON data that represents what’s in the above list. Their API
-        documentation is available here (was
-        <a href="https://developers.teleport.org/api/"
-          >https://developers.teleport.org/api/</a
-        >), and here is an example calling to it from Telnet:
-      </p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong> <em>telnet api.teleport.org 80</em>
-          Trying 52.84.76.101… Connected to d3v9dtao340sz1.cloudfront.net.
-          Escape character is ’^]’.
-          <em>GET /api/cities/?search=london HTTP/1.1</em>
-          <em>Host: api.teleport.org</em>
-        </p>
-        <p>
-          HTTP/1.1 200 OK Content-Type: application/json; charset=utf-8
-          Transfer-Encoding: chunked Connection: keep-alive
-          Access-Control-Max-Age: 600 Cache-Control: public, max-age=300 Server:
-          nginx X-Apiproxy-Cache-Status: MISS Date: Fri, 02 Jun 2017 20:24:43
-          GMT Via: 1.1 google, 1.1
-          19270b9ebeb1c54b61c028475c86d6dd.cloudfront.net (CloudFront) Vary:
-          Origin,Accept-Encoding X-Cache: Miss from cloudfront X-Amz-Cf-Id:
-          CpJ7DY8v3Ks27jNEQJ5HSeBb_2XR4xjAbWw6aHNPB4GUlZnDdlKE1Q==
-        </p>
-        <p>1480</p>
-        <pre
-          class="astro-code syntax-theme"
-          style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-          tabindex="0"
-          data-language="json"
-        ><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Tech</th><th align="left">Tool</th></tr></thead><tbody><tr><td align="left"><a href="https://en.wikipedia.org/wiki/Application_programming_interface">API</a></td><td align="left"><a href="https://en.wikipedia.org/wiki/Google_Chrome">Chrome</a></td></tr><tr><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">Javascript</a></td><td align="left"></td></tr><tr><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Network_requests">AJAX</a></td><td align="left"></td></tr><tr><td align="left"><a href="https://en.wikipedia.org/wiki/JSON">JSON</a></td><td align="left"></td></tr><tr><td align="left"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions">Regular Expressions</a></td><td align="left"></td></tr></tbody></table>
+<p>“API” is a nebulous term that programmers use to mean a few different things. The name the acronym stands for, Application Programming Interface, doesn’t really clear things up.</p>
+<p>At it’s core, an API is a list of commands that something can call. Web browsers provide some features, like AudioBuffer, or SpeechRecognitionResult, that can be accessed from the Javascript programming language directly. The browser talks to your operating system with system commands to allocate memory, draw windows on the screen, and request access to an Internet connection. Web sites sometimes provide answers to questions - what’s my account balance? how many messages are in my inbox? - without rendering an entire HTML page, but instead returning just a chunk of data that the browser does something with. All of these are examples of making API calls.</p>
+<p>The site teleport.org (defunct as of late 2023), which provides data on cities intended to help people decide where to move, has a search box where you can type in a city name, and get a list of matching names to choose from. Here I am using that to search for London:</p>
+<p><img alt="a teleport.org search for london" width="1244" height="787" loading="lazy" decoding="async" src="/_astro/london.DjL9UPtv_Z27XbF2.webp" ></p>
+<p>The most likely candidate, London England, is on the top, and then a handful of other Londons show up in different states of the US. Teleport provides a public API that can be called with a city name, which returns a block of JSON data that represents what’s in the above list. Their API documentation is available here (was <a href="https://developers.teleport.org/api/">https://developers.teleport.org/api/</a>), and here is an example calling to it from Telnet:</p>
+<div class="codez"><p><strong>~ #</strong> <em>telnet api.teleport.org 80</em>
+Trying 52.84.76.101…
+Connected to d3v9dtao340sz1.cloudfront.net.
+Escape character is ’^]’.
+<em>GET /api/cities/?search=london HTTP/1.1</em>
+<em>Host: api.teleport.org</em></p><p>HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: keep-alive
+Access-Control-Max-Age: 600
+Cache-Control: public, max-age=300
+Server: nginx
+X-Apiproxy-Cache-Status: MISS
+Date: Fri, 02 Jun 2017 20:24:43 GMT
+Via: 1.1 google, 1.1 19270b9ebeb1c54b61c028475c86d6dd.cloudfront.net (CloudFront)
+Vary: Origin,Accept-Encoding
+X-Cache: Miss from cloudfront
+X-Amz-Cf-Id: CpJ7DY8v3Ks27jNEQJ5HSeBb_2XR4xjAbWw6aHNPB4GUlZnDdlKE1Q==</p><p>1480</p><pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
 <span class="line"><span style="color:#79B8FF">  "_embedded"</span><span style="color:#E1E4E8">: {</span></span>
 <span class="line"><span style="color:#79B8FF">    "city:search-results"</span><span style="color:#E1E4E8">: [</span></span>
 <span class="line"><span style="color:#E1E4E8">      {</span></span>
@@ -1383,149 +709,28 @@
 <span class="line"><span style="color:#E1E4E8">    }</span></span>
 <span class="line"><span style="color:#E1E4E8">  },</span></span>
 <span class="line"><span style="color:#79B8FF">  "count"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">18</span></span>
-<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
-        <p>0</p>
-      </div>
-      <p>
-        There are a couple of interesting things to note here. First, the
-        <code>Transfer-Encoding: chunked</code> header means that instead of
-        saying up front what the resource’s byte count will be, the server will
-        send you a chunk at a time, saying what the size of just that chunk is,
-        and keeping the connection open while there is still more data coming.
-        This is useful for things like streaming video, where there isn’t a
-        static file, and also for APIs that return results collected from a
-        database, where the byte count isn’t known immediately after the request
-        is made.
-      </p>
-      <p>
-        The “1480” before the block is actually a hexadecimal number indicating
-        the size of the chunk. The “0” at the very end means the next chunk is 0
-        bytes, which means there won’t be more data coming.
-      </p>
-      <p>
-        Alright, now it’s time to crack open a browser and stop futzing with
-        Telnet. I use the Chrome browser, which has a nice developer tools area
-        that includes a console for entering Javascript commands. To access it,
-        press command-option-j if you’re on a Mac, or control-shift-j for
-        Windows or Linux (I think… I also think if you’re on Linux you’re pretty
-        familiar with developer tools). Here’s an example of me entering a small
-        command, and its return value:
-      </p>
-      <pre
-        class="astro-code syntax-theme"
-        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-        tabindex="0"
-        data-language="javascript"
-      ><code><span class="line"><span style="color:#B392F0">parseInt</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"1480"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">16</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre><p>0</p></div>
+<p>There are a couple of interesting things to note here. First, the <code>Transfer-Encoding: chunked</code> header means that instead of saying up front what the resource’s byte count will be, the server will send you a chunk at a time, saying what the size of just that chunk is, and keeping the connection open while there is still more data coming. This is useful for things like streaming video, where there isn’t a static file, and also for APIs that return results collected from a database, where the byte count isn’t known immediately after the request is made.</p>
+<p>The “1480” before the block is actually a hexadecimal number indicating the size of the chunk. The “0” at the very end means the next chunk is 0 bytes, which means there won’t be more data coming.</p>
+<p>Alright, now it’s time to crack open a browser and stop futzing with Telnet. I use the Chrome browser, which has a nice developer tools area that includes a console for entering Javascript commands. To access it, press command-option-j if you’re on a Mac, or control-shift-j for Windows or Linux (I think… I also think if you’re on Linux you’re pretty familiar with developer tools). Here’s an example of me entering a small command, and its return value:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">parseInt</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"1480"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">16</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#79B8FF">5248</span><span style="color:#E1E4E8">;</span></span></code></pre>
-      <p>
-        In this case, I’m converting the “1480” from above from hex to base 10,
-        showing the length of the giant data block that teleport returned. The
-        block is in a format called JSON, which stands for Javascript Object
-        Notation. It’s a string that would be valid Javascript if we pasted it
-        into the Chrome console window. In fact, let’s do just that. I’ll
-        preface it with “london =” so we assign the block to a variable we can
-        look at.
-      </p>
-      <p>
-        <img
-          alt="Pasting JSON into a Javascript console"
-          width="686"
-          height="799"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/json-console.Bqe-X2VI_Z2n7Tv0.webp"
-        />
-      </p>
-      <p>
-        Clicking the triangles beside object field names will cause Chrome’s
-        console to expand one additional layer of an object to be examined
-        visually. Repeating this lets you “drill down” through the object to see
-        how it is organized:
-      </p>
-      <p>
-        <img
-          alt="Expanded JS object"
-          width="794"
-          height="401"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/london-obj.Cjvz-Emt_1hRGp6.webp"
-        />
-      </p>
-      <p>
-        In a real web application, I don’t want users to have to copy and paste
-        to create an object, or to open a console and start clicking on things.
-        I want it to be able to make an API call, understand the return object’s
-        layout, and do something meaningful with that data. Enter AJAX.
-      </p>
-      <p>
-        AJAX literally stands for “Asynchronous Javascript And XML”, even though
-        it is more common to receive JSON data than XML. Javascript has an
-        object type called an XMLHttpRequest designed to make HTTP requests
-        without changing the page the browser is on. The return data is
-        available to Javascript to use on the existing page instead. Here is a
-        small bit of Javascript that you can enter into the console to fetch the
-        same data we did above:
-      </p>
-      <pre
-        class="astro-code syntax-theme"
-        style="background-color: #222; color: #e1e4e8; overflow-x: auto"
-        tabindex="0"
-        data-language="javascript"
-      ><code><span class="line"><span style="color:#E1E4E8">x </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> XMLHttpRequest</span><span style="color:#E1E4E8">();</span></span>
+<p>In this case, I’m converting the “1480” from above from hex to base 10, showing the length of the giant data block that teleport returned. The block is in a format called JSON, which stands for Javascript Object Notation. It’s a string that would be valid Javascript if we pasted it into the Chrome console window. In fact, let’s do just that. I’ll preface it with “london =” so we assign the block to a variable we can look at.</p>
+<p><img alt="Pasting JSON into a Javascript console" width="686" height="799" loading="lazy" decoding="async" src="/_astro/json-console.Bqe-X2VI_Z2n7Tv0.webp" ></p>
+<p>Clicking the triangles beside object field names will cause Chrome’s console to expand one additional layer of an object to be examined visually. Repeating this lets you “drill down” through the object to see how it is organized:</p>
+<p><img alt="Expanded JS object" width="794" height="401" loading="lazy" decoding="async" src="/_astro/london-obj.Cjvz-Emt_1hRGp6.webp" ></p>
+<p>In a real web application, I don’t want users to have to copy and paste to create an object, or to open a console and start clicking on things. I want it to be able to make an API call, understand the return object’s layout, and do something meaningful with that data. Enter AJAX.</p>
+<p>AJAX literally stands for “Asynchronous Javascript And XML”, even though it is more common to receive JSON data than XML. Javascript has an object type called an XMLHttpRequest designed to make HTTP requests without changing the page the browser is on. The return data is available to Javascript to use on the existing page instead. Here is a small bit of Javascript that you can enter into the console to fetch the same data we did above:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#E1E4E8">x </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> XMLHttpRequest</span><span style="color:#E1E4E8">();</span></span>
 <span class="line"><span style="color:#E1E4E8">x.</span><span style="color:#B392F0">open</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"get"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"https://api.teleport.org/api/cities/?search=london"</span><span style="color:#E1E4E8">);</span></span>
 <span class="line"><span style="color:#E1E4E8">x.</span><span style="color:#B392F0">send</span><span style="color:#E1E4E8">();</span></span></code></pre>
-      <p>
-        After typing those commands into the Javascript console, Chrome’s
-        Network tab shows the API call was made, and gives you an interface
-        similar to what we saw when we pasted the same JSON data into the
-        console above:
-      </p>
-      <p>
-        <img
-          alt="Chrome Network tab"
-          width="1087"
-          height="480"
-          loading="lazy"
-          decoding="async"
-          src="/_astro/london-network-tab.Cruqq2vO_QU343.webp"
-        />
-      </p>
-      <h3 id="epilogue">Epilogue</h3>
-      <p>
-        When I wrote this in 2017, Teleport was in the process of being
-        purchased by Topia, who later took down the teleport.org site, and then
-        removed its DNS records, something I’ve never seen before, but nslookup
-        in my experience doesn’t lie:
-      </p>
-      <div class="codez">
-        <p>
-          <strong>~ #</strong> <em>nslookup teleport.org</em> Server:
-          192.168.1.1 Address: 192.168.1.1#53
-        </p>
-        <p>** server can’t find teleport.org: SERVFAIL</p>
-        <p><strong>~ #</strong></p>
-      </div>
-      <p>
-        That makes it pretty hard to test some of what I’ve written here, and
-        the AJAX API has long been superseded by <code>fetch</code>, but I’m
-        leaving this blog entry up anyway because I’m very fond of it. I
-        originally intended it to be part of a “How to write software” series. I
-        backburnered that in favor of working directly with kids. I started
-        coding clubs at schools my kids attended, and we did stuff a lot more
-        fun than basic web programming, like working with Adafruit and Teensy
-        dev boards, making pixel art and designing levels for video games, and
-        writing a choose your own adventure story.
-      </p>
-      <p>
-        I don’t think I’ll ever come back to the series as I originally
-        conceived of it, but that’s okay. Somewhere in an alternate universe
-        there’s an OED-sized treatise of backend app coding that other Curtis is
-        making millions off of. I’m happy for him, but I’m pretty sure I had
-        more fun.
-      </p>
-      <p>Curtis - May 27, 2025</p>
-    </article>
-  </body>
-</html>
+<p>After typing those commands into the Javascript console, Chrome’s Network tab shows the API call was made, and gives you an interface similar to what we saw when we pasted the same JSON data into the console above:</p>
+<p><img alt="Chrome Network tab" width="1087" height="480" loading="lazy" decoding="async" src="/_astro/london-network-tab.Cruqq2vO_QU343.webp" ></p>
+<h3 id="epilogue">Epilogue</h3>
+<p>When I wrote this in 2017, Teleport was in the process of being purchased by Topia, who later took down the teleport.org site, and then removed its DNS records, something I’ve never seen before, but nslookup in my experience doesn’t lie:</p>
+<div class="codez"><p><strong>~ #</strong> <em>nslookup teleport.org</em>
+Server: 192.168.1.1
+Address: 192.168.1.1#53</p><p>** server can’t find teleport.org: SERVFAIL</p><p><strong>~ #</strong></p></div>
+<p>That makes it pretty hard to test some of what I’ve written here, and the AJAX API has long been superseded by <code>fetch</code>, but I’m leaving this blog entry up anyway because I’m very fond of it. I originally intended it to be part of a “How to write software” series. I backburnered that in favor of working directly with kids. I started coding clubs at schools my kids attended, and we did stuff a lot more fun than basic web programming, like working with Adafruit and Teensy dev boards, making pixel art and designing levels for video games, and writing a choose your own adventure story.</p>
+<p>I don’t think I’ll ever come back to the series as I originally conceived of it, but that’s okay. Somewhere in an alternate universe there’s an OED-sized treatise of backend app coding that other Curtis is making millions off of. I’m happy for him, but I’m pretty sure I had more fun.</p>
+<p>Curtis - May 27, 2025</p>  </article> </body></html>
