@@ -106,30 +106,37 @@ a:hover {
   color: var(--link-hover-color);
 }
 
-:not(pre) > code {
-  padding: 0.2em 0.4em;
+.codez {
+  padding: 0 1em;
 }
 
-:not(.codez) > code {
+article > pre {
+  padding: 1em;
+  font-family: "Menlo", monospace;
+  color: var(--code-color);
+  background-color: var(--code-background-color);
+  line-height: 1.25;
+}
+
+code,
+.codez p {
+  color: var(--code-color);
+  background-color: var(--code-background-color);
   font-size: 0.875em;
 }
 
 code,
 .codez {
-  font-family: "Menlo", monospace;
   color: var(--code-color);
   background-color: var(--code-background-color);
+  font-family: "Menlo", monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: auto;
 }
 
-.codez {
-  font-size: 0.875em;
-  overflow: scroll;
-  padding: 0 0.75em;
-  white-space: pre;
-}
-
-.codez pre {
-  padding: 0;
+p > code {
+  padding: 0.2em 0.4em;
 }
 
 .codez strong {
@@ -173,13 +180,6 @@ th:last-of-type {
 .math {
   font-family: "Times";
   font-size: 1.25em;
-}
-
-article pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow: auto;
-  padding: 0.75em;
 }
 
 article img {
