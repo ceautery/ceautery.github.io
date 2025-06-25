@@ -22,7 +22,7 @@ const data = {
     {
       allPosts.map((p) => (
         <li>
-          <code>{p.data.date}</code> -
+          <span>{p.data.date}</span> -
           <a href={`/blog/${p.id}/`}> {p.data.title}</a>
         </li>
       ))
@@ -31,7 +31,7 @@ const data = {
 </BaseLayout>
 
 <style>
-  code {
-    background-color: inherit;
+  span {
+    font-family: "Menlo", monospace;
   }
 </style>

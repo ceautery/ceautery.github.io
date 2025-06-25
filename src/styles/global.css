@@ -9,6 +9,8 @@
   --nav-hover-color: light-dark(#f4f4f4, #555);
   --code-background-color: #222;
   --code-color: #e1e4e8;
+  --inline-code-background-color: light-dark(#ddd, #222);
+  --inline-code-color: light-dark(black, #e1e4e8);
   --blockquote-border-color: light-dark(#eee, #666);
   --blockquote-color: light-dark(#444, #ccc);
   --table-border-color: light-dark(#dbdbdb, #555);
@@ -136,6 +138,8 @@ code,
 }
 
 p > code {
+  color: var(--inline-code-color);
+  background-color: var(--inline-code-background-color);
   padding: 0.2em 0.4em;
 }
 
