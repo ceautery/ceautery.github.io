@@ -31,8 +31,8 @@
           rgba(200, 200, 200, 0.1)
         );
         --nav-hover-color: light-dark(#f4f4f4, #555);
-        --code-background-color: light-dark(#f0f0f0, #444);
-        --code-color: light-dark(#000, #fff);
+        --code-background-color: #222;
+        --code-color: #e1e4e8;
         --blockquote-border-color: light-dark(#eee, #666);
         --blockquote-color: light-dark(#444, #ccc);
         --table-border-color: light-dark(#dbdbdb, #555);
@@ -94,9 +94,6 @@
         padding: 1em 15%;
         margin: 0 14pt;
       }
-      article:focus {
-        outline: none;
-      }
       article h1 {
         font-size: 30px;
         text-align: center;
@@ -118,19 +115,26 @@
       a:hover {
         color: var(--link-hover-color);
       }
-      code,
-      p.codez {
-        font-family: Menlo, monospace;
+      :not(pre) > code {
+        padding: 0.2em 0.4em;
+      }
+      :not(.codez) > code {
         font-size: 0.875em;
       }
+      code,
       .codez {
-        background-color: var(--code-background-color);
-        padding: 0.75em;
+        font-family: Menlo, monospace;
         color: var(--code-color);
-        overflow: scroll;
+        background-color: var(--code-background-color);
       }
-      p.codez {
+      .codez {
+        font-size: 0.875em;
+        overflow: scroll;
+        padding: 0 0.75em;
         white-space: pre;
+      }
+      .codez pre {
+        padding: 0;
       }
       .codez strong {
         color: #dda790;
@@ -170,12 +174,7 @@
         white-space: pre-wrap;
         word-wrap: break-word;
         overflow: auto;
-        font-size: 90%;
-        background-color: var(--code-background-color);
-        padding: 0.5em;
-      }
-      article p > code {
-        background-color: var(--code-background-color);
+        padding: 0.75em;
       }
       article img {
         max-width: 100%;
@@ -239,6 +238,10 @@
           <a href="/blog/randomize/">
             Using Discrete Logarithms to Randomize a Million Integers</a
           >
+        </li>
+        <li>
+          <code>2017-06-01</code> -
+          <a href="/blog/download-webpage/"> How to download a web page</a>
         </li>
       </ul>
     </article>
