@@ -181,11 +181,6 @@ th:last-of-type {
   width: 50%;
 }
 
-.math {
-  font-family: "Times";
-  font-size: 1.25em;
-}
-
 article img {
   max-width: 100%;
   height: auto;
