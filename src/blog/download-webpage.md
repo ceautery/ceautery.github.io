@@ -3,7 +3,6 @@ url: "/blog/download-webpage/"
 title: "How to download a web page"
 description: "Exploring shell commands, the HTTP protocol, and AJAX requests. (Written before I converted to the fetch API)"
 date: "2017-06-01"
-hasMath: true
 ---
 
 This post will show you:

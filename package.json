@@ -7,7 +7,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "post": "prettier --write --ignore-path=.prettierignore 'dist/**/*.html'",
     "deploy": "gh-pages -d dist --cname 'blog.autery.net'"
   },
   "dependencies": {
