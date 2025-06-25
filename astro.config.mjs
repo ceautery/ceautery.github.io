@@ -1,10 +1,12 @@
 import { bundledLanguages } from "shiki";
-import syntaxTheme from "./shiki/syntax-theme.json";
-import pry from "./shiki/pry.json";
+import syntaxTheme from "./src/shiki/syntax-theme.json";
+import pry from "./src/shiki/pry.json";
 // @ts-check
 import { defineConfig } from "astro/config";
+import remarkDirective from "remark-directive";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import codezPlugin from "./src/remark/codez-plugin";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,7 +22,7 @@ export default defineConfig({
         },
       ],
     },
-    remarkPlugins: [remarkMath],
+    remarkPlugins: [remarkMath, remarkDirective, codezPlugin],
     rehypePlugins: [rehypeKatex],
   },
 });

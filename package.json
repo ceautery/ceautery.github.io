@@ -16,6 +16,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1",
     "rehype-katex": "^7.0.1",
+    "remark-directive": "^3.0.1",
     "remark-math": "^6.0.0"
   }
 }
