@@ -65,7 +65,7 @@ The term "Bissextile" refers to adding a leap day that February to make "twice s
 
 This would have been a nice place to end calendar issues of Europe and their religious festivals, but that would have required the Catholic church in 1582 to still hold power over all of Europe. Unfortunately, Henry VIII wanted a divorce from Catherine of Aragon half a century earlier, in 1533, and so formed the Church of England as a mechanism to let that happen, and so England fell behind the curve, keeping the Julian calendar, causing, among other things, legal issues when contract dates in neighboring lands didn't match local dates. The only areas to adopt the 1582 date adjustment were the newly formed Polish-Lithuanian commonwealth, Portugal, Spain, and what is now Italy. France and the Netherlands (including Luxembourg and what is now Belgium) joined that December, and within a few years Holland, Austria, and Hungary had all converted to the Gregorian calendar as well. But not England or her territories; they held out for another 170 years.
 
-In 1750, the British Parliament addressed the growing date problems with the <a href="https://www.legislation.gov.uk/apgb/Geo2/24/23">Calendar (New Style) Act</a>. From its text:
+In 1750, the British Parliament addressed the growing date problems with the [Calendar (New Style) Act](https://www.legislation.gov.uk/apgb/Geo2/24/23). From its text:
 
 > "The Julian Calendar, hath been discovered to be erroneous, by means whereof the vernal or spring equinox, which at the time of the general council of Nice in the year of our Lord three hundred and twenty-five happened on or about the twenty-first day of March, now happens on the ninth or tenth day of the same month; and the said error is still increasing, ... The old supputation of the year not to be made use of after Dec. 1751. Year to commence for the future on 1 Jan. The days to be numbered as now until 2d Sept. 1752; and the day following to be accounted 14 Sept. omitting 11 days. ... any other hundredth years of our Lord which shall happen in time to come, except only every fourth hundredth year of our Lord, whereof the year of our Lord two thousand shall be the first, shall not be esteemed or taken to be bissextile or leap years, but shall be taken to be common years consisting of three hundred and sixty-five days, and no more;"
 
@@ -85,7 +85,7 @@ Another post-revolution Sovnarkom decree that grabbed my interest was for [refor
 
 ### Unix picks England
 
-Now that we have some background on just a small handful of history's calendars, let's take a look at some of the ways computers have incorporated date handling. Unix is a good place to start. This is some commentary by Dennis Ritchie on the First Edition of the <a href="https://www.bell-labs.com/usr/dmr/www/1stEdman.html">Unix Programmer's Manual</a> regarding timekeeping:
+Now that we have some background on just a small handful of history's calendars, let's take a look at some of the ways computers have incorporated date handling. Unix is a good place to start. This is some commentary by Dennis Ritchie on the First Edition of the [Unix Programmer's Manual](https://www.bell-labs.com/usr/dmr/www/1stEdman.html) regarding timekeeping:
 
 > We even anticipated the millenium bug: time was measured in sixtieths of a second since 1 Jan. 1971 as a 32 bit quantity. The BUGS section for time(II) remarks, "The cronological-minded reader will note that 2\*\*32 sixtieths of a second is only about 2.5 years." Later, this was patched more than once by declaring a new epoch, then again in 1973 by making the units full seconds dating from the 1970 New Year--this is the "classical" Unix epoch. Of course, it only pushed the issue off to 2038. Yet, the cal program even in 1971 knew about the hanky-panky in 1752!
 >
@@ -93,7 +93,7 @@ Now that we have some background on just a small handful of history's calendars,
 
 In short, Dennis and Ken (Thompson) had their hands full writing the base Unix programs we hackers take for granted now. The text above implies they wrote memory management from scratch in assembly, and had to know low level chip operations like how to correctly handle floats on a specific piece of hardware. The complexity of this can't easily be overstated, so they can be forgiven for ending up with timekeeping that would break in three years, especially since they didn't leave it that way, and were able to adjust in future Unix versions, ending up with the defacto standard epoch, the one that all small systems programmers assume you mean when you just say "epoch": Midnight GMT, Jan 1, 1970.
 
-In actuality, there are <a href="https://en.wikipedia.org/wiki/Epoch_(reference_date)#Notable_epoch_dates_in_computing">over a dozen common epochs</a> in use on different operating systems or individual programs, but for this article we are only going to focus on the one from Unix.
+In actuality, there are [over a dozen common epochs](<https://en.wikipedia.org/wiki/Epoch_(computing)#Notable_epoch_dates_in_computing>) in use on different operating systems or individual programs, but for this article we are only going to focus on the one from Unix.
 
 Dennis refers to the "cal" calendar program understanding the Gregorian cutover of England, and by extension the United States. The manual page for the cal program mentions this as well:
 
