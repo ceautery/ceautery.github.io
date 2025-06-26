@@ -11,8 +11,8 @@
   --code-color: #e1e4e8;
   --inline-code-background-color: light-dark(#ddd, #222);
   --inline-code-color: light-dark(black, #e1e4e8);
-  --blockquote-border-color: light-dark(#eee, #666);
-  --blockquote-color: light-dark(#444, #ccc);
+  --blockquote-border-color: light-dark(#eee, #777);
+  --blockquote-color: light-dark(#444, #eee);
   --table-border-color: light-dark(#dbdbdb, #555);
   --table-hover-color: light-dark(#f5f5f5, #444);
   --link-color: light-dark(#17874f, #66d9ef);
