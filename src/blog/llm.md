@@ -1,7 +1,6 @@
 ---
 url: "/blog/llm/"
 title: "Local LLMs"
-type: "article"
 image: "/images/llm/preview.png"
 description: "Running local LLMs with Ollama and Open WebUI, and using with Bruno and ngrok to see what makes it all tick."
 date: "2025-05-20"
