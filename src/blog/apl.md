@@ -71,14 +71,14 @@ The end result of this is that expressions are evaluated right to left. However,
 10
 ```
 
-APL uses the mathematical symbols × and ÷ for multiplication and division rather than \* and /, which makes it unique among programming languages. Slash is the reduce function (as we'll see in a minute), where asterisk raises to a power:
+APL uses the mathematical symbols `×` and `÷` for multiplication and division rather than `*` and `/`, which makes it unique among programming languages. Slash is the reduce function (as we'll see in a minute), where asterisk raises to a power:
 
 ```apl
       2 * 3
 8
 ```
 
-The monadic form is simply function, variable. If a function symbol occurs at the beginning of an expression, or after another function symbol, it uses its monadic meaning. In this way, the same symbol can have two different functions associated with it. For example, iota. It's monadic form (⍳ B)creates an incremental list of numbers from the index origin (defaults to 1 in GNU APL) up to B, it's dyadic form (A ⍳ B) looks for the index of B in the list A.
+The monadic form is simply function, variable. If a function symbol occurs at the beginning of an expression, or after another function symbol, it uses its monadic meaning. In this way, the same symbol can have two different functions associated with it. For example, iota. It's monadic form (`⍳ B`) creates an incremental list of numbers from the index origin (defaults to 1 in GNU APL) up to B, it's dyadic form (`A ⍳ B`) looks for the index of B in the list A.
 
 ```apl
       ⍳ 10
@@ -87,7 +87,7 @@ The monadic form is simply function, variable. If a function symbol occurs at th
 2
 ```
 
-The reduce function (f / B) puts function f between pairs of elements of B, the same way other language's reduce functions work. " + / 1 2 3 4" expands to "1 + 2 + 3 + 4". Combining reduce with iota, we can sum the numbers from 1 to 10 with this brief command:
+The reduce function (`f / B`) puts function f between pairs of elements of B, the same way other language's reduce functions work. ` + / 1 2 3 4` expands to `1 + 2 + 3 + 4`. Combining reduce with iota, we can sum the numbers from 1 to 10 with this brief command:
 
 ```apl
       +/ ⍳ 10
@@ -101,7 +101,7 @@ Functions that aren't associative can give unexpected, but correct under APL rul
 ¯2
 ```
 
-First, note the high minus sign next to the result. Negative numbers are always prefaced with high minus, to distinguish it from the subtraction operation; this let's you include negative numbers in inline lists. As for returning -2 instead of -8, APL is evaluating the expression as "1 - (2 - (3 - 4))", so this happens:
+First, note the high minus sign next to the result. Negative numbers are always prefaced with high minus, to distinguish it from the subtraction operation; this let's you include negative numbers in inline lists. As for returning `-2` instead of `-8`, APL is evaluating the expression as `1 - (2 - (3 - 4))`, so this happens:
 
 ```apl
       3 - 4
@@ -149,16 +149,16 @@ Another correct way to produce the same list is to use an inline function with f
 1 4 9 16 25 36 49 64 81 100
 ```
 
-Wrapping a statement in curly braces produces an inline function ("unnamed lambda" in APL-speak - it would be "named" if the function was assigned to a variable). The expression to the left of the function, if any, is passed in as the formal parameter alpha (⍺), and the expression on the right is passed in as omega (⍵), both of which can be treated as normal variables, and used as many times as necessary. In this case, omega is iota-10, which is multiplied against itself.
+Wrapping a statement in curly braces produces an inline function ("unnamed lambda" in APL-speak - it would be "named" if the function was assigned to a variable). The expression to the left of the function, if any, is passed in as the formal parameter alpha (`⍺`), and the expression on the right is passed in as omega (`⍵`), both of which can be treated as normal variables, and used as many times as necessary. In this case, omega is iota-10, which is multiplied against itself.
 
-A third way to perform this is to use the monadic function duplicate (⍨), which takes the expression on the right, passing it to the preceding function as both alpha and omega:
+A third way to perform this is to use the monadic function duplicate (`⍨`), which takes the expression on the right, passing it to the preceding function as both alpha and omega:
 
 ```apl
       ×⍨ ⍳ 10
 1 4 9 16 25 36 49 64 81 100
 ```
 
-One of the more powerful features of APL is the outer product function (∘.f), which creates a cartesian product of every element on the left against every element on the right, outputting a matrix. For example, the outer product of muliplying a list by itself produces a standard multiplication table:
+One of the more powerful features of APL is the outer product function (`∘.f`), which creates a cartesian product of every element on the left against every element on the right, outputting a matrix. For example, the outer product of muliplying a list by itself produces a standard multiplication table:
 
 ```apl
       { ⍵ ∘.× ⍵ } ⍳ 10
@@ -190,7 +190,7 @@ Lastly, the duplicate function used in dyadic form becomes "commute", swapping t
 
 ### Let's make some primes!
 
-Now we're ready to do something more interesting. Instead of a multiplication table, let's replace × with | and create a residue table:
+Now we're ready to do something more interesting. Instead of a multiplication table, let's replace `×` with `|` and create a residue table:
 
 ```apl
       { ⍵ ∘.| ⍵ } ⍳ 10
@@ -208,7 +208,7 @@ Now we're ready to do something more interesting. Instead of a multiplication ta
 
 This shows us the remainders of division operations. The top row of zeroes shows that each number divides evenly by 1. The diagonal line of zeroes shows that each number divides evenly by itself. Any other zeroes imply a number that isn't prime, because it divided evenly by something other than 1 or itself.
 
-The 1 row and column doesn't add any useful information, so we can drop it. The down-arrow in dyadic form means "drop". A ↓ B means return the list B without its first A elements. Creating a residue table with the integers from 2-10 is more meaningful:
+The 1 row and column doesn't add any useful information, so we can drop it. The down-arrow in dyadic form means "drop". `A ↓ B` means return the list B without its first A elements. Creating a residue table with the integers from 2-10 is more meaningful:
 
 ```apl
       1 ↓ ⍳ 10
@@ -225,7 +225,7 @@ The 1 row and column doesn't add any useful information, so we can drop it. The 
 2 3 4 5 6 7 8 9 0
 ```
 
-Here any column with more than one 0 isn't prime. Creating a boolean matrix of where all the zeroes were is as easy as preceding the inline function with "0 = ".
+Here any column with more than one 0 isn't prime. Creating a boolean matrix of where all the zeroes were is as easy as preceding the inline function with `0 = `.
 
 ```apl
       { 0 = ⍵ ∘.| ⍵ } 1 ↓ ⍳ 10
@@ -240,14 +240,14 @@ Here any column with more than one 0 isn't prime. Creating a boolean matrix of w
 0 0 0 0 0 0 0 0 1
 ```
 
-The integers 1 and 0 are used in place of boolean values, allowing us to sum each column easily. Here we are using the character ⌿, which does the same thing as reduce, but over a minor axis - the columns of a matrix, rather than its rows.
+The integers 1 and 0 are used in place of boolean values, allowing us to sum each column easily. Here we are using the character `⌿`, which does the same thing as reduce, but over a minor axis - the columns of a matrix, rather than its rows.
 
 ```apl
       { +⌿ 0 = ⍵ ∘.| ⍵ } 1 ↓ ⍳ 10
 1 1 2 1 3 1 3 2 3
 ```
 
-Now we're getting closer to programmatically finding primes. Each 1 in this list is in the position of a prime number in our original 2-10 list. Passing a boolean list to the reduce function returns just those values that correspond to 1s; this is a "select" function. We can identify just our 1s by preceding our sum reduction with "1 = ", then select from our original list by appending slash-omega after the boolean list:
+Now we're getting closer to programmatically finding primes. Each 1 in this list is in the position of a prime number in our original 2-10 list. Passing a boolean list to the reduce function returns just those values that correspond to 1s; this is a "select" function. We can identify just our 1s by preceding our sum reduction with `1 = `, then select from our original list by appending slash-omega after the boolean list:
 
 ```apl
       { 1 = +⌿ 0 = ⍵ ∘.| ⍵ } 1 ↓ ⍳ 10
@@ -267,7 +267,7 @@ Since this is all contingent on a cartesian product, our solution, though expres
 
 ### Fibonacci numbers, and debugging inline functions
 
-If you've made it this far, you probably have a good Unicode font installed. If you see boxes in this section, they're on purpose. In APL the box is called the "quad" symbol, and prefaces a few system variables, for instance the "index origin" I nebulously referred to above is ⎕IO, and can be set to either 0 or 1, depending on how you want indices to behave. Assigning a variable is done with the left arrow symbol. "n ← 5" would set variable "n" to 5 (which means the equals sign is only used for comparing things).
+If you've made it this far, you probably have a good Unicode font installed. If you see boxes in this section, they're on purpose. In APL the box is called the "quad" symbol, and prefaces a few system variables, for instance the "index origin" I nebulously referred to above is `⎕IO`, and can be set to either 0 or 1, depending on how you want indices to behave. Assigning a variable is done with the left arrow symbol. `n ← 5` would set variable "n" to 5 (which means the equals sign is only used for comparing things).
 
 Assigning to just a naked quad character is akin to printing to STDOUT, or a JavaScript console.log(). If I take this simple inline function that multiplies alpha by omega's successor...
 
@@ -312,7 +312,7 @@ The phi function, in modaic form, reverses a list:
 10 9 8 7 6 5 4 3 2 1
 ```
 
-In dyadic form, the phi function rotates a list, or rotates a matrix around the vertical axis, which we'll get into later. The up-arrow function in dyadic form is "take", drop's counterpoint. "A ↑ B" returns the first A elements of list B. If A is negative, take gets its elements from the end of the list. If you take more than the size of the input list, the remaining elements are filled with zeroes.
+In dyadic form, the phi function rotates a list, or rotates a matrix around the vertical axis, which we'll get into later. The up-arrow function in dyadic form is "take", drop's counterpoint. `A ↑ B` returns the first A elements of list B. If A is negative, take gets its elements from the end of the list. If you take more than the size of the input list, the remaining elements are filled with zeroes.
 
 ```apl
       2 ↑ ⌽ ⍳ 10
@@ -332,7 +332,7 @@ The comma function, in dyadic form, concatenates lists. Combining all that, I ca
  1 1 2 3 5 8 13 21 34 55
 ```
 
-Succinct, but clumsy. The business with reversing the natural number list turns out to be unnecessary. Instead I can just generate a list of all 1s by using the Rho function (⍴). Rho is monadic form tells you the shape of something (a list's length, or a matrix's dimensions), but in dyadic form it is \_re_shape, where reshaping to a larger size causes an scalar or list to repeat. Making 10 ones is as easy as...
+Succinct, but clumsy. The business with reversing the natural number list turns out to be unnecessary. Instead I can just generate a list of all 1s by using the Rho function (`⍴`). Rho is monadic form tells you the shape of something (a list's length, or a matrix's dimensions), but in dyadic form it is \_re_shape, where reshaping to a larger size causes an scalar or list to repeat. Making 10 ones is as easy as...
 
 ```apl
       10 ⍴ 1
@@ -346,7 +346,7 @@ Succinct, but clumsy. The business with reversing the natural number list turns 
  1 1 2 3 5 8 13 21 34 55
 ```
 
-This is better, but it still rubs me the wrong way to use a list for the sole purpose of flow control in a loop. APL provides a more traditional style of function that can be created using the "del editor". The del character is a downward-pointing triangle (∇), and is used to declare a function signature, inlcuding the name of a variable to return (z in this case), optional variable names to handle inputs, the function name itself, and an an optional final list of local variables, delimited by semicolons. This puts you in a line-editor mode, and avails you of the use of APL's goto function, the right-arrow.
+This is better, but it still rubs me the wrong way to use a list for the sole purpose of flow control in a loop. APL provides a more traditional style of function that can be created using the "del editor". The del character is a downward-pointing triangle (`∇`), and is used to declare a function signature, inlcuding the name of a variable to return (z in this case), optional variable names to handle inputs, the function name itself, and an an optional final list of local variables, delimited by semicolons. This puts you in a line-editor mode, and avails you of the use of APL's goto function, the right-arrow.
 
 Goto can reference a numbered line, or a named label (labels are defined by typing a word followed by a colon on a line by itself). If 0, nil, or something that isn't a valid line number or label is passed to goto, the function exits. In the function below, I'm initializing z to 1, then concatenating it as above, and exiting the loop using a boolean select that returns 2 (the line number to go back to) until z is the same size as the input variable "len" (using Rho to get z's shape):
 
@@ -360,11 +360,11 @@ Goto can reference a numbered line, or a named label (labels are defined by typi
 1 1 2 3 5 8 13 21 34 55
 ```
 
-Seeing the del-formatted functions is a little awkward at first, and in non-Gnu APL interpreters, this style of inline function definition is deprecated in favor of using built-in function editors that can be invoked with ")edit" or similar commands.
+Seeing the del-formatted functions is a little awkward at first, and in non-Gnu APL interpreters, this style of inline function definition is deprecated in favor of using built-in function editors that can be invoked with `)edit` or similar commands.
 
 ### Primes redux, and function metrics
 
-Let's build a new method of calculating prime numbers that is more performant than O(n^2). I'll start by manually building up a list, and checking the residue of all the primes so far against the new candidate number.
+Let's build a new method of calculating prime numbers that is more performant than `O(n^2)`. I'll start by manually building up a list, and checking the residue of all the primes so far against the new candidate number.
 
 ```apl
       primes ← 2
@@ -382,7 +382,7 @@ Since 3 mod 2 is 1, 3 doesn't divide evenly by any previous prime number, and so
 0
 ```
 
-Here, "primes residue 4" returns 0 for 2, and 1 for 3, meaning 4 divides evenly by 2, but not by 3. The carat (^) symbol is a bitwise AND function, and in this case the AND-reduction of 0 and 1 is 0, or false. 4, then, is not a prime, but we have a starter method to quickly check for new primes. If we try it with 5...
+Here, "primes residue 4" returns 0 for 2, and 1 for 3, meaning 4 divides evenly by 2, but not by 3. The carat (`^`) symbol is a bitwise AND function, and in this case the AND-reduction of 0 and 1 is 0, or false. 4, then, is not a prime, but we have a starter method to quickly check for new primes. If we try it with 5...
 
 ```apl
       ^ / primes | 5
@@ -414,9 +414,9 @@ Success!! - Sort of. This isn't as efficient as we can make it, since we are com
 25
 ```
 
-In the first statement, Rho didn't return anything, since reduce always returns a scalar, not a list. Even though the body of the function reduce is running over builds a list, reduce "encloses" it, leaving a scalar of rank 0, and no shape. The superset symbol (⊃) "discloses" enclosed scalars, making their contents visible to functions that expect a plain list - or at least, that's my current understanding. Rank and shape are odd concepts, and getting an intuitive understanding of them helps make one's APL code less... um... janky.
+In the first statement, Rho didn't return anything, since reduce always returns a scalar, not a list. Even though the body of the function reduce is running over builds a list, reduce "encloses" it, leaving a scalar of rank 0, and no shape. The superset symbol (`⊃`) "discloses" enclosed scalars, making their contents visible to functions that expect a plain list - or at least, that's my current understanding. Rank and shape are odd concepts, and getting an intuitive understanding of them helps make one's APL code less... um... janky.
 
-Now let's get some heuristics on our prime function, and see if we can tweak it further. APL provides a timestamp function, but I find the "account information" (⎕AI) list very useful. It returns an array containing your "user ID", which I think GNU-APL hardcodes, or used to hardcode, the CPU time that the interpreter process has used, how long in real time the process has been running, and, in theory, how long your keyboard has been unlocked.
+Now let's get some heuristics on our prime function, and see if we can tweak it further. APL provides a timestamp function, but I find the "account information" (`⎕AI`) list very useful. It returns an array containing your "user ID", which I think GNU-APL hardcodes, or used to hardcode, the CPU time that the interpreter process has used, how long in real time the process has been running, and, in theory, how long your keyboard has been unlocked.
 
 Here's the quad-AI array, and assigning its second element to a variable we can subtract with:
 
@@ -447,7 +447,7 @@ The [How many primes are there?](https://t5k.org/howmany.html) page assures me t
 984
 ```
 
-...and voila, we have a three-fold speed improvement. If you're wondering just how bad the O(n^2) solution from earlier is, it's a doozy:
+...and voila, we have a three-fold speed improvement. If you're wondering just how bad the `O(n^2)` solution from earlier is, it's a doozy:
 
 ```apl
       start ← ⎕ai[2]
@@ -495,7 +495,7 @@ If I assign that same snippet to a variable, I can easily see which characters a
       0 0 0 0 0 0
 ```
 
-Running that boolean list through an enclose (the subset, or "⊂" character) over the original variable works similarly to the reduce function. The main difference is that consecutive true elements are combined to make unique list items:
+Running that boolean list through an enclose (the subset, or "`⊂`" character) over the original variable works similarly to the reduce function. The main difference is that consecutive true elements are combined to make unique list items:
 
 ```apl
       tst ⊂⍨ tst ∈ '1234567890'
@@ -537,7 +537,7 @@ Now, I want to filter out all the number blocks that are between 12 an 19 digits
       0 0
 ```
 
-The diaeresis character (¨) is the "each" operator. It iterates over each element of a list and passes it into a function as consecutive omegas. It is similar to a reduce function, except it doesn't do any first-pair funny business, and doesn't explicitly return a scalar.
+The diaeresis character (`¨`) is the "each" operator. It iterates over each element of a list and passes it into a function as consecutive omegas. It is similar to a reduce function, except it doesn't do any first-pair funny business, and doesn't explicitly return a scalar.
 
 Enclosing our list above over nums pulls out all the candidates of the right length... but then we discover the weird nested list output, as "enclose" and "reduce" make drastically different list shapes:
 
@@ -614,7 +614,7 @@ If you're unfamiliar with the Luhn algorithm, it's a simple checksum-like operat
 
 The total is calculated by summing the digits in reverse order. The first digit is added directly, the second digit is doubled, then repeat until the end. If doubled digits exceed 9, the sum is also summed. 7 doubled is 14, 1 plus 4 is 5. This can be simplified programatically into selecting your digit's index from the list '0246813579'. Finally, the grand total must be evenly divisible by 10.
 
-The function below makes use of the ⍎ symbol, which is APL's "eval" or "execute" operator. It is idiomatic to use execute to turn strings into numbers. My function here returns true for sums with a 10 residue of 0. It creates the sum by iterating over the reversed input string, expecting each character to be a digit, and alternating between evaluating the digit itself, or evaluating the nth index of '0246813579', depending on whether the index of the shape of the input string is even or not.
+The function below makes use of the `⍎` symbol, which is APL's "eval" or "execute" operator. It is idiomatic to use execute to turn strings into numbers. My function here returns true for sums with a 10 residue of 0. It creates the sum by iterating over the reversed input string, expecting each character to be a digit, and alternating between evaluating the digit itself, or evaluating the nth index of '0246813579', depending on whether the index of the shape of the input string is even or not.
 
 Simple! Actually it may take you some time to parse out what's going on, particularly if this is your first venture into APL. I've read accounts of APL being referred to as a write-only language due to trouble people have with parsing the very densely packed ideas in APL expressions. At any rate, here's my Luhn function, followed by a couple tests, and finally iterating over all our previously identified card numbers:
 
@@ -672,7 +672,7 @@ Colums takes an alpha of the DB handle, an omega of a table name:
  transaction_id    varchar(64)
 ```
 
-Selecting is a little more interesting. The alpha variable is the main select command, the omega is a _scalar_ of any variables the select needs, the Select function itself takes an axis variable to refer to the DB handle. If you are doing a direct query with no variables, 0 or an empty string ('') will suffice for omega:
+Selecting is a little more interesting. The alpha variable is the main select command, the omega is a _scalar_ of any variables the select needs, the Select function itself takes an axis variable to refer to the DB handle. If you are doing a direct query with no variables, 0 or an empty string (`''`) will suffice for omega:
 
 ```apl
       'select amount, last_4 from payments' SQL∆Select[d] 0
@@ -695,7 +695,7 @@ Selecting is a little more interesting. The alpha variable is the main select co
  400     1111
 ```
 
-An axis variable is an index after a function to refer to which axis of a matrix to operate on. For example, instead of using the special ⌿ character to reduce over a column, you can also use the normal reduce and specify the first index. E.g.:
+An axis variable is an index after a function to refer to which axis of a matrix to operate on. For example, instead of using the special `⌿` character to reduce over a column, you can also use the normal reduce and specify the first index. E.g.:
 
 ```apl
   { +/[0] 0 = ⍵ ∘.| ⍵ } 2 ↓ ⍳ 11
