@@ -35,7 +35,7 @@ The challenge was this: Given directions to draw an L-shaped room, calculate its
 
 It describes an L-shaped room that looks like this:
 
-![](../assets/room-area/ra-room.png)
+![Diagram of an L-shaped room](../assets/room-area/ra-room.png)
 
 Visually inspecting the shape, it's easy for a human to understand that this is a 16x9 rectangle with a 7x5 rectangle cut out of it, making the room area 144 - 35 = 109 square units. When first faced with the puzzle, my spur of the moment solution attempt was to note which vector directions repeated, and which didn't. Two of the vector directions don't repeat, so their values are the base rectangle, and the rectangle to be subtracted is described by the first direction to repeat's second value, and the second direction to repeat's first value. Yes... that's quite a hacky approach to the problem. Maybe that works in all L-room cases and maybe it doesn't, but it is definitely not a general solution that works with other room shapes.
 
@@ -53,18 +53,18 @@ To understand why this works, let's take a step back...
 
 Given any two points that produce a triangle with the origin, moving counterclockwise with respect to the origin, let's call the points (a, b) and (c, d), the area of the parallelogram (0, 0), (a, b), (a+c, b+d), (c, d) can be calculated by ad - bc. The best visual for understanding why that formula works is probably Solomon Golomb's famous "proof without words":
 
-![](../assets/room-area/proof-without-words.png)
+![A visual proof showing how a 2x2 determinant is the area of a parelellogram](../assets/room-area/proof-without-words.png)
 
 We can deduce the same formula algebraically with a little elbow grease. To find the area of the parallelogram below...
 
-![](../assets/room-area/ra-parallelogram.png)
+![Parallelogram with point on origin, and adjacent points (a,b) and (c,d)](../assets/room-area/ra-parallelogram.png)
 
 We can draw a bounding box around it, and divide the area outside the parallelogram into congruent shapes we can build rectangles with:
 
-![](../assets/room-area/ra-bounding-box.png)
+![Parallelogram inscribed in a square](../assets/room-area/ra-bounding-box.png)
 
-![](../assets/room-area/ra-rectangle1.png)
-![](../assets/room-area/ra-rectangle2.png)
+![Rectangle from left/right gaps between square and inscribed parallelogram](../assets/room-area/ra-rectangle1.png)
+![Rectangle from top/bottom gaps between square and inscribed parallelogram](../assets/room-area/ra-rectangle2.png)
 
 The rectangles will have the areas `cd` and `b(a+2c)`. So, the area of the parallelogram is the area of the bounding box `(a+c)(b+d)`, minus the rectangles:
 
@@ -81,23 +81,23 @@ Dividing that in half gives us the area of triangle (0, 0), (a, b), (c, d).
 
 Breaking any arbitrary polygon (so long as none of the lines cross) up into triangles with respect to origin, can be used to calculate the shape's total area with this method. Take our original L-shaped room. If we assume the bottom left corner sits on origin, then that saves us a pair of calculations. Going counter-clockwise around the shape, form a triangle from the first pair of points to origin:
 
-![](../assets/room-area/ra-step1.png)
+![L-shaped room with shaded wedge](../assets/room-area/ra-step1.png)
 
 I'll keep a running total of parallelogram areas, and divide everything in half at the end. Using the shoelace method, our first area is
 <br>$(9 \times 5) - (9 \times 0)$ or 45, representing double the shaded area.
 
 The next triangle is where things get weird:
 
-![](../assets/room-area/ra-step2.png)
+![L-shaped room with shaded wedge](../assets/room-area/ra-step2.png)
 
 Our "sweep" has just moved clockwise, so it should produce a negative area. It looks to be subtracting part of the triangle we just considered, and some random wedge outside the shape. Let's pretend that's not as insane as it sounds, and continue. The formula gives us $(9 \times 5) - (16 \times 5)$,
-<br>or `$45 - 80$`, or `$^{-}35$`. This makes our running total
+<br>or $45 - 80$, or $^{-}35$. This makes our running total
 
 $45 - 35 = 10$
 
 The next triangle shows that we're still on the right track:
 
-![](../assets/room-area/ra-step3.png)
+![L-shaped room with shaded wedge](../assets/room-area/ra-step3.png)
 
 We've added back in both of the shapes subtracted in the previous step, along with the small triangle in the upper-right. Using the formula, we have $(16 \times 9) - (16 \times 5)$, or $144 - 80$, or $64$. Our running total is now
 
@@ -105,7 +105,7 @@ $45 - 35 + 64 = 74$
 
 This brings us to the last triangle we have to consider:
 
-![](../assets/room-area/ra-step4.png)
+![L-shaped room with shaded wedge](../assets/room-area/ra-step4.png)
 
 The formula gives us $(16 \times 9) - (9 \times 0)$, or 144, making our final running total
 
@@ -319,10 +319,11 @@ end
 
 Which gives...
 
-```
-curtis@Curtis-Autery-MBPro area % rspec coord_maker_spec.rb
+:::codez
+**curtis@Curtis-Autery-MBPro area %** _rspec coord_maker_spec.rb_
 .F
 
+```
 Failures:
 
   1) CoordMaker with a square coords describe a square and return to origin
@@ -336,6 +337,8 @@ Failures:
 Finished in 0.02385 seconds (files took 0.08586 seconds to load)
 2 examples, 1 failure
 ```
+
+:::
 
 Now let's write some code to calculate coordinates, and we have two waiting examples to make sure we're doing it right.
 
