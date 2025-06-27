@@ -103,9 +103,9 @@ True to form, if you call up the calendar for September 1752, you see a month wi
 
 ```
 ~: cal sep 1752
-    September 1752
+   September 1752
 Su Mo Tu We Th Fr Sa
-        1  2 14 15 16
+       1  2 14 15 16
 17 18 19 20 21 22 23
 24 25 26 27 28 29 30
 ```
@@ -113,7 +113,7 @@ Su Mo Tu We Th Fr Sa
 The FreeBSD-born calendar program, ncal, on the other hand, attempts to identify the Gregorian cutover date based on your locale, but falls back to British rules if a locale can't be found, or isn't associated with a Gregorian cutover. It also accepts a commandline switch to specify a two-letter country code rather than look up where you are. So if I wanted to see the calendar of Rome when the calendar Papal bull was published, I'd specify IT (Italy) as my location:
 
 ```
-  ~: ncal -s IT oct 1582
+~: ncal -s IT oct 1582
     October 1582
 Mo  1 18 25
 Tu  2 19 26
