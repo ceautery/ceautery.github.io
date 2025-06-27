@@ -1,13 +1,10 @@
 import { h } from "hastscript";
 import { visit } from "unist-util-visit";
 
-function codezPlugin() {
+function classWrapper() {
   return (tree) => {
     visit(tree, (node) => {
-      if (
-        node.type === "containerDirective" &&
-        /^(codez|hero)$/.test(node.name)
-      ) {
+      if (node.type === "containerDirective" && node.name.length) {
         const data = node.data || (node.data = {});
 
         data.hName = "div";
@@ -17,4 +14,4 @@ function codezPlugin() {
   };
 }
 
-export default codezPlugin;
+export default classWrapper;

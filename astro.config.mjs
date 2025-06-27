@@ -6,7 +6,7 @@ import { defineConfig } from "astro/config";
 import remarkDirective from "remark-directive";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import codezPlugin from "./src/remark/codez-plugin";
+import classWrapper from "./src/remark/class-wrapper";
 import inspectUrls from "@jsdevtools/rehype-url-inspector";
 
 // https://astro.build/config
@@ -23,7 +23,7 @@ export default defineConfig({
         },
       ],
     },
-    remarkPlugins: [remarkMath, remarkDirective, codezPlugin],
+    remarkPlugins: [remarkMath, remarkDirective, classWrapper],
     rehypePlugins: [
       rehypeKatex,
       [
