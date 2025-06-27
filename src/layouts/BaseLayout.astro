@@ -3,11 +3,12 @@ import "../styles/global.css";
 
 const { data } = Astro.props;
 const baseURL = "https://blog.autery.net";
+const isRoot = data.url === "/";
 ---
 
 <html lang="en">
   <head>
-    {(<title>{data.title}</title>)}
+    <title>{data.title}</title>
     {
       data.hasMath && (
         <link
@@ -40,7 +41,7 @@ const baseURL = "https://blog.autery.net";
       )
     }
   </head><body>
-    <header>
+    <header class:list={[{ root: isRoot }]}>
       Curtis Autery, pretty ok software writer.
 
       <nav>

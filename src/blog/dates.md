@@ -572,7 +572,7 @@ I hope you enjoyed this long exposition into the world of calendars and politics
 
 I wrote this in 2015, long before the Gaza war, when my feelings on the state of Israel were pretty rosy and innocent. Now it's hard for me to read about the history of the Hebrew calendar and the Zion daylight saving time headache without being reminded of current events. I'm not going to opine on that here, but I want to acknowledge that "my respect has grown" sounds quite different today than it did ten years ago.
 
-I`ll quote Harry Truman on the establishment of Israel after WW2, from the series [Decision: The Conflicts of Harry S. Truman](https://www.trumanlibrary.gov/library/audiovisual-materials/screen-gems/decision-conflicts):
+I'll quote Harry Truman on the establishment of Israel after WW2, from the series [Decision: The Conflicts of Harry S. Truman](https://www.trumanlibrary.gov/library/audiovisual-materials/screen-gems/decision-conflicts):
 
 > You can't move five or six million people out of a country and fill it up with five or six million more and expect both sets of them to be pleased.
 >

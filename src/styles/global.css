@@ -52,13 +52,24 @@ header {
   width: 100%;
   background-color: var(--header-background-color);
   z-index: 1; /* keeps KaTeX fractions from renering on top of header */
+  font-size: 0.8em;
+}
+
+header.root {
+  font-size: 1em;
 }
 
 nav {
-  margin: 0.5em 0;
+  margin: 0.5em 0 0.5em 2em;
+  display: inline;
   border-bottom: 3px solid var(--nav-border-color);
   line-height: 2;
   max-width: 600px;
+}
+
+header.root > nav {
+  margin: 0.5em 0;
+  display: block;
 }
 
 nav a {
