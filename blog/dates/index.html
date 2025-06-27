@@ -64,13 +64,13 @@ Curtis Autery, pretty ok software writer.
 <p><img alt="Unix cal manpage, with the callout &quot;Try September 1752&quot;" width="800" height="385" loading="lazy" decoding="async" src="/_astro/unix-cal-manpage.DDx0Y-wT_ZPInYk.webp" ></p>
 <p>True to form, if you call up the calendar for September 1752, you see a month with some missing days:</p>
 <pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>~: cal sep 1752</span></span>
-<span class="line"><span>    September 1752</span></span>
+<span class="line"><span>   September 1752</span></span>
 <span class="line"><span>Su Mo Tu We Th Fr Sa</span></span>
-<span class="line"><span>        1  2 14 15 16</span></span>
+<span class="line"><span>       1  2 14 15 16</span></span>
 <span class="line"><span>17 18 19 20 21 22 23</span></span>
 <span class="line"><span>24 25 26 27 28 29 30</span></span></code></pre>
 <p>The FreeBSD-born calendar program, ncal, on the other hand, attempts to identify the Gregorian cutover date based on your locale, but falls back to British rules if a locale can’t be found, or isn’t associated with a Gregorian cutover. It also accepts a commandline switch to specify a two-letter country code rather than look up where you are. So if I wanted to see the calendar of Rome when the calendar Papal bull was published, I’d specify IT (Italy) as my location:</p>
-<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>  ~: ncal -s IT oct 1582</span></span>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>~: ncal -s IT oct 1582</span></span>
 <span class="line"><span>    October 1582</span></span>
 <span class="line"><span>Mo  1 18 25</span></span>
 <span class="line"><span>Tu  2 19 26</span></span>
