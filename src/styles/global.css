@@ -197,6 +197,11 @@ article img {
   height: auto;
 }
 
+article div.hero {
+  display: flex;
+  justify-content: center;
+}
+
 .tooltip {
   display: none;
   position: absolute;
