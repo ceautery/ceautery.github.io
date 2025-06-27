@@ -217,7 +217,7 @@ $$
 \frac{3}{32} + \frac{3}{512} + \frac{3}{8192} + \frac{3}{131,072}...
 $$
 
-Does this really repeat by adding `$3 \div \text{(next power of 2 ending in 2)}$`? Yes, which I'll demonstrate. To start with, subtract one tenth by three thirty-seconds:
+Does this really repeat by adding $3 \div \text{(next power of 2 ending in 2)}$? Yes, which I'll demonstrate. To start with, subtract one tenth by three thirty-seconds:
 
 $$
 \frac{1}{10} - \frac{3}{32} = \frac{32}{320} - \frac{30}{320} = \frac{2}{320} = \frac{1}{160}
