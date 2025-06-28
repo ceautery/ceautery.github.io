@@ -332,7 +332,7 @@ So $2^{52}$ is the limit of scale and accuracy. Let's plug that into the above e
   2.718281828459045
 ```
 
-That exactly matches Math.E, and is accurate to the mathematical constant _e_ within `$2.3 \times 10^{-16}$`. If we move n up or down by just 1, we lose accuracy:
+That exactly matches Math.E, and is accurate to the mathematical constant _e_ within $2.3 \times 10^{-16}$. If we move n up or down by just 1, we lose accuracy:
 
 ```javascript
 > e(Math.pow(2, 52) + 1)

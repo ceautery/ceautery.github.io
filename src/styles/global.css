@@ -94,8 +94,14 @@ article {
 }
 
 article h1 {
-  font-size: 30px;
+  font-size: 2em;
   text-align: center;
+}
+article h2 {
+  font-size: 1.5em;
+}
+article h3 {
+  font-size: 1.17em;
 }
 
 p.hero {

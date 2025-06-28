@@ -1,7 +1,7 @@
-import { bundledLanguages } from "shiki";
-import syntaxTheme from "./src/shiki/syntax-theme.json";
 import pry from "./src/shiki/pry.json";
 // @ts-check
+import syntaxTheme from "./src/shiki/syntax-theme.json";
+import { bundledLanguages } from "shiki";
 import { defineConfig } from "astro/config";
 import remarkDirective from "remark-directive";
 import remarkMath from "remark-math";
