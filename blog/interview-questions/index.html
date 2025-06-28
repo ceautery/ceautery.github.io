@@ -3,7 +3,7 @@
 Curtis Autery, pretty ok software writer.
 <nav> <a href="/" class="live">blog</a> <a href="/about">about</a> </nav> </header> <article>  <h1 id="forward">Forward</h1>
 <p>Hi, 2025 Curtis here. I wrote this in 2013, from my last Windows machine. It was a couple years before leetcode was founded, when web frameworks like Angular were still in their infancies. Fellow devs, don’t take interviews where questions like these are asked. It’s silliness to expect someone to livecode in front of strangers, and how well a candidate does in that situation doesn’t correlate with how well they’ll do their job.</p>
-<p>2013 Curtis, though, he was more interested in showing off than setting boundaries. These days I look for roles where collaboration and communication are important, and using a library for powersets and squre roots is preferred over writing your own bespoke answer to a solved compsci problem.</p>
+<p>2013 Curtis, though, he was more interested in showing off than setting boundaries. These days I look for roles where collaboration and communication are important, and using a library for powersets and square roots is preferred over writing your own bespoke answer to a solved compsci problem.</p>
 <p>That being said… on with the show!</p>
 <h1 id="five-coding-interview-questions">Five coding interview questions</h1>
 <p>Recently I took a contract with Automattic to build a WordPress plugin for them. We parted amicably with a Dear John letter instead of an offer letter, as the friction between our operating styles was greater in reality than it should have been on paper. I’ll spare you the details.</p>
@@ -352,26 +352,24 @@ For the above S, the power set will be <code>{NULL, {1}, {2}, {2}, {1,2}, {1,2},
 <span class="line"><span>1, 2, 3       1   1   1</span></span></code></pre>
 <p>So if we iterate from 1 to 8 (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">2^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>, 3 being the set length), turn the number binary, and use each binary digit as a flag to determine what elements to include in each subset, we can easily generate the complete power set, including the empty set.</p>
 <p>To remove the duplicates, we can turn each subset into a hash key, and set the value at that key to 1. If we hit the same key twice, it won’t create a new hash element. Combine this with Javascript’s ability to define custom sorts, and we can return the results in the desired order:</p>
-<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>function powerSet(arr) {</span></span>
-<span class="line"><span>    var ps = {} // power set hash</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>    for (var n = 0; n &#x3C; Math.pow(2, arr.length); n++) {</span></span>
-<span class="line"><span>        var tmp = [];</span></span>
-<span class="line"><span>        for (var f = 0; f &#x3C; arr.length; f++)</span></span>
-<span class="line"><span>            if ((n >> f) % 2 == 1) tmp.push(arr[f])</span></span>
-<span class="line"><span>        ps[tmp.sort().join(',')] = 1;</span></span>
-<span class="line"><span>    }</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>    function cmp(a, b) {</span></span>
-<span class="line"><span>        return a.length &#x3C; b.length ? -1 : a.length == b.length ? a-b : 1;</span></span>
-<span class="line"><span>    }</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>    return Object.keys(ps).sort(cmp);</span></span>
-<span class="line"><span>}</span></span></code></pre>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> powerSet</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">arr</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#E1E4E8"> ps </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {}; </span><span style="color:#6A737D">// power set hash</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; n </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">pow</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, arr.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">); n</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#E1E4E8"> tmp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#E1E4E8"> f </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; f </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> arr.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">; f</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">      if</span><span style="color:#E1E4E8"> ((n </span><span style="color:#F97583">>></span><span style="color:#E1E4E8"> f) </span><span style="color:#F97583">%</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583"> ==</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) tmp.</span><span style="color:#B392F0">push</span><span style="color:#E1E4E8">(arr[f]);</span></span>
+<span class="line"><span style="color:#E1E4E8">    ps[tmp.</span><span style="color:#B392F0">sort</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">","</span><span style="color:#E1E4E8">)] </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  function</span><span style="color:#B392F0"> cmp</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">a</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">b</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> a.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> &#x3C;</span><span style="color:#E1E4E8"> b.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> ?</span><span style="color:#F97583"> -</span><span style="color:#79B8FF">1</span><span style="color:#F97583"> :</span><span style="color:#E1E4E8"> a.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> ==</span><span style="color:#E1E4E8"> b.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> ?</span><span style="color:#E1E4E8"> a </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> b </span><span style="color:#F97583">:</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> Object.</span><span style="color:#B392F0">keys</span><span style="color:#E1E4E8">(ps).</span><span style="color:#B392F0">sort</span><span style="color:#E1E4E8">(cmp);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
 <p>Results:</p>
-<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>powerSet([1,2,2])</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>["", "1", "2", "1,2", "2,2", "1,2,2"]</span></span></code></pre>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">powerSet</span><span style="color:#E1E4E8">([</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">])[(</span><span style="color:#9ECBFF">""</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"1"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"2"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"1,2"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"2,2"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"1,2,2"</span><span style="color:#E1E4E8">)];</span></span></code></pre>
 <h3 id="4-also-from-facebook">4. Also from Facebook:</h3>
 <blockquote>
 <p>Write a function which returns the square root of a given number up to a precision of 0.0001. Only arithematic operations like addition, subtraction, division and multiplication are allowed.</p>
@@ -404,46 +402,45 @@ For the above S, the power set will be <code>{NULL, {1}, {2}, {2}, {1,2}, {1,2},
 <span class="line"><span>...etc.</span></span></code></pre>
 <p>As you get more decimal digits, the remainders grow, and eventually get unwieldy if you aren’t using a large integer library of some sort. Our question only wants accuracy to .0001, so we should still be able to fit the last remainder into a standard int.</p>
 <p>Here’s my implementation of that method in PHP, which takes copious advantage of the language’s easy casting between strings and numbers:</p>
-<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;?php</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>$in = $argv[1];</span></span>
-<span class="line"><span>if (preg_match('/^\d+$/', $in)) $in .= ".00000000";</span></span>
-<span class="line"><span>else if (! preg_match('/^\d+\.\d+$/', $in) ) {</span></span>
-<span class="line"><span>    echo "Invalid number format. ### or ###.### only.\n";</span></span>
-<span class="line"><span>    exit;</span></span>
-<span class="line"><span>}</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>// Split number into left and right parts</span></span>
-<span class="line"><span>list($l, $r) = explode('.', $in, 2);</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>// Left part must have an even count, lead with 0 if needed</span></span>
-<span class="line"><span>if (strlen($l) % 2 == 1) $l = "0" . $l;</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>// Make right part 8 digits, to give us 4 decimals in solution</span></span>
-<span class="line"><span>$r = substr( str_pad($r, 8, "0"), 0, 8); // Trim or pad to 8 digits</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>$ans = $remainder = "";</span></span>
-<span class="line"><span>foreach(str_split($l . $r, 2) as $chunk) {</span></span>
-<span class="line"><span>    $remainder .= $chunk;</span></span>
-<span class="line"><span>    $tmp = $ans * 20;</span></span>
-<span class="line"><span>    $n = $tmp == 0 ? 0 : (int)($remainder / $tmp);</span></span>
-<span class="line"><span>    while (($tmp + $n) * $n &#x3C;= $remainder) $n++;</span></span>
-<span class="line"><span>    $n--;</span></span>
-<span class="line"><span>    $ans .= $n;</span></span>
-<span class="line"><span>    $remainder -= ($tmp + $n) * $n;</span></span>
-<span class="line"><span>}</span></span>
-<span class="line"><span>$ans = substr_replace($ans, ".", strlen($l) / 2, 0);</span></span>
-<span class="line"><span>print "$ans\n";</span></span>
-<span class="line"><span></span></span>
-<span class="line"><span>?></span></span></code></pre>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="php"><code><span class="line"><span style="color:#F97583">&#x3C;?</span><span style="color:#79B8FF">php</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$in </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $argv[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">preg_match</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/</span><span style="color:#F97583">^</span><span style="color:#85E89D;font-weight:bold">\d</span><span style="color:#F97583">+$</span><span style="color:#9ECBFF">/'</span><span style="color:#E1E4E8">, $in)) $in </span><span style="color:#F97583">.=</span><span style="color:#9ECBFF"> ".00000000"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">else</span><span style="color:#F97583"> if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#79B8FF"> preg_match</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/</span><span style="color:#F97583">^</span><span style="color:#85E89D;font-weight:bold">\d</span><span style="color:#F97583">+</span><span style="color:#85E89D;font-weight:bold">\.\d</span><span style="color:#F97583">+$</span><span style="color:#9ECBFF">/'</span><span style="color:#E1E4E8">, $in) ) {</span></span>
+<span class="line"><span style="color:#79B8FF">    echo</span><span style="color:#9ECBFF"> "Invalid number format. ### or ###.### only.</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">    exit</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Split number into left and right parts</span></span>
+<span class="line"><span style="color:#79B8FF">list</span><span style="color:#E1E4E8">($l, $r) </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> explode</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'.'</span><span style="color:#E1E4E8">, $in, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Left part must have an even count, lead with 0 if needed</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">strlen</span><span style="color:#E1E4E8">($l) </span><span style="color:#F97583">%</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583"> ==</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) $l </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "0"</span><span style="color:#F97583"> .</span><span style="color:#E1E4E8"> $l;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Make right part 8 digits, to give us 4 decimals in solution</span></span>
+<span class="line"><span style="color:#E1E4E8">$r </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> substr</span><span style="color:#E1E4E8">( </span><span style="color:#79B8FF">str_pad</span><span style="color:#E1E4E8">($r, </span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"0"</span><span style="color:#E1E4E8">), </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">); </span><span style="color:#6A737D">// Trim or pad to 8 digits</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">$ans </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $remainder </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> ""</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#F97583">foreach</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">str_split</span><span style="color:#E1E4E8">($l </span><span style="color:#F97583">.</span><span style="color:#E1E4E8"> $r, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> $chunk) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    $remainder </span><span style="color:#F97583">.=</span><span style="color:#E1E4E8"> $chunk;</span></span>
+<span class="line"><span style="color:#E1E4E8">    $tmp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $ans </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 20</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    $n </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> $tmp </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> ?</span><span style="color:#79B8FF"> 0</span><span style="color:#F97583"> :</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#E1E4E8">)($remainder </span><span style="color:#F97583">/</span><span style="color:#E1E4E8"> $tmp);</span></span>
+<span class="line"><span style="color:#F97583">    while</span><span style="color:#E1E4E8"> (($tmp </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> $n) </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> $n </span><span style="color:#F97583">&#x3C;=</span><span style="color:#E1E4E8"> $remainder) $n</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    $n</span><span style="color:#F97583">--</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    $ans </span><span style="color:#F97583">.=</span><span style="color:#E1E4E8"> $n;</span></span>
+<span class="line"><span style="color:#E1E4E8">    $remainder </span><span style="color:#F97583">-=</span><span style="color:#E1E4E8"> ($tmp </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> $n) </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> $n;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">$ans </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> substr_replace</span><span style="color:#E1E4E8">($ans, </span><span style="color:#9ECBFF">"."</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">strlen</span><span style="color:#E1E4E8">($l) </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#9ECBFF"> "</span><span style="color:#E1E4E8">$ans</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">?></span></span></code></pre>
 <p>Results:</p>
-<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>$ php sqrt.php 1800</span></span>
-<span class="line"><span>42.4264</span></span>
-<span class="line"><span>$ php sqrt.php 43046721</span></span>
-<span class="line"><span>6561.0000</span></span>
-<span class="line"><span>$ php sqrt.php 2</span></span>
-<span class="line"><span>1.4142</span></span>
-<span class="line"><span>$</span></span></code></pre>
+<div class="codez"><p><strong>$</strong> <em>php sqrt.php 1800</em>
+42.4264
+<strong>$</strong> <em>php sqrt.php 43046721</em>
+6561.0000
+<strong>$</strong> <em>php sqrt.php 2</em>
+1.4142</p></div>
 <p>This method isn’t exactly intuitive, and recalling the specifics without a reference might be a problem, however it’s easy to build an equivalent solution from first principles. Simply, we’re looking for the square root S of a number N, so a formula to express that without a radix is:</p>
 <p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>S</mi><mn>2</mn></msup><mo>=</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">S^2 = N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></p>
 <p>We’re also looking to build that up one part at a time with A’s and B’s, where:</p>
