@@ -1,0 +1,532 @@
+<!DOCTYPE html><html lang="en"> <head><title>Five coding interview questions</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous"><link rel="me" href="https://mastodon.social/@CurtisAutery"><meta name="viewport" content="width=500"><meta charset="UTF-8"><meta property="og:url" content="https://blog.autery.net/blog/interview-questions/"><meta property="og:title" content="Five coding interview questions"><meta property="og:type" content="article"><meta property="og:image" content="https://blog.autery.net/images/plate.jpg"><meta name="description" property="og:description" content="Obama-era Curtis slings some code in a variety of languages to solve theoretical coding interview questions"><meta name="author" content="Curtis Autery"><meta property="article:published_time" content="2013-10-24T12:00:00-05:00"><style>:root{color-scheme:light dark;--background-color: light-dark(#fff, #2f2f2f);--text-color: light-dark(#000, #fff);--nav-border-color: light-dark( rgba(10, 10, 10, .1), rgba(200, 200, 200, .1) );--nav-hover-color: light-dark(#f4f4f4, #555);--code-background-color: #222;--code-color: #e1e4e8;--inline-code-background-color: light-dark(#ddd, #222);--inline-code-color: light-dark(black, #e1e4e8);--blockquote-border-color: light-dark(#eee, #777);--blockquote-color: light-dark(#444, #eee);--table-border-color: light-dark(#dbdbdb, #555);--table-hover-color: light-dark(#f5f5f5, #444);--link-color: light-dark(#17874f, #66d9ef);--link-hover-color: light-dark(#363636, #fff);--tooltip-background-color: light-dark(#fff, #444);--tooltip-border-color: light-dark(#dbdbdb, #666);--header-background-color: light-dark( rgba(255, 255, 255, 1), rgba(47, 47, 47, 1) )}.katex{font-size:1.25em}html{scroll-padding-top:96px}body{display:flex;flex-direction:column;height:100%;margin:0;font-family:system-ui;font-size:1.25em;line-height:1.5;background-color:var(--background-color);color:var(--text-color)}header{margin-left:1em;position:sticky;top:0;width:100%;background-color:var(--header-background-color);z-index:1;font-size:.8em}header.root{font-size:1em}nav{margin:.5em 0 .5em 2em;display:inline;border-bottom:3px solid var(--nav-border-color);line-height:2;max-width:600px}header.root>nav{margin:.5em 0;display:block}nav a{display:inline-block;padding:0 2em;text-decoration:none;color:inherit}nav a:hover{background-color:var(--nav-hover-color)}nav a.live{border-bottom:3px solid #198e53}article{flex-grow:1;padding:1em 15%;margin:0 14pt}article h1{font-size:2em;text-align:center}article h2{font-size:1.5em}article h3{font-size:1.17em}p.hero{display:flex;justify-content:center}article blockquote{border-left:5px solid var(--blockquote-border-color);padding-left:1em;margin-left:0;color:var(--blockquote-color)}a{color:var(--link-color);text-decoration:none}a:hover{color:var(--link-hover-color)}.codez{padding:0 1em}article>pre{padding:1em;font-family:Menlo,monospace;color:var(--code-color);background-color:var(--code-background-color);line-height:1.25}code,.codez p{color:var(--code-color);background-color:var(--code-background-color);font-size:.875em}code,.codez{color:var(--code-color);background-color:var(--code-background-color);font-family:Menlo,monospace;white-space:pre-wrap;word-wrap:break-word;overflow:auto}p>code{color:var(--inline-code-color);background-color:var(--inline-code-background-color);padding:.2em .4em}.codez strong{color:#dda790}.codez em{color:#26d980}tr:hover{background-color:var(--table-hover-color)}td,th{border:1px solid var(--table-border-color);padding:.5em .75em;vertical-align:top}td{border-width:0 0 1px}th{width:30%;color:var(--link-hover-color);text-align:left;border-width:0 0 2px}th:first-of-type{width:20%}th:last-of-type{width:50%}article img{max-width:100%;height:auto}article div.hero{display:flex;justify-content:center}.tooltip{display:none;position:absolute;top:0;left:0;border:2px solid var(--tooltip-border-color);padding:5pt;background:var(--tooltip-background-color)}p.hover{position:relative}.hover img:hover+.tooltip,.tooltip:hover{display:inline}@media screen and (max-width: 1200px){body{font-size:1.125em}article{padding:1em 10%}}@media screen and (max-width: 1024px){body{font-size:1em}article{padding:1em 5%}}@media screen and (max-width: 900px){body{font-size:1em}article{padding:1em 0;text-align:left}}
+</style></head><body> <header>
+Curtis Autery, pretty ok software writer.
+<nav> <a href="/" class="live">blog</a> <a href="/about">about</a> </nav> </header> <article>  <h1 id="forward">Forward</h1>
+<p>Hi, 2025 Curtis here. I wrote this in 2013, from my last Windows machine. It was a couple years before leetcode was founded, when web frameworks like Angular were still in their infancies. Fellow devs, don’t take interviews where questions like these are asked. It’s silliness to expect someone to livecode in front of strangers, and how well a candidate does in that situation doesn’t correlate with how well they’ll do their job.</p>
+<p>2013 Curtis, though, he was more interested in showing off than setting boundaries. These days I look for roles where collaboration and communication are important, and using a library for powersets and squre roots is preferred over writing your own bespoke answer to a solved compsci problem.</p>
+<p>That being said… on with the show!</p>
+<h1 id="five-coding-interview-questions">Five coding interview questions</h1>
+<p>Recently I took a contract with Automattic to build a WordPress plugin for them. We parted amicably with a Dear John letter instead of an offer letter, as the friction between our operating styles was greater in reality than it should have been on paper. I’ll spare you the details.</p>
+<p>Part of their onboarding ordeal is a coding challenge. In my case, it was to modify a dummy plugin to add a feature to it, with 7 days to polish it up. I bring this up only because what I expected, but which apparently wasn’t part of the process, was a series of coding questions like the ones that follow. In fact none of the software dev interviews I’ve ever had have included questions like these. Granted I haven’t applied to Google or Microsoft, and I don’t live in The Valley, but still… nothing?</p>
+<p>I sort of feel cheated, and because of that, I’ve decided to take the current first 5 questions from <a href="https://web.archive.org/web/20170720082049/https://careercup.com/page?pid=coding-interview-questions" target="_blank" rel="noreferrer">Career Cup</a> (defunct as of June 2024, this link is to the Wayback Machine archive) and give my take on them (actually at the time of this writing, this was the first 4 questions, skipping a few (design a web crawler, convert a float without using built-in functions, and remove an unsorted list’s dups in O(n) time without using sorting or space - that last exceeds polite levels of ridiculous), and then the Goldman Sachs chess problem, since it looked interesting. Most coding questions like this don’t require deep computer science knowledge so much as simply critical thinking, knowledge of basic set theory and data structures, and of course familiarity with the syntax of a programming language or two.</p>
+<p>I’m not very familiar with Career Cup, but it was the top hit for coding interview questions on Google. It appears to be used by people seeking specific “right answers” to interview questions meant to glean deep subject knowledge, and hence defeating the entire exercise.</p>
+<p>As I understand it, the point of a tech or coding interview is to feel out a candidate’s style and general tack on problem solving, with the ideal question being a surprise out of left field that they need to ad lib to get through - sort of a Kobayashi Maru test. Finding that your exact set of questions has been studied for I don’t imagine would go over very well. In most ways, I think the process Automattic uses is superior: Give someone a random one-time task that you won’t give the next candidate.</p>
+<p>And yet, sites like Career Cup are in abundance, trying to game the system. CC uses user-submitted questions purportedly from interviews they’ve had, most of which name the company the question belongs to. I’m uncertain how accurate that assumption is, or if it really matters. At any rate, here are the questions exactly as they appeared on CC, my interpretation of them, and my answers, spanning Go, Perl, Lisp, Java, PHP, JavaScript, and 18 years of experience in IT:</p>
+<h3 id="1-from-amazoncom">1. From Amazon.com:</h3>
+<blockquote>
+<p>Find if all the leaf nodes are at same level in binary tree. Recursive and non-recursive approach?</p>
+</blockquote>
+<p>Leaf? Node? Binary Tree? Alright, let’s start with this completely pointless example:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>        Beatles</span></span>
+<span class="line"><span>          / \</span></span>
+<span class="line"><span>         /   \</span></span>
+<span class="line"><span>        /     \</span></span>
+<span class="line"><span>       /       \</span></span>
+<span class="line"><span>      /         \</span></span>
+<span class="line"><span>   Alive     Not Alive</span></span>
+<span class="line"><span>    / \         / \</span></span>
+<span class="line"><span>   /   \       /   \</span></span>
+<span class="line"><span>Paul  Ringo  John  George</span></span></code></pre>
+<p>A “tree” in computer science jargon, is a collection of objects, each of whom contain links to other objects. Each object + links is a node. A leaf is a node with no links, which I’m sure you already intuited, since we’re talking about trees, after all.</p>
+<p>In the tree above, each of our Beatles objects is simply a string, and a link to two other objects, until you get to the bottom. Each node having two links to other nodes makes this a binary tree. There are specialized types of trees (e.g., “cover trees” for nearest neighbor searches), and specialized binary trees (e.g, binary search trees whose insert functions reorder nodes to keep them sorted), but this isn’t a tutorial on the concept, so I’d recommend this Google search if you want more theory and examples:</p>
+<p><a href="https://www.google.com/search?q=tree+programming+site%3A.edu" target="_blank" rel="noreferrer">tree programming site:.edu</a></p>
+<p>There are libraries for most programming lanuages for different tree types, but you don’t need them for simple examples like this. Programming a tree is really just a design pattern; all you need is your language’s variation on a struct or an object, and functions for managing inserts, searches, and deletes. I’ll use Go, with the following declaration of a node:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> Person</span><span style="color:#F97583"> struct</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    name  </span><span style="color:#F97583">string</span></span>
+<span class="line"><span style="color:#E1E4E8">    mom   </span><span style="color:#F97583">*</span><span style="color:#B392F0">Person</span></span>
+<span class="line"><span style="color:#E1E4E8">    dad   </span><span style="color:#F97583">*</span><span style="color:#B392F0">Person</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Yes, we’re making a family tree of sorts, and yes the declaration of a node is really that simple. Adding to a tree is similarly easy:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">func</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">p </span><span style="color:#F97583">*</span><span style="color:#B392F0">Person</span><span style="color:#E1E4E8">) </span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">name</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">mom</span><span style="color:#F97583"> bool</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    parent </span><span style="color:#F97583">:=</span><span style="color:#B392F0"> Person</span><span style="color:#E1E4E8">{ name: name }</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> mom {</span></span>
+<span class="line"><span style="color:#E1E4E8">        p.mom </span><span style="color:#F97583">=</span><span style="color:#F97583"> &#x26;</span><span style="color:#E1E4E8">parent</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        p.dad </span><span style="color:#F97583">=</span><span style="color:#F97583"> &#x26;</span><span style="color:#E1E4E8">parent</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Our question wants us to determine if all the leaves are at the same depth. If I build a tree with the following:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">    root </span><span style="color:#F97583">:=</span><span style="color:#E1E4E8"> Person { name: </span><span style="color:#9ECBFF">"Self"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Mom"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Dad"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.mom.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Maternal Grandma"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.mom.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Maternal Grandpa"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>…then my tree looks like this:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>         Self</span></span>
+<span class="line"><span>          / \</span></span>
+<span class="line"><span>         /   \</span></span>
+<span class="line"><span>        /     \</span></span>
+<span class="line"><span>       /       \</span></span>
+<span class="line"><span>      /         \</span></span>
+<span class="line"><span>    Mom         Dad</span></span>
+<span class="line"><span>    / \</span></span>
+<span class="line"><span>   /   \</span></span>
+<span class="line"><span>Grams  Gramps</span></span></code></pre>
+<p>In this example, “Dad” is a leaf, and so are Grams and Gramps, but they are at different depths. So if I look at “Self” as the root node, the tree doesn’t have all leaves at the same depth. However, if I start with “Mom”, it does. So we need a way to programmatically iterate through all the nodes, find out if they’re leaves, and track their depths. As the question suggested, this can be done both recursively and non-recursively.</p>
+<p>Let’s start with the recursive approach. I’m using a global variable, depth, which I set to the depth level of the first leaf I see. I iterate through the nodes with a recursive function call, and the first time I hit a leaf with a different depth than my global variable, I return false back through the call stack:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">package</span><span style="color:#B392F0"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#9ECBFF">    "</span><span style="color:#B392F0">fmt</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">type</span><span style="color:#B392F0"> Person</span><span style="color:#F97583"> struct</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    name  </span><span style="color:#F97583">string</span></span>
+<span class="line"><span style="color:#E1E4E8">    mom   </span><span style="color:#F97583">*</span><span style="color:#B392F0">Person</span></span>
+<span class="line"><span style="color:#E1E4E8">    dad   </span><span style="color:#F97583">*</span><span style="color:#B392F0">Person</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#E1E4E8"> depth </span><span style="color:#F97583">int</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">    root </span><span style="color:#F97583">:=</span><span style="color:#E1E4E8"> Person { name: </span><span style="color:#9ECBFF">"Self"</span><span style="color:#E1E4E8"> }</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Mom"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Dad"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.mom.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Maternal Grandma"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    root.mom.</span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Maternal Grandpa"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    fmt.</span><span style="color:#B392F0">Println</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">checkDepths</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">&#x26;</span><span style="color:#E1E4E8">root, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">    fmt.</span><span style="color:#B392F0">Println</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">checkDepths</span><span style="color:#E1E4E8">(root.mom, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">p </span><span style="color:#F97583">*</span><span style="color:#B392F0">Person</span><span style="color:#E1E4E8">) </span><span style="color:#B392F0">addParent</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">name</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">mom</span><span style="color:#F97583"> bool</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">    parent </span><span style="color:#F97583">:=</span><span style="color:#B392F0"> Person</span><span style="color:#E1E4E8">{ name: name }</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> mom {</span></span>
+<span class="line"><span style="color:#E1E4E8">        p.mom </span><span style="color:#F97583">=</span><span style="color:#F97583"> &#x26;</span><span style="color:#E1E4E8">parent</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        p.dad </span><span style="color:#F97583">=</span><span style="color:#F97583"> &#x26;</span><span style="color:#E1E4E8">parent</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> checkDepths</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">p</span><span style="color:#F97583"> *</span><span style="color:#B392F0">Person</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">d</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">bool</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (p </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> nil</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> true</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (d </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">        depth </span><span style="color:#F97583">=</span><span style="color:#F97583"> -</span><span style="color:#79B8FF">1</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (p.mom </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> nil</span><span style="color:#F97583"> &#x26;&#x26;</span><span style="color:#E1E4E8"> p.dad </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> nil</span><span style="color:#E1E4E8">) { </span><span style="color:#6A737D">// On a leaf</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (depth </span><span style="color:#F97583">==</span><span style="color:#F97583"> -</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            depth </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> d </span><span style="color:#6A737D">// init depth on first leaf</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> (d </span><span style="color:#F97583">==</span><span style="color:#E1E4E8"> depth)</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    d</span><span style="color:#F97583">++</span><span style="color:#6A737D"> // Not a leaf node, increment depth</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> ( </span><span style="color:#B392F0">checkDepths</span><span style="color:#E1E4E8">(p.mom, d) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#B392F0"> checkDepths</span><span style="color:#E1E4E8">(p.dad, d) )</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Results:</p>
+<div class="codez"><p><strong>C:\gae_go\test></strong> <em>go run bintree.go</em>
+false
+true</p><p>C:\gae_go\test></p></div>
+<p>Just as expected. Now, how can we do the same thing without recursion? Another way to represent a binary tree is with a simple array. An object’s index on the array implies where it is on the tree. Here is a simple tree of index positions:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>           0</span></span>
+<span class="line"><span>          / \</span></span>
+<span class="line"><span>         /   \</span></span>
+<span class="line"><span>        /     \</span></span>
+<span class="line"><span>       /       \</span></span>
+<span class="line"><span>      /         \</span></span>
+<span class="line"><span>     1           2</span></span>
+<span class="line"><span>    / \         / \</span></span>
+<span class="line"><span>   /   \       /   \</span></span>
+<span class="line"><span>  3     4     5     6</span></span>
+<span class="line"><span> / \   / \   / \   / \</span></span>
+<span class="line"><span>7   8 9  10 11 12 13 14</span></span></code></pre>
+<p>Nodes that aren’t used on the tree are just empty (or "", since I’m using an array of Go strings here… slices, really, but there’s an array under there somewhere). So if I wanted to represent the binary tree from the previous example, these indices would be used:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>           0</span></span>
+<span class="line"><span>          / \</span></span>
+<span class="line"><span>         /   \</span></span>
+<span class="line"><span>        /     \</span></span>
+<span class="line"><span>       1       2</span></span>
+<span class="line"><span>      / \</span></span>
+<span class="line"><span>     3   4</span></span></code></pre>
+<p>Now I can iterate through the array sequentially, and use a little math to check whether or not I’m looking at a leaf. The following psuedocode performs the same checks as the Go program above:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Find the row number of the last index of the array</span></span>
+<span class="line"><span>Set l to the first index on that row</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Set n to 0</span></span>
+<span class="line"><span>Increment n from 0 to l - 1</span></span>
+<span class="line"><span>    if array index n is not empty, but indices 2n + 1 and 2n + 2 are, fail</span></span>
+<span class="line"><span>If the loop exits without failing, return success</span></span></code></pre>
+<p>Why does that work? The last row contains all leaves (otherwise it wouldn’t be the last row). I’m checking all the elements on rows above that for leaves. If I find any, then the leaves aren’t all on the same depth. An element at index n is a leaf if it isn’t empty, but indices 2n+1 and 2n+2 are.</p>
+<p>Here’s the psuedocode converted to working Go:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> checkDepths</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">bool</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    lastIdx </span><span style="color:#F97583">:=</span><span style="color:#F97583"> float64</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">len</span><span style="color:#E1E4E8">(people) </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    lastRow </span><span style="color:#F97583">:=</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">(math.</span><span style="color:#B392F0">Log2</span><span style="color:#E1E4E8">(lastIdx))</span></span>
+<span class="line"><span style="color:#E1E4E8">    l </span><span style="color:#F97583">:=</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">(math.</span><span style="color:#B392F0">Pow</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float64</span><span style="color:#E1E4E8">(lastRow))) </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> 1</span><span style="color:#6A737D"> // Index of first elem in last row</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">:=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; n </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> l; n</span><span style="color:#F97583">++</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        mom </span><span style="color:#F97583">:=</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583"> *</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> ( </span><span style="color:#F97583">!</span><span style="color:#B392F0">isEmpty</span><span style="color:#E1E4E8">(n) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#B392F0"> isEmpty</span><span style="color:#E1E4E8">(mom) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#B392F0"> isEmpty</span><span style="color:#E1E4E8">(mom</span><span style="color:#F97583">+</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) ) {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> false</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> true</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>The “isEmpty” function will check for the empty string at the given index, or the index being out of range of the array. Other than that, I’m using logs base 2 and raising 2 to powers to search for row numbers and indices, respectively. I’ll trust that you can decode the math if you’re so inclined.</p>
+<p>What we can’t do easily with a non-recursive function is pick a node other than root to drill down through, as I did in the recursive example. So to show a failure and a success with the new method, I’ll call checkDepths, watch it fail, then finish fleshing out the binary tree and call it again. Here’s the final code and results:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="go"><code><span class="line"><span style="color:#F97583">package</span><span style="color:#B392F0"> main</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#9ECBFF">    "</span><span style="color:#B392F0">fmt</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#9ECBFF">    "</span><span style="color:#B392F0">math</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">var</span><span style="color:#E1E4E8"> people []</span><span style="color:#F97583">string</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">    people </span><span style="color:#F97583">=</span><span style="color:#B392F0"> make</span><span style="color:#E1E4E8">([]</span><span style="color:#F97583">string</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">126</span><span style="color:#E1E4E8">) </span><span style="color:#6A737D">// 7 rows, but an initial slice length of 1</span></span>
+<span class="line"><span style="color:#E1E4E8">    self</span><span style="color:#F97583">:=</span><span style="color:#79B8FF"> 0</span></span>
+<span class="line"><span style="color:#E1E4E8">    people[self] </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "Self"</span></span>
+<span class="line"><span style="color:#E1E4E8">    mom </span><span style="color:#F97583">:=</span><span style="color:#B392F0"> addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Mom"</span><span style="color:#E1E4E8">, self, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    dad </span><span style="color:#F97583">:=</span><span style="color:#B392F0"> addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Dad"</span><span style="color:#E1E4E8">, self, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#B392F0">    addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Maternal Grandma"</span><span style="color:#E1E4E8">, mom, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#B392F0">    addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Maternal Grandpa"</span><span style="color:#E1E4E8">, mom, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    fmt.</span><span style="color:#B392F0">Println</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">checkDepths</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Add remaining grandparents</span></span>
+<span class="line"><span style="color:#B392F0">    addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Paternal Grandma"</span><span style="color:#E1E4E8">, dad, </span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#B392F0">    addParent</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Paternal Grandpa"</span><span style="color:#E1E4E8">, dad, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    fmt.</span><span style="color:#B392F0">Println</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">checkDepths</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> addParent</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">name</span><span style="color:#F97583"> string</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">parentOf</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">mom</span><span style="color:#F97583"> bool</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">int</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    index </span><span style="color:#F97583">:=</span><span style="color:#E1E4E8"> parentOf </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583"> +</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#F97583"> !</span><span style="color:#E1E4E8"> mom {</span></span>
+<span class="line"><span style="color:#E1E4E8">        index</span><span style="color:#F97583">++</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#B392F0"> len</span><span style="color:#E1E4E8">(people) </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> index </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        people </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> people[:index </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    people[index] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> name</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> index</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> checkDepths</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">bool</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    lastIdx </span><span style="color:#F97583">:=</span><span style="color:#F97583"> float64</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">len</span><span style="color:#E1E4E8">(people) </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    lastRow </span><span style="color:#F97583">:=</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">(math.</span><span style="color:#B392F0">Log2</span><span style="color:#E1E4E8">(lastIdx))</span></span>
+<span class="line"><span style="color:#E1E4E8">    l </span><span style="color:#F97583">:=</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">(math.</span><span style="color:#B392F0">Pow</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#F97583">float64</span><span style="color:#E1E4E8">(lastRow))) </span><span style="color:#F97583">-</span><span style="color:#79B8FF"> 1</span><span style="color:#6A737D"> // Index of first elem in last row</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">:=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; n </span><span style="color:#F97583">&#x3C;</span><span style="color:#E1E4E8"> l; n</span><span style="color:#F97583">++</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">        mom </span><span style="color:#F97583">:=</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583"> *</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> ( </span><span style="color:#F97583">!</span><span style="color:#B392F0">isEmpty</span><span style="color:#E1E4E8">(n) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#B392F0"> isEmpty</span><span style="color:#E1E4E8">(mom) </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#B392F0"> isEmpty</span><span style="color:#E1E4E8">(mom</span><span style="color:#F97583">+</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) ) {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> false</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> true</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">func</span><span style="color:#B392F0"> isEmpty</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">index</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">bool</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> index </span><span style="color:#F97583">>=</span><span style="color:#B392F0"> len</span><span style="color:#E1E4E8">(people) {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> true</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> people[index] </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> ""</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Results:</p>
+<div class="codez"><p><strong>C:\gae_go\test></strong> <em>go run bintree2.go</em>
+false
+true</p><p>C:\gae_go\test></p></div>
+<h3 id="2-from-cadence-inc">2. From Cadence inc</h3>
+<blockquote>
+<p>Given a positive int “N”. and an array of numbers ranging from 0-9 (say array name is arr). print all numbers from 0 to N which include any number from “arr”.</p>
+<p>example: i/p: N=20 arr={2,3}</p>
+<p>o/p: 2,3,12,13,20</p>
+</blockquote>
+<p>Again, these are the questions as-is on Career Cup. Let’s re-describe what’s being asked for:</p>
+<p>Given a list of digits, and a count N, iterate from 0 to N, and print any number that contains any of the digits in the list.</p>
+<p>So if my list of digits is <code>[2, 3]</code>, and my count is <code>20</code>, then the lines I return should be:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>2</span></span>
+<span class="line"><span>3</span></span>
+<span class="line"><span>12</span></span>
+<span class="line"><span>13</span></span>
+<span class="line"><span>20</span></span></code></pre>
+<p>…because each of those numbers contains a digit in the list.</p>
+<p>I posted a solution to this with regular expressions and Javascript, and then looked at the several answers posted before mine. Sadly, none of them used regular expressions, which is pretty sad, since they are especially well-suited to a problem like this. This won’t serve as an intro into the power of regular expressions, but they make life a lot easier, and you should go make yourself an expert in them. You’ll thank me.</p>
+<p>Regex syntax allows for matching characters in a group. e.g., if I turn my list of 2 and 3 into a regex group match, it looks like this:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#9ECBFF">/</span><span style="color:#79B8FF">[23]</span><span style="color:#9ECBFF">/</span><span style="color:#E1E4E8">;</span></span></code></pre>
+<p>If I iterate from 0 to N, and turn each of those numbers into strings, I can bind that regex to them, and let the parser tell me if the current number matches anything in the group. The steps involved are remarkably simple, and most of the overhead in the code is creating the RegExp object with the array.join business:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">function</span><span style="color:#B392F0"> matches</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">N</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">arr</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#E1E4E8"> m </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#F97583">  var</span><span style="color:#E1E4E8"> re </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> RegExp</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"["</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> arr.</span><span style="color:#B392F0">join</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">""</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">+</span><span style="color:#9ECBFF"> "]"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">  for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">var</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">; n </span><span style="color:#F97583">&#x3C;=</span><span style="color:#79B8FF"> N</span><span style="color:#E1E4E8">; n</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> ((</span><span style="color:#9ECBFF">""</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> n).</span><span style="color:#B392F0">match</span><span style="color:#E1E4E8">(re) </span><span style="color:#F97583">!=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">) m.</span><span style="color:#B392F0">push</span><span style="color:#E1E4E8">(n);</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#F97583">  return</span><span style="color:#E1E4E8"> m;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Results:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#B392F0">matches</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">, [</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">])[(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">12</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">13</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">)];</span></span></code></pre>
+<p>The syntax for doing the same thing on commandline perl is a great illustration of why it is my favorite language. Here I’m using perl’s marvelous grep function and range operator, simple regular expression syntax, and the “automagic” conversion of numbers to strings as needed:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>$ perl -le '$N=shift; $re=join("", @ARGV); print for grep {/[$re]/} 0..$N' 20 2 3</span></span>
+<span class="line"><span>2</span></span>
+<span class="line"><span>3</span></span>
+<span class="line"><span>12</span></span>
+<span class="line"><span>13</span></span>
+<span class="line"><span>20</span></span></code></pre>
+<h3 id="3-from-facebook">3. From Facebook:</h3>
+<blockquote>
+<p>We are given a set of integers with repeated occurences of elements. For Example, <code>S={1,2,2}</code>.
+We need to print the power set of S ensuring that the repeated elements of the power set are printed only once.
+For the above S, the power set will be <code>{NULL, {1}, {2}, {2}, {1,2}, {1,2}, {2,2}, {1,2,2}}</code>. So, as per the question requirements, we need to print <code>{NULL, {1}, {2}, {1,2}, {2,2}, {1,2,2}}</code></p>
+</blockquote>
+<p>The “Power Set” of set S is basically the set of all subsets of S. Good detailed descriptions are all over the net, such as in <a href="https://en.wikipedia.org/wiki/Power%5Fset" target="_blank" rel="noreferrer">this Wikipedia page</a>.</p>
+<p>Essentially we’re being asked here to take the set <code>{1,2,2}</code>, create a power set out of it, and filter out the dups. In this case, that involves creating:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>{NULL, {1}, {2}, {2}, {1,2}, {1,2}, {2,2}, {1,2,2}}</span></span></code></pre>
+<p>…and filtering out the extra {2} and {1,2}, leaving:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>{NULL, {1}, {2},      {1,2},        {2,2}, {1,2,2}}</span></span></code></pre>
+<p>A programming language family well-suited to create powersets is Lisp. It’s a language I find very fun, partially for for how arcane it is (making seasoned .NET or Java developers blanch in terror is high comedy to me), and it is perhaps the only language type to match my beloved Perl in expressiveness, as the power set generator below (written in the Emacs flavor of Lisp) illustrates:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">require</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">cl)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">(</span><span style="color:#F97583">defun</span><span style="color:#B392F0"> powerset</span><span style="color:#E1E4E8">(s)</span></span>
+<span class="line"><span style="color:#E1E4E8">  (</span><span style="color:#79B8FF">sort</span><span style="color:#E1E4E8"> (delete-dups</span></span>
+<span class="line"><span style="color:#E1E4E8">         (</span><span style="color:#79B8FF">reduce</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8"> (one two) (</span><span style="color:#79B8FF">append</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">mapcar</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(i) (</span><span style="color:#79B8FF">cons</span><span style="color:#E1E4E8"> two i)) one) one))</span></span>
+<span class="line"><span style="color:#E1E4E8">                 (</span><span style="color:#79B8FF">sort</span><span style="color:#E1E4E8"> s </span><span style="color:#79B8FF">#'></span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#B392F0">                 :initial-value</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">                 ))</span></span>
+<span class="line"><span style="color:#79B8FF">        #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(a b) (</span><span style="color:#79B8FF">&#x3C;</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8"> a) (</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8"> b)))</span></span>
+<span class="line"><span style="color:#E1E4E8">))</span></span></code></pre>
+<p>Results:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(powerset </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">)) => (</span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">))</span></span></code></pre>
+<p>So what’s going on here? First I should mention that this isn’t a method I came up with on the fly, rather the underlying call sequence:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>reduce -> append -> mapcar -> cons</span></span></code></pre>
+<p>…is a well known method to generate power sets using 4 powerful, idiomatic Lisp functions chained together. The method involves taking our source list S, and a working list W that starts empty. Iterate through each item in S, concatenating the item to everything in W, then appending the original W. Like so:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Init with S = (1 2 2), W = nil</span></span>
+<span class="line"><span>First pass</span></span>
+<span class="line"><span>  Take 1 from S, concatenate to everything in W, returning (1)</span></span>
+<span class="line"><span>  Append the return (1) to W, giving W = ((1) nil)</span></span>
+<span class="line"><span>Second pass</span></span>
+<span class="line"><span>  Take 2 from S, concat with W, returning ((2 1) (2))</span></span>
+<span class="line"><span>  Append the above return value to W, giving W = ((2 1) (2) (1) nil)</span></span>
+<span class="line"><span>Third pass</span></span>
+<span class="line"><span>  Take the final 2 from S, concat with W, returning ((2 2 1) (2 2) (2 1) (2))</span></span>
+<span class="line"><span>  Append the above to W, giving a final set of ((2 2 1) (2 2) (2 1) (2) (2 1) (2) (1) nil)</span></span></code></pre>
+<p>A couple sorting tweaks are needed, and the duplicates haven’t been addressed, but first let’s take apart how the Lisp functions accomplish the process I just described. This blog entry won’t serve as a tutorial on Lisp or its underlying data structures, but I’ll hum a few bars to get through the example. Note that my explanations are not perfectly canon. I’d suggest taking a peek at <a href="https://www.gnu.org/software/emacs/manual/html%5Fnode/eintr/index.html" target="_blank" rel="noreferrer">the GNU Emacs Lisp manual</a>, or <a href="https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node1.html" target="_blank" rel="noreferrer">Common Lisp the Language, 2nd Edition</a> for more in depth descriptions. Or if you happen to be a Douglas Hofstadter fan, his excellent book “Metamagical Themas” from the ’80s has a <a href="https://gist.github.com/jackrusher/5139396" target="_blank" rel="noreferrer">wonderful Lisp introduction</a> that I can’t recommend highly enough as a starting point.</p>
+<p>First, everything surrounded by parentheses is a space separated list. Lists fed to the expression evaluator can be a function name and its arguments, e.g. <code>(cons 1 nil)</code>, or a “quoted” list containing literal values, e.g. <code>'(1 2 3)</code>.</p>
+<p>cons: Create a “cons” out of the two variables passed. If the first variable is an atom and the second is a list, this prepends the list with the atom, returning the result as a new list.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">cons</span><span style="color:#79B8FF"> 1</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">)) => (</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">cons</span><span style="color:#79B8FF"> 1</span><span style="color:#79B8FF"> nil</span><span style="color:#E1E4E8">) => (</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>mapcar: Perform a function on each element of a list, returning all the results as a new list.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">mapcar</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">1+ </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">)) => (</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 3</span><span style="color:#79B8FF"> 4</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>This can be combined with a “lambda” (anonymous function) that accepts one variable</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">mapcar</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(i) (</span><span style="color:#79B8FF">cons</span><span style="color:#E1E4E8"> i </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">))) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">)) => ((</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">3</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">))</span></span></code></pre>
+<p>append: Combine the elements of multiple lists into one list.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">append</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">4</span><span style="color:#79B8FF"> 5</span><span style="color:#79B8FF"> 6</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">7</span><span style="color:#79B8FF"> 8</span><span style="color:#79B8FF"> 9</span><span style="color:#E1E4E8">)) => (</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#79B8FF"> 4</span><span style="color:#79B8FF"> 5</span><span style="color:#79B8FF"> 6</span><span style="color:#79B8FF"> 7</span><span style="color:#79B8FF"> 8</span><span style="color:#79B8FF"> 9</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>reduce: The doozy. Perform a two-parameter function across all elements of a list, keeping a running value as the first parameter in the next pass. This can start with the “running value” as the first list element, or a separate init value can be passed.</p>
+<p>The easiest example is addition. In Lisp, the ’+’ function takes two variables, and returns their sum. e.g.:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">+</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">) => </span><span style="color:#79B8FF">5</span></span>
+<span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">reduce</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">+ </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">)) => </span><span style="color:#79B8FF">6</span></span></code></pre>
+<p>As with mapcar, the function can be swapped out for a lambda, provided it accepts two parameters. This is the same reduce as above, explicitly declaring the maths involved:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">reduce</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(a b) (</span><span style="color:#79B8FF">+</span><span style="color:#E1E4E8"> a b)) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">)) => </span><span style="color:#79B8FF">6</span></span></code></pre>
+<p>Here is the syntax for setting an initial “running value”, and the effect it has:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">reduce</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">+ </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#79B8FF"> 2</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">) </span><span style="color:#B392F0">:initial-value</span><span style="color:#79B8FF"> 7</span><span style="color:#E1E4E8">) => </span><span style="color:#79B8FF">13</span></span></code></pre>
+<p><code>reduce</code> is not a standard Emacs Lisp function, but can be imported by requring the “cl” (Common Lisp) library.</p>
+<p>Let’s go back to the meat of our solution to the question:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">reduce</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8"> (one two) (</span><span style="color:#79B8FF">append</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">mapcar</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(i) (</span><span style="color:#79B8FF">cons</span><span style="color:#E1E4E8"> two i)) one) one))</span></span>
+<span class="line"><span style="color:#B392F0">        :initial-value</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        ))</span></span></code></pre>
+<p>…and our original list to pass to it: <code>'(1 2 2)</code>. Reduce is going to pass <code>(nil)</code> (that is, a set containing nil as an element) and 1 to the <code>lambda (one two)</code> function, which will trickle down to the cons function the equivalent of:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">cons</span><span style="color:#79B8FF"> 1</span><span style="color:#79B8FF"> nil</span><span style="color:#E1E4E8">) => (</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>…which will return to the mapcar the equivalent of:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">mapcar</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(i) (</span><span style="color:#79B8FF">cons</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8"> i)) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)) => ((</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">))</span></span></code></pre>
+<p>…then that will be appended back with the current “one” value of <code>(nil)</code>:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">append</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">((</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)) => ((</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>…and on the next pass we cons the first “2” to everything:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">mapcar</span><span style="color:#79B8FF"> #'</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">lambda</span><span style="color:#E1E4E8">(i) (</span><span style="color:#79B8FF">cons</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8"> i)) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">((</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)) => ((</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">))</span></span></code></pre>
+<p>…and append the current “one” <code>((1) nil)</code> back on:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="lisp"><code><span class="line"><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">append</span><span style="color:#79B8FF"> '</span><span style="color:#E1E4E8">((</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">)) </span><span style="color:#79B8FF">'</span><span style="color:#E1E4E8">((</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)) => ((</span><span style="color:#79B8FF">2</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">) (</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">nil</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>…and one more pass fleshes out the power set. After that we can use Emacs Lisp’s built-in “delete-dups” to pull out the extra (2) and (1 2), and some sort functions to straighten out the output the way we want.</p>
+<p>If that’s a little “out there” for your tastes, you don’t need the power or expressiveness of Lisp (or the maddeningly nested parentheses) to answer this question, but you will need a straightforward method to generate a power set before you get mired in nested loops that don’t quite spit out what you want. I’ll demonstrate one such method in Javascript.</p>
+<p>An easy way to iterate through all the possibilities of a power set is with binary counting. For example, the power set of <code>[1, 2, 3]</code> can be represented like so:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Subset        How many</span></span>
+<span class="line"><span>             3's 2's 1's</span></span>
+<span class="line"><span>Empty set     0   0   0</span></span>
+<span class="line"><span>1             0   0   1</span></span>
+<span class="line"><span>2             0   1   0</span></span>
+<span class="line"><span>1, 2          0   1   1</span></span>
+<span class="line"><span>3             1   0   0</span></span>
+<span class="line"><span>1, 3          1   0   1</span></span>
+<span class="line"><span>2, 3          1   1   0</span></span>
+<span class="line"><span>1, 2, 3       1   1   1</span></span></code></pre>
+<p>So if we iterate from 1 to 8 (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mn>3</mn></msup></mrow><annotation encoding="application/x-tex">2^3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span>, 3 being the set length), turn the number binary, and use each binary digit as a flag to determine what elements to include in each subset, we can easily generate the complete power set, including the empty set.</p>
+<p>To remove the duplicates, we can turn each subset into a hash key, and set the value at that key to 1. If we hit the same key twice, it won’t create a new hash element. Combine this with Javascript’s ability to define custom sorts, and we can return the results in the desired order:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>function powerSet(arr) {</span></span>
+<span class="line"><span>    var ps = {} // power set hash</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    for (var n = 0; n &#x3C; Math.pow(2, arr.length); n++) {</span></span>
+<span class="line"><span>        var tmp = [];</span></span>
+<span class="line"><span>        for (var f = 0; f &#x3C; arr.length; f++)</span></span>
+<span class="line"><span>            if ((n >> f) % 2 == 1) tmp.push(arr[f])</span></span>
+<span class="line"><span>        ps[tmp.sort().join(',')] = 1;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    function cmp(a, b) {</span></span>
+<span class="line"><span>        return a.length &#x3C; b.length ? -1 : a.length == b.length ? a-b : 1;</span></span>
+<span class="line"><span>    }</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    return Object.keys(ps).sort(cmp);</span></span>
+<span class="line"><span>}</span></span></code></pre>
+<p>Results:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>powerSet([1,2,2])</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>["", "1", "2", "1,2", "2,2", "1,2,2"]</span></span></code></pre>
+<h3 id="4-also-from-facebook">4. Also from Facebook:</h3>
+<blockquote>
+<p>Write a function which returns the square root of a given number up to a precision of 0.0001. Only arithematic operations like addition, subtraction, division and multiplication are allowed.</p>
+</blockquote>
+<p>Wikipedia has a <a href="https://en.wikipedia.org/wiki/Square_root_algorithms" target="_blank" rel="noreferrer">nice article</a> on manual methods of computing square roots. Back in the days before Javascript was fast, I created a script called “CMath” (C being the first letter in Curtis), which performed math on string objects, including square roots, computing pi and e, and arbitrary precision decimals.</p>
+<p>This was before I was anything approaching a competent developer, and I did it solely for fun, not to solve any problem I was running into. The square root method I used is on the above Wikipedia page under “Decimal (base 10)”. Essentially, you treat it as a long division problem, with the twist of building the next divisor digit based on 20x the current solution, and pulling down two digits at a time from the dividend. Here’s an example of taking the square root of 1800:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span> 4</span></span>
+<span class="line"><span>1800.0000</span></span>
+<span class="line"><span>18  : first digit is largest digit whose square is less than 18</span></span>
+<span class="line"><span>16  : 4^2 = 16, 5^2 = 25, so 4 is the first digit</span></span>
+<span class="line"><span> 2  : Remainder of 2</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span> 4 2.</span></span>
+<span class="line"><span>1800.0000</span></span>
+<span class="line"><span>18</span></span>
+<span class="line"><span>16    : Answer so for is 4, 4 * 20 = 80. Look for largest n where</span></span>
+<span class="line"><span> 200  : n(80 + n) &#x3C; 200. 82 * 2 = 164, 83 * 3 = 249, so next is 2</span></span>
+<span class="line"><span> 164  : 82 * 2 = 164</span></span>
+<span class="line"><span>  36  : Remainder of 36</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span> 4 2. 4</span></span>
+<span class="line"><span>1800.0000</span></span>
+<span class="line"><span>18</span></span>
+<span class="line"><span>16</span></span>
+<span class="line"><span> 200</span></span>
+<span class="line"><span> 164</span></span>
+<span class="line"><span>  3600  : 42 * 20 = 840. Need largest n(840 + n) &#x3C; 3600</span></span>
+<span class="line"><span>  3387  : 844 * 4 = 3387, 845 * 4 = 4225, so next is 4</span></span>
+<span class="line"><span>   213  : Remainder of 213</span></span>
+<span class="line"><span>...etc.</span></span></code></pre>
+<p>As you get more decimal digits, the remainders grow, and eventually get unwieldy if you aren’t using a large integer library of some sort. Our question only wants accuracy to .0001, so we should still be able to fit the last remainder into a standard int.</p>
+<p>Here’s my implementation of that method in PHP, which takes copious advantage of the language’s easy casting between strings and numbers:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>&#x3C;?php</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>$in = $argv[1];</span></span>
+<span class="line"><span>if (preg_match('/^\d+$/', $in)) $in .= ".00000000";</span></span>
+<span class="line"><span>else if (! preg_match('/^\d+\.\d+$/', $in) ) {</span></span>
+<span class="line"><span>    echo "Invalid number format. ### or ###.### only.\n";</span></span>
+<span class="line"><span>    exit;</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// Split number into left and right parts</span></span>
+<span class="line"><span>list($l, $r) = explode('.', $in, 2);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// Left part must have an even count, lead with 0 if needed</span></span>
+<span class="line"><span>if (strlen($l) % 2 == 1) $l = "0" . $l;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>// Make right part 8 digits, to give us 4 decimals in solution</span></span>
+<span class="line"><span>$r = substr( str_pad($r, 8, "0"), 0, 8); // Trim or pad to 8 digits</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>$ans = $remainder = "";</span></span>
+<span class="line"><span>foreach(str_split($l . $r, 2) as $chunk) {</span></span>
+<span class="line"><span>    $remainder .= $chunk;</span></span>
+<span class="line"><span>    $tmp = $ans * 20;</span></span>
+<span class="line"><span>    $n = $tmp == 0 ? 0 : (int)($remainder / $tmp);</span></span>
+<span class="line"><span>    while (($tmp + $n) * $n &#x3C;= $remainder) $n++;</span></span>
+<span class="line"><span>    $n--;</span></span>
+<span class="line"><span>    $ans .= $n;</span></span>
+<span class="line"><span>    $remainder -= ($tmp + $n) * $n;</span></span>
+<span class="line"><span>}</span></span>
+<span class="line"><span>$ans = substr_replace($ans, ".", strlen($l) / 2, 0);</span></span>
+<span class="line"><span>print "$ans\n";</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>?></span></span></code></pre>
+<p>Results:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>$ php sqrt.php 1800</span></span>
+<span class="line"><span>42.4264</span></span>
+<span class="line"><span>$ php sqrt.php 43046721</span></span>
+<span class="line"><span>6561.0000</span></span>
+<span class="line"><span>$ php sqrt.php 2</span></span>
+<span class="line"><span>1.4142</span></span>
+<span class="line"><span>$</span></span></code></pre>
+<p>This method isn’t exactly intuitive, and recalling the specifics without a reference might be a problem, however it’s easy to build an equivalent solution from first principles. Simply, we’re looking for the square root S of a number N, so a formula to express that without a radix is:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>S</mi><mn>2</mn></msup><mo>=</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">S^2 = N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></p>
+<p>We’re also looking to build that up one part at a time with A’s and B’s, where:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>A</mi><mo>+</mo><mi>B</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>=</mo><msup><mi>S</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(A + B)^2 = S^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
+<p>A simple algebraic expansion of the left side of that equation it:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>A</mi><mi>B</mi><mo>+</mo><msup><mi>B</mi><mn>2</mn></msup><mo>=</mo><msup><mi>S</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">A^2 + 2AB + B^2 = S^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
+<p>In fact, the <code>2AB</code> is where our 20x comes from above. If A is a digit of the solution, and B another, then in reality A is in a decimal place with 10 times the weight of B, e.g., digits “2” and “4” really represent “20” and “4”, or “200” and “40”.</p>
+<p>In the PHP solution above, our partial solution A is fed into the division problem as <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>A</mi></mrow><annotation encoding="application/x-tex">A^2 + 2A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">2</span><span class="mord mathnormal">A</span></span></span></span>. To get to the correct equation, we need to take the <code>2A</code> part and add a little more to it:</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mi>A</mi><mo>+</mo><mi>B</mi><mo stretchy="false">)</mo><mo>×</mo><mi>B</mi><mo>=</mo><mn>2</mn><mi>A</mi><mi>B</mi><mo>+</mo><msup><mi>B</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(2A + B) \times B = 2AB + B^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></p>
+<p>…which is exactly what the PHP solution above does. So this is another example of replacing a Google search with some basic maths to arrive at the same algorithm.</p>
+<h3 id="5-from-goldman-sachs">5. From Goldman sachs:</h3>
+<blockquote>
+<p>A standard chess knight (it moves in its standard way i.e. L shaped OR 2.5 moves) is sitting at the position a1 on an N x N chess board. What is the minimum number of moves it will take to reach the diagonally opposite corner? P.S. - If it were a 8 x 8 chess board, the final destination for the knight would be h8</p>
+</blockquote>
+<p>This is a critical thinking problem, and doesn’t explicity call for any code. Restating the question, if my chessboard is N squares on a side, how many optimal moves will it take to get a knight from one corner to the opposite one? On the off chance you’re unfamiliar with chess, a knight move is two vertical squares + one horizontal, or two horizontals plus one vertical.</p>
+<p>Trying to tack diagonally across the board, each pair of moves puts the knight 3 squares up and 3 over. Finding the optimal <em>number</em> of moves is marginally simpler than finding the optimal moves themselves. Here are the optimal moves (as far as I know - I haven’t checked this against anything but first principles) for boards of side 4 through 11.</p>
+<p>Optimal moves for board of size:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span> 4      5      6        7        8          9          10           11</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>...2  ..2.4  .....4  ......4  .....4.6  ........6  .........6  ........6.8</span></span>
+<span class="line"><span>.1..  .....  ..2...  ....3..  ........  .....4...  .......5..  ...........</span></span>
+<span class="line"><span>....  .1.3.  ....3.  .......  ....3.5.  .......5.  ..........  .......5.7.</span></span>
+<span class="line"><span>0...  .....  .1....  ...2...  ........  ....3....  ......4...  ...........</span></span>
+<span class="line"><span>      0....  ......  .1.....  ...2....  .........  ....3.....  ......4....</span></span>
+<span class="line"><span>             0.....  .......  .1......  ...2.....  ..........  ....3......</span></span>
+<span class="line"><span>                     0......  ........  .1.......  ...2......  ...........</span></span>
+<span class="line"><span>                              0.......  .........  .1........  ...2.......</span></span>
+<span class="line"><span>                                        0........  ..........  .1.........</span></span>
+<span class="line"><span>                                                   0.........  ...........</span></span>
+<span class="line"><span>                                                               0..........</span></span></code></pre>
+<p>Our optimal move count is always even, and stays the same for three board lengths in a row, making the math much easier than the verification. Now, what’s up with a 3 x 3 board?</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>.14</span></span>
+<span class="line"><span>3..</span></span>
+<span class="line"><span>0.2</span></span></code></pre>
+<p>By the previous equation, it should take two moves to move the knight from corner to corner. Unfortunately, though, you can’t actually fit a double-move on the board, as that would put the knight here:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>   2</span></span>
+<span class="line"><span>.1.</span></span>
+<span class="line"><span>...</span></span>
+<span class="line"><span>0..</span></span></code></pre>
+<p>So the math is pretty simple, and doesn’t beg to be turned into code, but since the question was from a coding interview, I’ll throw it into a simple Java class, taking advantage of Java’s strong typing to find the size without needing to round:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#F97583">package</span><span style="color:#E1E4E8"> cea.demos;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> KnightMoves</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  private</span><span style="color:#B392F0"> KnightMoves</span><span style="color:#E1E4E8">() { }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> int</span><span style="color:#B392F0"> getOptimalMoveNum</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">int</span><span style="color:#FFAB70"> size</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">throws</span><span style="color:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> (size </span><span style="color:#F97583">&#x3C;</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">throw</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Exception</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Size of board must be 3 or more"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> size </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 3</span><span style="color:#F97583"> ?</span><span style="color:#79B8FF"> 4</span><span style="color:#F97583"> :</span><span style="color:#E1E4E8"> (size </span><span style="color:#F97583">+</span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> 3</span><span style="color:#F97583"> *</span><span style="color:#79B8FF"> 2</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">  public</span><span style="color:#F97583"> static</span><span style="color:#F97583"> void</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">String</span><span style="color:#E1E4E8">[] </span><span style="color:#FFAB70">args</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">throws</span><span style="color:#E1E4E8"> Exception {</span></span>
+<span class="line"><span style="color:#E1E4E8">    StringBuffer sb </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuffer</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">int</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 3</span><span style="color:#E1E4E8">; n </span><span style="color:#F97583">&#x3C;</span><span style="color:#79B8FF"> 20</span><span style="color:#E1E4E8">; n</span><span style="color:#F97583">++</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">      sb.</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Board Edge length: "</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(n);</span></span>
+<span class="line"><span style="color:#E1E4E8">      sb.</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">", Optimal move count: "</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">getOptimalMoveNum</span><span style="color:#E1E4E8">(n));</span></span>
+<span class="line"><span style="color:#E1E4E8">      sb.</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    System.out.</span><span style="color:#B392F0">print</span><span style="color:#E1E4E8">(sb.</span><span style="color:#B392F0">toString</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>Results:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Board Edge length: 3, Optimal move count: 4</span></span>
+<span class="line"><span>Board Edge length: 4, Optimal move count: 2</span></span>
+<span class="line"><span>Board Edge length: 5, Optimal move count: 4</span></span>
+<span class="line"><span>Board Edge length: 6, Optimal move count: 4</span></span>
+<span class="line"><span>Board Edge length: 7, Optimal move count: 4</span></span>
+<span class="line"><span>Board Edge length: 8, Optimal move count: 6</span></span>
+<span class="line"><span>Board Edge length: 9, Optimal move count: 6</span></span>
+<span class="line"><span>Board Edge length: 10, Optimal move count: 6</span></span>
+<span class="line"><span>Board Edge length: 11, Optimal move count: 8</span></span>
+<span class="line"><span>Board Edge length: 12, Optimal move count: 8</span></span>
+<span class="line"><span>Board Edge length: 13, Optimal move count: 8</span></span>
+<span class="line"><span>Board Edge length: 14, Optimal move count: 10</span></span>
+<span class="line"><span>Board Edge length: 15, Optimal move count: 10</span></span>
+<span class="line"><span>Board Edge length: 16, Optimal move count: 10</span></span>
+<span class="line"><span>Board Edge length: 17, Optimal move count: 12</span></span>
+<span class="line"><span>Board Edge length: 18, Optimal move count: 12</span></span>
+<span class="line"><span>Board Edge length: 19, Optimal move count: 12</span></span></code></pre>
+<p>It’s tempting to include printouts for the actual optimal moves, since if you look at my manual method above, I hashed out a simple algorithm that wouldn’t be hard to implement. However, it’s easy to overreach to try to look a little cooler or impressive. Experience has calmed me some, and while I’m confident I could have a working solution in a pass or two, I’m not cocky enough to push the issue in an interview.</p>
+<p>Over the years my work has been solid under time pressure, with people hovering, with real money on the line, but it’s a rookie move to dive into that situation when it’s avoidable. It’s better, I think, to answer the question that was asked, and not use it as a segue for showing off.</p>
+<p>So those are some of the coding answers I may have been able to give, had I been asked, in a variety of languages. Am I for hire? Absolutely. It’s my hope that mentioning that after several pages of code will naturally weed out the hiring managers I wouldn’t click with.</p>
+<p>Clicking, man… it’s pretty damned important.</p>  </article> </body></html>
