@@ -1,0 +1,39 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const data = {
+  title: "About Bytes",
+  type: "article",
+  image: "/images/plate.jpg",
+  url: "/about",
+  description: "About the Bytes website, and about the author",
+};
+---
+
+<BaseLayout data={data}>
+  <h1 id="about-bytes">About Bytes</h1>
+  <p>
+    This blog runs on Github Pages, and is built with Astro with some plugins to
+    handle syntax highlighting, LaTeX, Markdown directives, and URL inspection.
+  </p>
+  <p>
+    The page layout is purposefully sparse. There are no cookies or clientside
+    javascript. There is no advertising, analytics, or monetization.
+  </p>
+  <p>
+    My intended content is tech deep dives, small experiments, and musings on
+    life and politics.
+  </p>
+  <h1 id="about-curtis">About Curtis</h1>
+  <p>
+    I&#39;m <a href="mailto:curtis@autery.net">Curtis Autery</a>, a software
+    engineer, and a dad several times over.
+  </p>
+  <p>
+    I teach tech to kids. I&#39;ve worked with Girls Who Code, Tech Corps, and
+    directly with schools my children attend. We&#39;ve covered everything from
+    writing a book report in PowerPoint, to creating pixel animations for video
+    games, to Adafruit dev boards.
+  </p>
+  <p><a href="/Curtis-Autery.pdf">Résumé</a></p>
+</BaseLayout>

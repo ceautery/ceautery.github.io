@@ -3,7 +3,8 @@ import "../styles/global.css";
 
 const { data } = Astro.props;
 const baseURL = "https://blog.autery.net";
-const isRoot = data.url === "/";
+const isRoot = /\/(about)?$/.test(data.url);
+const isAbout = data.url === "/about";
 ---
 
 <html lang="en">
@@ -45,8 +46,8 @@ const isRoot = data.url === "/";
       Curtis Autery, pretty ok software writer.
 
       <nav>
-        <a href="/" class="live">blog</a>
-        <a href="/about">about</a>
+        <a href="/" class:list={[{ live: !isAbout }]}>blog</a>
+        <a href="/about" class:list={[{ live: isAbout }]}>about</a>
       </nav>
     </header>
 
