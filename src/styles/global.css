@@ -208,7 +208,15 @@ article div.hero {
   justify-content: center;
 }
 
-.tooltip {
+.tip {
+  position: relative;
+}
+
+.tip p:first-of-type {
+  display: inline-block;
+}
+
+.tip p:last-of-type {
   display: none;
   position: absolute;
   top: 0;
@@ -218,12 +226,8 @@ article div.hero {
   background: var(--tooltip-background-color);
 }
 
-p.hover {
-  position: relative;
-}
-
-.hover img:hover + .tooltip,
-.tooltip:hover {
+.tip p:hover + p,
+.tip p:last-of-type:hover {
   display: inline;
 }
 
