@@ -1,0 +1,375 @@
+<style>
+button {
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+}
+  .output {
+    font: 20px Courier new;
+    white-space: pre;
+  }
+
+</style>
+<canvas id="cnv"></canvas>
+<div id="inputs">
+</div>
+
+<div id="description" class="output">
+</div>
+<button onclick="setupCanvas()">Start</button>
+<input id="showCanvas" type="checkbox">Show Canvas</input>
+
+<div id="log" class="output">
+</div>
+
+<script>
+  var ctx = cnv.getContext('2d');
+    var grammars = [
+        {
+            name: 'Axial tree',
+            startAngle: 0,
+            turnAngle: 30,
+            axiom: 'F',
+            rules: {
+                F: 'F[+F]F[-F]F'
+              }
+          },
+        {
+            name: 'Snowflake',
+            startAngle: 30,
+            turnAngle: 60,
+            axiom: 'F++F++F',
+            rules: {
+                F: 'F-F++F-F'
+              }
+          },
+        {
+            name: 'Dragon Curve',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'F',
+            rules: {
+                F: 'F-H',
+                H: 'F+H'
+              }
+          },
+        {
+            name: 'Five Dragon',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'F',
+            rules: {
+                F: 'F+F+F-F-F'
+              }
+          },
+        {
+            name: 'Levy Dragon',
+            startAngle: 0,
+            turnAngle: 45,
+            axiom: 'F',
+            rules: {
+                F: '+F--F+',
+              }
+          },
+        {
+            name: 'Quilt',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'F+F+F+F',
+            rules: {
+                F: 'FF+F+F+F+FF'
+              }
+          },
+        {
+            name: 'Sierpinski Arrowhead',
+            startAngle: 90,
+            turnAngle: 60,
+            axiom: 'H',
+            rules: {
+                F: '+H-F-H+',
+                H: '-F+H+F-'
+              }
+          },
+        {
+            name: 'Gosper curve',
+            startAngle: 0,
+            turnAngle: 60,
+            axiom: 'F',
+            rules: {
+                F: 'F+H++H-F--FF-H+',
+                H: '-F+HH++H+F--F-H'
+              }
+          },
+        {
+            name: "Peano's Sweep",
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'R',
+            rules: {
+                L: 'LFRFL-F-RFLFR+F+LFRFL',
+                R: 'RFLFR+F+LFRFL-F-RFLFR'
+              }
+          },
+        {
+            name: 'Hilbert Curve',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'X',
+            rules: {
+                Y: '+XF-YFY-FX+',
+                X: '-YF+XFX+FY-'
+              }
+          },
+        {
+            name: 'Square Curve',
+            startAngle: 90,
+            turnAngle: 90,
+            axiom: 'X',
+            rules: {
+                X: 'XF-F+F-XF+F+XF-F+F-X'
+              }
+          },
+        {
+            name: 'Pythagoras tree',
+            startAngle: 0,
+            turnAngle: 45,
+            axiom: 'F',
+            rules: {
+                F: 'H[-F]+F',
+                H: 'HH'
+              }
+          },
+        {
+            name: 'Fractal plant',
+            startAngle: 25,
+            turnAngle: 25,
+            axiom: 'X',
+            rules: {
+                F: 'FF',
+                X: 'F-[[X]+X]+F[+FX]-X'
+              }
+          },
+        {
+            name: 'Islands and Lakes',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'F+F+F+F',
+            rules: {
+                F: 'F+M-FF+F+FF+FM+FF-M+FF-F-FF-FM-FFF',
+                M: 'MMMMMM'
+              }
+          },
+        {
+            name: 'Minkowski',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'F+F+F+F',
+            rules: {
+                F: 'F-F+F',
+              }
+          },
+        {
+            name: 'Spiral',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'XFY+FY',
+            rules: {
+                Y: 'FY',
+                X: 'XFY+FY+'
+              }
+          },
+        {
+            name: 'T-Square',
+            startAngle: 0,
+            turnAngle: 90,
+            axiom: 'F+XFF+XFF+XFF+XF',
+            rules: {
+                X: '-Y-F+XFF+XFF+XF-Y',
+                Y: 'YFY'
+              }
+          }
+      ];
+
+    grammars.forEach( (g, ndx) => {
+        var button = document.createElement('button');
+        button.addEventListener('click', function() { setupGrammar(ndx) });
+        button.textContent = g.name;
+        inputs.appendChild(button);
+        if (ndx % 5 == 4) inputs.appendChild(document.createElement('br'))
+      });
+
+    setupGrammar(0);
+
+    var current,
+      len = 10,
+      stack = [],
+      identity = [1, 0, 0, 1, 0, 0],
+      maps = {
+          F: drawForward,
+          H: drawForward,
+          M: moveForward,
+          '+': right,
+          '-': left,
+          '[': push,
+          ']': pop
+        },
+      iteration, min, max, path, transform, opacity, current, grammar;
+
+    function multiplyTransforms(t2) {
+        var t1 = transform;
+        var a = t1[0];  var A = t2[0];
+        var b = t1[1];  var B = t2[1];
+        var c = t1[2];  var C = t2[2];
+        var d = t1[3];  var D = t2[3];
+        var e = t1[4];  var E = t2[4];
+        var f = t1[5];  var F = t2[5];
+        transform = [a*A+c*B, b*A+d*B, a*C+c*D, b*C+d*D, a*E+c*F+e, b*E+d*F+f];
+      }
+
+    setupInput();
+
+    cnv.onwebkitfullscreenchange = () => {
+        if (document.webkitIsFullScreen) {
+            step();
+          } else {
+              setupInput();
+            }
+      }
+    var show = 0;
+    function setupGrammar(g) {
+        grammar = grammars[g];
+        showGrammar();
+      }
+
+    function setupCanvas() {
+        log.textContent = '';
+        current = grammar.axiom;
+        iteration = 0;
+        if (showCanvas.checked) {
+            cnv.webkitRequestFullScreen();
+            inputs.style.display = 'none';
+            cnv.style.display = '';
+            cnv.style.background = 'white'
+            cnv.width = screen.width;
+            cnv.height = screen.height;
+            cnv.onclick = step;
+            ctx.font = '30px sans-serif';
+          } else {
+              step();
+              step();
+              step();
+              step();
+            }
+      }
+
+    function showGrammar() {
+        description.textContent = `
+ ${grammar.name}
+ Start angle: ${grammar.startAngle}
+ Turn angle: ${grammar.turnAngle}
+ Start position: ${grammar.axiom}
+ Rules:
+ `
+        for (var r in grammar.rules) {
+            description.textContent += '    ' + r + ': ' + grammar.rules[r] + '\n'
+          }
+
+        log.textContent = '';
+      }
+
+    function setupInput() {
+        cnv.style.display = 'none';
+        inputs.style.display = '';
+      }
+
+    function step() {
+        if (current.length > 250000) {
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.fillText('Press escape to return to the menu', 100, 200);
+            return;
+          }
+        transform = identity;
+        if (grammar.startAngle) rotate(grammar.startAngle);
+        iteration++;
+        path = [[0, 0, 'm']];
+        min = [0, 0];
+        max = [0, 0];
+        var arr = current.split(''), next = '';
+        arr.forEach(l => {
+            if (maps[l]) maps[l]();
+            checkBounds();
+            if (grammar.rules[l]) next += grammar.rules[l];
+            else next += l;
+          });
+        min[0] -= 10; min[1] -= 10;
+        max[0] += 10; max[1] += 10;
+        draw();
+        if (current.length > 100) current = current.slice(0, 100) + '...';
+        log.textContent += iteration + ': ' + current + '\n\n'
+        current = next;
+      }
+
+    function draw() {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, cnv.width, cnv.height);
+        ctx.fillText(grammar.name, 20, 40);
+        ctx.fillText('Iteration ' + iteration, 20, 80);
+        ctx.translate(cnv.width / 2, cnv.height / 2);
+        var scale = Math.min(cnv.width / (max[0] - min[0]), cnv.height / (max[1] - min[1]));
+        ctx.scale(scale, scale);
+        ctx.translate(-(min[0] + max[0]) / 2, -(min[1] + max[1]) / 2);
+        ctx.lineWidth = 1/scale;
+        ctx.beginPath();
+        path.forEach(p => {
+            if (p[2] == 'm') ctx.moveTo(p[0], p[1]);
+            else ctx.lineTo(p[0], p[1]);
+          })
+        ctx.stroke();
+      }
+
+    function checkBounds() {
+        var x = transform[4], y = transform[5];
+        if (x < min[0]) min[0] = x;
+        if (x > max[0]) max[0] = x;
+        if (y < min[1]) min[1] = y;
+        if (y > max[1]) max[1] = y;
+      }
+
+    function drawForward() {
+        multiplyTransforms([1, 0, 0, 1, 0, -len]);
+        path.push([transform[4], transform[5], 'l']);
+      }
+
+    function moveForward() {
+        multiplyTransforms([1, 0, 0, 1, 0, -len]);
+        path.push([transform[4], transform[5], 'm']);
+      }
+
+    function rotate(d) {
+        r = degreesToRads(d);
+        multiplyTransforms([Math.cos(r), Math.sin(r), -Math.sin(r), Math.cos(r), 0, 0]);
+      }
+
+    function left() {
+        rotate(-grammar.turnAngle);
+      }
+
+    function right() {
+        rotate(grammar.turnAngle);
+      }
+
+    function push() {
+        stack.push(transform);
+      }
+
+    function pop() {
+        transform = stack.pop();
+        path.push([transform[4], transform[5], 'm'])
+      }
+
+    function degreesToRads(d) {
+        return Math.PI * d / 180;
+      }
+
+</script>
+

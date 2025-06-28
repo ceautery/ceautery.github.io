@@ -1,0 +1,91 @@
+<style>
+body {
+  font-size: 1.5em;
+}
+
+canvas {
+  border: 1px solid black;
+  margin: 0 auto;
+  display: block;
+  background:#FFF;
+}
+
+canvas.hand:hover {
+  cursor: hand;
+}
+
+input[type=button] {
+  font-size: 1em;
+  padding: .5em;
+}
+
+.close a {
+  background:#E4E4E4;
+  padding: .5em;
+  border: solid;
+}
+
+.close {
+  margin: 2em;
+}
+
+.close:hover {
+  cursor: hand;
+}
+
+#fullScreenBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 0;
+  display: none;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+textarea {
+  margin: 0 2em;
+  flex-grow: 1;
+}
+</style>
+
+<div class="container">
+  <div>
+    <a href="javascript:load('inscribedTriangle')">Simple inscribed triangle</a><br>
+    <br>
+    Pentagons<br>
+    <a href="javascript:load('euclid')">Pentagon, Euclid's method</a><br>
+    <a href="javascript:load('phi')">Pentagon, Phi method</a><br>
+    <a href="javascript:load('cosine')">Pentagon, Cosine method</a><br>
+    <a href="javascript:load('carlyle')">Pentagon, Carlyle Circle method</a><br>
+    <br>Heptadecagons<br>
+    <a href="javascript:load('hep')">Richmond method</a><br>
+    <a href="javascript:load('hep2')">Carlyle circle method</a><br>
+    <br>
+    Selections from Book 1 of Euclid's Elements<br>
+    <a href="javascript:load('b1p1')">B1P1 - Create an equilateral triangle</a><br>
+    <a href="javascript:load('b1p2')">B1P2 - Create a line of another line's length</a><br>
+    <a href="javascript:load('b1p3')">B1P3 - Cut a line at a smaller line's length</a><br>
+    <a href="javascript:load('b1p9')">B1P9 - Bisect an angle</a><br>
+    <a href="javascript:load('b1p10')">B1P10 - Bisect a line segment</a><br>
+    <a href="javascript:load('b1p11')">B1P11 - Create a right angle at a given point</a><br>
+    <br>
+    <input type=text id=delay value=100 size=4 /> Frame delay (ms)<br><br>
+    <input type=button onclick=run() value=Run />
+  </div>
+  <textarea id="ta"></textarea>
+</div>
+
+<div id="fullScreenBox">
+  <div class="close"><a onclick=closePromptBox()>Close</a></div>
+  <canvas width=1024 height=768 id="cnv"></canvas>
+</div>
+<script src="/compass/script.js"></script>
+
