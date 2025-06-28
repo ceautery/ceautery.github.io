@@ -10,8 +10,6 @@ hasMath: true
 
 For simplicity’s sake, my use of “numbers” here will mean positive integers (counting, or natural numbers).
 
-Date: Thu, 01 Jun 2017 11:59:13 GMT
-
 On a recent project, I assigned myself a fun-sounding ticket for generating unique, pseudorandom 6 digit codes from a web server. A naive approach to accomplish that is to generate a random number on the fly, and compare it against previous codes to make sure it was unique, and regenerate if the number collides with a previous one… which becomes more necessary as more codes are generated. Another approach is to shuffle an array of sequential numbers up to a million, and write the shuffled values, one per row, into a database table or queue, and read them off in the order they were added.
 
 I didn’t want to create a million row table, or have performance degrade over time, but I did want a solution that would create a sequence that didn’t have any obvious patterns in it, so that numbers aren’t guessable. I went with a more mathy solution that fit all the requirements. It needs only a prime number less than a million, finding a matching “generator” number that produces a shuffled set of all the numbers less than the prime, and tracking a sequence number somehow. Let’s explore how that works.
