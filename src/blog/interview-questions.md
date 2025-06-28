@@ -10,7 +10,7 @@ hasMath: true
 
 Hi, 2025 Curtis here. I wrote this in 2013, from my last Windows machine. It was a couple years before leetcode was founded, when web frameworks like Angular were still in their infancies. Fellow devs, don't take interviews where questions like these are asked. It's silliness to expect someone to livecode in front of strangers, and how well a candidate does in that situation doesn't correlate with how well they'll do their job.
 
-2013 Curtis, though, he was more interested in showing off than setting boundaries. These days I look for roles where collaboration and communication are important, and using a library for powersets and squre roots is preferred over writing your own bespoke answer to a solved compsci problem.
+2013 Curtis, though, he was more interested in showing off than setting boundaries. These days I look for roles where collaboration and communication are important, and using a library for powersets and square roots is preferred over writing your own bespoke answer to a solved compsci problem.
 
 That being said... on with the show!
 
@@ -545,31 +545,29 @@ So if we iterate from 1 to 8 ($2^3$, 3 being the set length), turn the number bi
 
 To remove the duplicates, we can turn each subset into a hash key, and set the value at that key to 1. If we hit the same key twice, it won't create a new hash element. Combine this with Javascript's ability to define custom sorts, and we can return the results in the desired order:
 
-```
+```javascript
 function powerSet(arr) {
-    var ps = {} // power set hash
+  var ps = {}; // power set hash
 
-    for (var n = 0; n < Math.pow(2, arr.length); n++) {
-        var tmp = [];
-        for (var f = 0; f < arr.length; f++)
-            if ((n >> f) % 2 == 1) tmp.push(arr[f])
-        ps[tmp.sort().join(',')] = 1;
-    }
+  for (var n = 0; n < Math.pow(2, arr.length); n++) {
+    var tmp = [];
+    for (var f = 0; f < arr.length; f++)
+      if ((n >> f) % 2 == 1) tmp.push(arr[f]);
+    ps[tmp.sort().join(",")] = 1;
+  }
 
-    function cmp(a, b) {
-        return a.length < b.length ? -1 : a.length == b.length ? a-b : 1;
-    }
+  function cmp(a, b) {
+    return a.length < b.length ? -1 : a.length == b.length ? a - b : 1;
+  }
 
-    return Object.keys(ps).sort(cmp);
+  return Object.keys(ps).sort(cmp);
 }
 ```
 
 Results:
 
-```
-powerSet([1,2,2])
-
-["", "1", "2", "1,2", "2,2", "1,2,2"]
+```javascript
+powerSet([1, 2, 2])[("", "1", "2", "1,2", "2,2", "1,2,2")];
 ```
 
 ### 4. Also from Facebook:
@@ -611,7 +609,7 @@ As you get more decimal digits, the remainders grow, and eventually get unwieldy
 
 Here's my implementation of that method in PHP, which takes copious advantage of the language's easy casting between strings and numbers:
 
-```
+```php
 <?php
 
 $in = $argv[1];
@@ -648,15 +646,14 @@ print "$ans\n";
 
 Results:
 
-```
-$ php sqrt.php 1800
+:::codez
+**\$** _php sqrt.php 1800_
 42.4264
-$ php sqrt.php 43046721
+**\$** _php sqrt.php 43046721_
 6561.0000
-$ php sqrt.php 2
+**\$** _php sqrt.php 2_
 1.4142
-$
-```
+:::
 
 This method isn't exactly intuitive, and recalling the specifics without a reference might be a problem, however it's easy to build an equivalent solution from first principles. Simply, we're looking for the square root S of a number N, so a formula to express that without a radix is:
 
