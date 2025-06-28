@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "postbuild": "node fix-doctype.js 'dist/**/*.html'",
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "gh-pages -d dist --cname 'blog.autery.net'"
