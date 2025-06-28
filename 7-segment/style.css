@@ -1,0 +1,19 @@
+canvas {
+  border: 1px solid;
+  margin: auto;
+  display: block;
+}
+
+div {
+  display: flex;
+  justify-content: space-between;
+  width: 550px;
+  margin: 20px auto;
+}
+
+button {
+  padding: 5px 20px;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 16px;
+}
