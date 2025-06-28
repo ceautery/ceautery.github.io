@@ -3,7 +3,7 @@ import "../styles/global.css";
 
 const { data } = Astro.props;
 const baseURL = "https://blog.autery.net";
-const isRoot = /\/(about)?$/.test(data.url);
+const isRoot = /^\/(about)?$/.test(data.url);
 const isAbout = data.url === "/about";
 ---
 
