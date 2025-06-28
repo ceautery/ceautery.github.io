@@ -8,7 +8,7 @@
     "postbuild": "node fix-doctype.js 'dist/**/*.html'",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "gh-pages -d dist --cname 'blog.autery.net'"
+    "deploy": "gh-pages -d dist --cname 'autery.net'"
   },
   "dependencies": {
     "@jsdevtools/rehype-url-inspector": "^2.0.2",
