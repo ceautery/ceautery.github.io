@@ -1,5 +1,4 @@
 ---
-url: "/blog/apl/"
 title: "A deep dive into APL"
 description: "A tutorial on the APL language, with examples of parsing a file for credit card numbers, generating primes, and reading from a database"
 date: "2016-02-12"

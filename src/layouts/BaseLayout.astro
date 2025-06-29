@@ -1,10 +1,10 @@
 ---
 import "../styles/global.css";
 
-const { data } = Astro.props;
+const { data, url } = Astro.props;
 const baseURL = "https://blog.autery.net";
-const isRoot = /^\/(about)?$/.test(data.url);
-const isAbout = data.url === "/about";
+const isRoot = /^\/(about)?$/.test(url);
+const isAbout = url === "/about";
 ---
 
 <html lang="en">
@@ -23,7 +23,7 @@ const isAbout = data.url === "/about";
     <link rel="me" href="https://mastodon.social/@CurtisAutery" />
     <meta name="viewport" content="width=500" />
     <meta charset="UTF-8" />
-    <meta property="og:url" content={`${baseURL}${data.url}`} />
+    <meta property="og:url" content={`${baseURL}${url}`} />
     <meta property="og:title" content={data.title} />
     <meta property="og:type" content={data.type} />
     <meta property="og:image" content={`${baseURL}${data.image}`} />

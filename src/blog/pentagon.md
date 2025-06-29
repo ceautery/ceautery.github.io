@@ -1,5 +1,4 @@
 ---
-url: "/blog/pentagon/"
 title: "Four ways to construct a pentagon"
 description: "Toying around with compass and straightedge geometry, Euclid's elements, and a journey through the history of constructing pentagons and heptadecagons"
 date: "2012-06-13"

@@ -1,5 +1,4 @@
 ---
-url: "/blog/combinatorics/"
 title: "Combinatorics, brute force, and a surprising coding challenge"
 description: ""
 date: "2015-12-29"

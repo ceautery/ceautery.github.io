@@ -1,5 +1,4 @@
 ---
-url: "/blog/randomize/"
 title: "Using Discrete Logarithms to Randomize a Million Integers"
 description: "Using Discrete Logarithms to Randomize a Million Integers"
 date: "2025-04-08"

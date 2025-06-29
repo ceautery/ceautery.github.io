@@ -4,18 +4,17 @@ import { getCollection } from "astro:content";
 
 const allPosts = (await getCollection("blog"))
   .sort((a, b) => b.data.date.localeCompare(a.data.date))
-  .filter((b) => !/\bwip\b/.test(b.data.url));
+  .filter((b) => !/\bwip\b/.test(b.id));
 
 const data = {
   title: "Bytes",
   type: "website",
   image: "/images/plate.jpg",
-  url: "/",
   description: "A minimalist blog from a pretty ok software writer",
 };
 ---
 
-<BaseLayout data={data}>
+<BaseLayout data={data} url="/">
   <h1>Bytes</h1>
   <div>Things I think about</div>
   <ul>

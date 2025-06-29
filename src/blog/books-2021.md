@@ -1,5 +1,4 @@
 ---
-url: "/blog/llm/"
 title: "Audiobooks of the year, 2021"
 image: "/images/books/books-2021.jpg"
 description: "Stuff I listened to this year while commuting. Recommendations, surprise finds, and one I finally got to after a decade"

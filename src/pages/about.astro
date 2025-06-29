@@ -5,12 +5,11 @@ const data = {
   title: "About Bytes",
   type: "article",
   image: "/images/plate.jpg",
-  url: "/about",
   description: "About the Bytes website, and about the author",
 };
 ---
 
-<BaseLayout data={data}>
+<BaseLayout data={data} url="/about">
   <h1 id="about-bytes">About Bytes</h1>
   <p>
     This blog runs on Github Pages, and is built with Astro with some plugins to

@@ -1,5 +1,4 @@
 ---
-url: "/blog/nand/"
 title: "Why Sheffer's Stroke is NAND instead of NOR"
 description: "A quick tour throw an oddity in the history of boolean logic, and an example of how notation can change meaning over time"
 date: "2013-03-13"

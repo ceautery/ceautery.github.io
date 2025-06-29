@@ -1,5 +1,4 @@
 ---
-url: "/blog/krause/"
 title: "Schools and angry conservatives"
 description: "Musings on Texas book bans, states withdrawing from the NSBA, and violence from average conservatives"
 date: "2021-11-15"

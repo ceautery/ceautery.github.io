@@ -1,5 +1,4 @@
 ---
-url: "/blog/room-area/"
 title: "Outsiders, TDD, and the area of a polygon"
 image: "/images/room-area/ra-room.png"
 description: "How a code challenge led me down a rabbit hole to a founding father of vector calculus"

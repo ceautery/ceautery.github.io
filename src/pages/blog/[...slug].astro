@@ -14,6 +14,6 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BaseLayout data={post.data}>
+<BaseLayout data={post.data} url={`/blog/${post.id}/`}>
   <Content />
 </BaseLayout>

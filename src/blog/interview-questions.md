@@ -1,5 +1,4 @@
 ---
-url: "/blog/interview-questions/"
 title: "Five coding interview questions"
 description: "Obama-era Curtis slings some code in a variety of languages to solve theoretical coding interview questions"
 date: "2013-10-24"

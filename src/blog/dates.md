@@ -1,5 +1,4 @@
 ---
-url: "/blog/dates/"
 title: "JavaScript dates, trains, Passover, and Henry VIII"
 description: "A small chunk of the history of calendars and time zones, and their interplay with holidays, political revolutions, train timetables, and technology."
 date: "2015-10-30"

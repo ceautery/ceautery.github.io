@@ -1,5 +1,4 @@
 ---
-url: "/blog/calculating-e/"
 title: "Calculating e with Javascript"
 description: "An intro to floating point numbers, the limits of binary fractions, Javascript large integer rounding, and how to generate Math.E the hard way."
 date: "2013-11-26"

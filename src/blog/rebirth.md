@@ -1,5 +1,4 @@
 ---
-url: "/blog/rebirth/"
 title: "Covid, rebirth, jobs, and elections"
 description: "Blogging again after a disastrous 2020"
 date: "2020-11-05"

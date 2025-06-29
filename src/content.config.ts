@@ -8,7 +8,6 @@ const blog = defineCollection({
     type: z.string().default("article"),
     description: z.string(),
     image: z.string().default("/images/plate.jpg"),
-    url: z.string(),
     date: z.string(),
     hasMath: z.boolean().optional(),
   }),

@@ -1,5 +1,4 @@
 ---
-url: "/blog/baudot-wip/"
 title: "From Baudot to Graphemes"
 description: "A dive into the history of telecommunications, character sets, and how both were influenced by the French Revolution"
 image: "/images/baudot/murray_telegraph.png"

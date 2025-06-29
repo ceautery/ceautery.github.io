@@ -1,5 +1,4 @@
 ---
-url: "/blog/llm/"
 title: "Books of the year, 2020"
 image: "/images/books/books-2020.jpg"
 description: "Some hidden gems I found this year, from friend recommendations, YouTube rabbit holes, and algorithmic hints"
