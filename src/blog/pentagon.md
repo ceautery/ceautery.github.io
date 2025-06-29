@@ -8,7 +8,7 @@ hasMath: true
 
 # Four ways to construct a pentagon
 
-[This page](https://autery.net/pages/compass.html) contains animations of the compass and straightedge pentagon construction techniques I describe below, along with the first six propositions in Euclid's Elements.
+[This page](https://autery.net/compass) contains animations of the compass and straightedge pentagon construction techniques I describe below, along with the first six propositions in Euclid's Elements.
 
 Over the last few weeks I've been spending what free time I have obsessing over the odd mathematics of Argand diagrams, complex roots, and how they relate to constructing regular polygons with a compass and straightedge. I found, among other things, that I had forgotten quite a bit from my trig and geometry classes from 25 years ago.
 
@@ -227,4 +227,4 @@ If you add the ability of remembering a compass length to the classical rules of
 
 So, that's about all. There are other methods to create a pentagon which I haven't covered here, such as Ptolemy's, but I think I've covered the topic pretty thoroughly. I hope I have laid this out simply enough for a layman (or a high-school student trying to decide if math is a worthwhile thing to think about) to follow.
 
-Don't forget to check out the construction animations [here](https://autery.net/pages/compass.html).
+Don't forget to check out the construction animations [here](https://autery.net/compass).
