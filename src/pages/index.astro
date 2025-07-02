@@ -15,22 +15,40 @@ const data = {
 ---
 
 <BaseLayout data={data} url="/">
-  <h1>Bytes</h1>
-  <div>Things I think about</div>
-  <ul>
+  <table>
+    <tr><td colspan="2"><h1>Bytes</h1></td></tr>
     {
       allPosts.map((p) => (
-        <li>
-          <span>{p.data.date}</span> -
-          <a href={`/blog/${p.id}/`}> {p.data.title}</a>
-        </li>
+        <tr>
+          <td>{p.data.date}</td>
+          <td>
+            <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+          </td>
+        </tr>
       ))
     }
-  </ul>
+  </table>
 </BaseLayout>
 
 <style>
-  span {
+  td:first-of-type:not([colspan]) {
     font-family: "Menlo", monospace;
+  }
+
+  a {
+    display: block;
+    width: 100%;
+  }
+
+  td:last-of-type {
+    padding-right: 0;
+  }
+
+  tr:first-of-type:hover {
+    background-color: inherit;
+  }
+
+  table {
+    border-spacing: 0;
   }
 </style>

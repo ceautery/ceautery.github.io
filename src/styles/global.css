@@ -47,6 +47,7 @@ body {
 
 header {
   margin-left: 1em;
+  margin-top: 5px;
   position: sticky;
   top: 0;
   width: 100%;
@@ -64,12 +65,11 @@ nav {
   display: inline;
   border-bottom: 3px solid var(--nav-border-color);
   line-height: 2;
-  max-width: 600px;
 }
 
 header.root > nav {
   margin: 0.5em 0;
-  display: block;
+  display: table;
 }
 
 nav a {
@@ -88,7 +88,6 @@ nav a.live {
 }
 
 article {
-  flex-grow: 1;
   padding: 1em 15%;
   margin: 0 14pt;
 }

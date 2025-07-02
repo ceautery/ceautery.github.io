@@ -58,7 +58,7 @@ These "boards" were an awakening for me. They were social networks of nearby you
 
 I liked connecting to boards so much that I needled my parents to buy a modem for my Apple //c. I'm pretty sure I still rode my bike places, climbed trees, played soccer, what have you, but if I was home I was on the computer typing furiously on one BBS or other.
 
-My modem, an Avatex 1200, was more complicated than an accoustic coupler modem. You changed it's settings by typing to it from a terminal program on your computer, which would transmit command signals to it over a serial cable. The modem would start listening for commands when you typed "AT" (attention).
+My modem, an Avatex 1200, was more complicated than an accoustic coupler modem. You changed its settings by typing to it from a terminal program on your computer, which would transmit command signals to it over a serial cable. The modem would start listening for commands when you typed "AT" (attention).
 
 :::tip
 ![](../assets/baudot/avatex_1200.jpg)
@@ -103,7 +103,7 @@ The tech used in dial-up modem communications is built on ancient concepts.
 
 Transmitting simple information over distance has been done with simple tools throughout recorded history. Natives of the Americas and Australian aboriginals used smoke signals. Ming dynasty China used [a relay system of beacon towers](https://link.springer.com/article/10.1007/s12520-021-01283-7) along the Great Wall to warn of invaders. The ancient Greeks got creative with their [Polybius square](https://en.wikipedia.org/wiki/Polybius_square) fire-signaling to describe coordinates on a grid of letters (or on a cipher grid).
 
-A big leap forward from Polybius happened in France during the French Revolution. Claude Chappe conceived of a semaphore telegraph which would sit above a tower. The telegraph had two indicator arms that could each be rotated to 7 distict positions, connected to a base that could be rotated into a horizontal or vertical position, giving `$7 \times 7 \times 2 =  98$` distinct numeric codes. Each tower also had a telescope, to view other telegraphs in a chain between cities.
+A big leap forward from Polybius happened in France during the French Revolution. Claude Chappe conceived of a semaphore telegraph which would sit above a tower. The telegraph had two indicator arms that could each be rotated to 7 distict positions, connected to a base that could be rotated into a horizontal or vertical position, giving $7 \times 7 \times 2 =  98$ distinct numeric codes. Each tower also had a telescope, to view other telegraphs in a chain between cities.
 
 :::tip
 ![](../assets/baudot/chappe_telegraph.jpg)
@@ -113,7 +113,7 @@ by [Louis Figuier](https://en.wikipedia.org/wiki/Louis_Figuier)
 is licensed under public domain
 :::
 
-Six of the codes were meant to convey status information, or "control codes" - start of message, no one at the station right now, etc. The remaining 92 positions were used in a two-symbol code, where each code represented a French word, giving `$92 \times 92 = 8,464$` possible words. Each station would have a codebook of 92 pages, with 92 words on each page.
+Six of the codes were meant to convey status information, or "control codes" - start of message, no one at the station right now, etc. The remaining 92 positions were used in a two-symbol code, where each code represented a French word, giving $92 \times 92 = 8,464$ possible words. Each station would have a codebook of 92 pages, with 92 words on each page.
 
 :::tip
 ![](../assets/baudot/chappe_codebook.png)
@@ -168,6 +168,8 @@ The spinning wheel in the above image generates static electricity. There are 24
 The Le Sage telegraph is interesting, and a good proof of concept for communicating without line of sight, but it was impractical to use that many wires over any real distance, where each wire required insulation against other wires' static charges.
 
 In 1816, English scientist Francis Ronalds built a telegraph that needed only one "wire", although his prototype used a hard to imagine amount of wire strung in a grid between two insulators - eight miles of wire!
+
+![](../assets/baudot/ronalds_telegraph.png)
 
 From the 2016 Physics Today article [The bicentennial of Francis Ronalds’s electric telegraph](https://pubs.aip.org/physicstoday/article/69/2/26/415427/The-bicentennial-of-Francis-Ronalds-s-electric)
 
