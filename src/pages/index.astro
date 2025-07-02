@@ -15,41 +15,48 @@ const data = {
 ---
 
 <BaseLayout data={data} url="/">
-  <table>
-    <tr><td colspan="2"><h1>Bytes</h1></td></tr>
-    {
-      allPosts.map((p) => (
-        <tr>
-          <td>{p.data.date}</td>
-          <td>
-            <a href={`/blog/${p.id}/`}>{p.data.title}</a>
-          </td>
-        </tr>
-      ))
-    }
-  </table>
+  <div class="wrapper">
+    <h1>Bytes</h1>
+    <div>
+      {
+        allPosts.map((p) => (
+          <a href={`/blog/${p.id}/`}>
+            <span>{p.data.date}</span> <span>{p.data.title}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
 </BaseLayout>
 
 <style>
-  td:first-of-type:not([colspan]) {
+  .wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  a span:first-of-type {
     font-family: "Menlo", monospace;
     word-break: keep-all;
+    margin-right: 10px;
+    color: var(--text-color);
   }
 
   a {
-    display: block;
+    display: flex;
     width: 100%;
+    border-width: 0 0 1px;
+    border-style: solid;
+    border-color: var(--table-border-color);
+    padding: 0.5em 0.75em;
   }
 
-  td:last-of-type {
-    padding-right: 0;
+  a:first-of-type {
+    border-top-width: 1px;
   }
 
-  tr:first-of-type:hover {
-    background-color: inherit;
-  }
-
-  table {
-    border-spacing: 0;
+  a:hover {
+    background-color: var(--table-hover-color);
   }
 </style>

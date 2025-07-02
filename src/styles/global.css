@@ -52,7 +52,7 @@ header {
   top: 0;
   width: 100%;
   background-color: var(--header-background-color);
-  z-index: 1; /* keeps KaTeX fractions from renering on top of header */
+  z-index: 1; /* keeps KaTeX fractions from rendering on top of header */
   font-size: 0.8em;
 }
 
