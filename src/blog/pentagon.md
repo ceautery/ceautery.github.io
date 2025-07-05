@@ -55,9 +55,9 @@ Alternatively, find $\frac{f2\pi}{n}$, where n is the number of sides, and f is 
 
 ### 1: Euclid's method
 
-There are other methods to find a point than by using cosines. With pentagons, the cosine math gets a little trickier. Since there are five points, the distance along the circumference between each will be $\frac{2\pi}{5}$. If you ask a calculator for the cosine of $\frac{2\pi}{5}$ radians (or 72 degrees), you get an irrational number that starts with 0.309016994. This turns out to be $\frac{\sqrt{5 - 1}}{4}$, but let's assume we don't know that yet. Point being, no method of finding that point with compass and straightedge jumps out at you.
+There are other methods to find a point than by using cosines. With pentagons, the cosine math gets a little trickier. Since there are five points, the distance along the circumference between each will be $\frac{2\pi}{5}$. If you ask a calculator for the cosine of $\frac{2\pi}{5}$ radians (or 72 degrees), you get an irrational number that starts with 0.309016994. This turns out to be $\frac{\sqrt{5} - 1}{4}$, but let's assume we don't know that yet. Point being, no method of finding that point with compass and straightedge jumps out at you.
 
-In Euclid's Elements, the construction method was different: Inscribe an isosceles triangle on a circle, making the angles on the base double the one on top. Bisect the bigger angles, and then you should have 5 equal angles extending to 5 points equidistant from each other. Creating the triangle involves mechanically finding the golden ratio, $\frac{\sqrt{5 + 1}}{2}$, commonly denoted by the Greek letter phi ($\phi$). The link below titled "Pentagon, Euclid's method" shows an animation of that, but here's the gist of it:
+In Euclid's Elements, the construction method was different: Inscribe an isosceles triangle on a circle, making the angles on the base double the one on top. Bisect the bigger angles, and then you should have 5 equal angles extending to 5 points equidistant from each other. Creating the triangle involves mechanically finding the golden ratio, $\frac{\sqrt{5} + 1}{2}$, commonly denoted by the Greek letter phi ($\phi$). The link below titled "Pentagon, Euclid's method" shows an animation of that, but here's the gist of it:
 
 ![](../assets/pentagon/golden_triangle.PNG)
 
@@ -85,7 +85,7 @@ $Z = \frac{DB}{2A}$
 We know the diameter, D, is 2, so:
 $Z = \frac{2B}{2A}$ which reduces to $Z = \frac{B}{A}$
 Lastly, we know from Euclid that $\frac{B}{A}$ is the golden ratio, so:
-$Z = \phi = \frac{\sqrt{5 + 1}}{2}$
+$Z = \phi = \frac{\sqrt{5} + 1}{2}$
 :::
 
 This gives us our second method of constructing a pentagon with compass and straightedge, namely finding a point phi away from the opposite end of P0. We do this by finding the $\frac{\sqrt{5}}{2}$ part and the $\frac{1}{2}$ part separately using nothing more than bisecting lines and drawing circles with known points. The link "Pentagon, Phi method" below shows an animation of that, but the method is simply drawing a circle with a $\frac{1}{2}$ radius inside the unit circle, with a diameter from the unit circle's center to it's edge:
