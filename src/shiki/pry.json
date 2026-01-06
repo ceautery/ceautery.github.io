@@ -3,7 +3,7 @@
 	"name": "Pry",
 	"patterns": [
     {
-      "match": "(^\\[\\d+\\] pry\\(.+?\\)>)(.*)",
+      "match": "(^\\[\\d+\\] pry\\(.+?\\)>|^>> )(.*)",
       "captures": {
         "1": {
           "name": "variable"
