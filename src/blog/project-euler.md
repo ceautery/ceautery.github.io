@@ -151,7 +151,6 @@ If you decide you want a simpler prompt and enter the command above, the next ti
 euler # pry
 >> 7 * 12
 => 84
->> 
 ```
 
 ## Project Euler
@@ -348,14 +347,21 @@ Pry also provides an `ls` command that lets you list what methods can call on an
 ```pry
 >> ls r
 Enumerable#methods:
-  all?         collect         drop        each_with_index   find_all    group_by  min_by     reduce        slice_when  take_while
-  any?         collect_concat  drop_while  each_with_object  find_index  inject    minmax_by  reject        sort        tally
-  chain        compact         each_cons   filter            flat_map    lazy      none?      select        sort_by     to_h
-  chunk        cycle           each_entry  filter_map        grep        map       one?       slice_after   sum         uniq
-  chunk_while  detect          each_slice  find              grep_v      max_by    partition  slice_before  take        zip
+  all?            drop              find_all    min_by        slice_when
+  any?            drop_while        find_index  minmax_by     sort
+  chain           each_cons         flat_map    none?         sort_by
+  chunk           each_entry        grep        one?          sum
+  chunk_while     each_slice        grep_v      partition     take
+  collect         each_with_index   group_by    reduce        take_while
+  collect_concat  each_with_object  inject      reject        tally
+  compact         filter            lazy        select        to_h
+  cycle           filter_map        map         slice_after   uniq
+  detect          find              max_by      slice_before  zip
 Range#methods:
-  %   ===    bsearch  cover?  end      eql?          first  include?  last  member?  minmax    pretty_print  size  to_a  to_set
-  ==  begin  count    each    entries  exclude_end?  hash   inspect   max   min      overlap?  reverse_each  step  to_s
+  %      bsearch  end           first     last     minmax        size  to_set
+  ==     count    entries       hash      max      overlap?      step
+  ===    cover?   eql?          include?  member?  pretty_print  to_a
+  begin  each     exclude_end?  inspect   min      reverse_each  to_s
 ```
 
 Ranges and arrays are the two basic "collection" classes that implement simple ordered lists of things, and they both inherit from [Enumerable](https://docs.ruby-lang.org/en/4.0/Enumerable.html), a group of methods that iterate over collections in different ways.
@@ -403,7 +409,6 @@ Let's run that in pry, just copy and paste the whole chunk of code into pry and 
 >>   end
 >> end
 => ["Can't divide by zero", 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
->> 
 ```
 
 Using `2.0` instead of `2` for the division makes ruby treat the numbers to be floating point numbers instead of integers. More on that later. And yes, just like you can call `odd?` on a number, you can call `.zero?` on it to see if it's a zero. That does the same as `n == 0`.
@@ -456,7 +461,6 @@ In a range, you can do this with a method called `step`.
 => [1, 9, 25]
 >> (1..5).step(2).map { |n| n ** 2 }.sum
 => 35
->> 
 ```
 
 At a scale this small, the difference is minimal, but if our range is going to be in the hundreds of thousands, the `.step` way will save us a lot of CPU time and memory.
@@ -499,7 +503,6 @@ If you paste that into pry and hit enter, then call it with 250,000, you'll get 
 => :sum_odd_squares
 >> sum_odd_squares 250_000
 => 20833333333250000
->> 
 ```
 
 One of the things you probably noticed is that both methods seem to run at the same speed, even though the first one is clearly doing more work. Computers are pretty fast, and CPUs are great at doing things in a loop, so a half-million of something is child's play for today's computers.
@@ -532,7 +535,6 @@ And then we can call `measure` directly on the `Benchmark` class, and pass it a 
  @stime=3.000000000419334e-06,
  @total=1.600000000046009e-05,
  @utime=1.3000000000040757e-05>
->> 
 ```
 
 The `@` signs before all the variable names mean that those are "instance variables", that each method in the class instance has access to. There's some system architecture theory behind why the times are split up into so many variables, but I typically just go by the `@real` time.
@@ -544,7 +546,6 @@ Before we compare the two "real" values, a bit about the `e-06` notation. That's
 => 1000.0
 >> 1e-3
 => 0.001
->> 
 ```
 
 So the first `@real`, 0.043... is the same as `4.3e-2`
@@ -573,6 +574,8 @@ You have the tools to solve problem 0 now. So... go register your account!
 
 First, since I'm a lunatic and wrote this just as one long page, I suggest you use the table of contents to navigate. This will also help keep track of your progress, since links you've visited from there should be in a different color.
 
+And good news! You learned enough about the ruby language in problem 0 to make the rest of the problems easier. We'll still cover some new concepts in each problem, but it will be less of a firehose.
+
 After you register, and each time you sign in, you should be taking to the Archives link, where you can see the names of the first 50 problems. If not, you can navigate directly to each problem by it's number with the web address format:
 
 `projecteuler.net/problem=(problem number)`
@@ -598,7 +601,6 @@ Anyway, we're not fizzbuzzing, we're adding up multiples of 3 and 5. The example
 ```pry
 >> (1...10).to_a
 => [1, 2, 3, 4, 5, 6, 7, 8, 9]
->> 
 ```
 
 If we look at all of those numbers modulo three:
@@ -606,7 +608,6 @@ If we look at all of those numbers modulo three:
 ```pry
 >> (1...10).map { |n| n % 3 }
 => [1, 2, 0, 1, 2, 0, 1, 2, 0]
->> 
 ```
 
 ...we can see that all the multiples of three have zero as the remainder, like you'd expect. Now we can select them.
@@ -614,7 +615,6 @@ If we look at all of those numbers modulo three:
 ```pry
 >> (1...10).select { |n| (n % 3).zero? }
 => [3, 6, 9]
->> 
 ```
 
 We need to also include the ones that are multiples of five. Just like with the ampersand (`&`), there's a bitwise OR using a single pipe symbol (`|`), and a logical OR using two pipes. `(condition_1) || (condition_2)` returns true if either condition is true. We can use that here to include multiples of 5 in the list.
@@ -622,7 +622,6 @@ We need to also include the ones that are multiples of five. Just like with the 
 ```pry
 >> (1...10).select { |n| (n % 3).zero? || (n % 5).zero? }
 => [3, 5, 6, 9]
->> 
 ```
 
 The same numbers as the example. Now we just tack on a `sum` at the end.
@@ -630,11 +629,66 @@ The same numbers as the example. Now we just tack on a `sum` at the end.
 ```pry
 >> (1...10).select { |n| (n % 3).zero? || (n % 5).zero? }.sum
 => 23
->> 
 ```
 
-The same answer as the example. Now to solve the problem you just need to make the range up to, but not including 1,000.
+The same answer as the example. Now to solve the problem you just need to make the range up to but not including 1,000.
 
 ## Problem 2
+
+> Each new term in the Fibonacci sequence is generated by adding the previous two terms. By starting with $1$ and $2$, the first $10$ terms will be:
+> 
+> $$1, 2, 3, 5, 8, 13, 21, 34, 55, 89, \dots$$
+> 
+> By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
+
+If there's something devs love as much as threes and fives, or prime numbers in general, it's Fibonacci numbers. We're eager to tell people how much they show up in nature. Petals on a flower, rows on a pinecone, branch patterns on a tree. For some reason they took over agile estimation meetings for those shops that assign "points" to tickets, where the number is always a Fibonacci number.
+
+Usually the sequence starts with `[1, 1]` and the first generated number is 2, though, not starting directly with `[1, 2]`. But since we're looking for the sum of the _even_ digits, we could start either way and get the same answer.
+
+So we have two ruby questions to answer before we can solve this: How do I add to an array? How do I get the values of the last two array elements?
+
+First let's make an array to play with, and see what methods it exposes. My usual tinkering array is the digits in Westerville's zip code:
+
+```pry
+>> arr = [4, 3, 0, 8, 1]
+=> [4, 3, 0, 8, 1]
+>> ls arr
+Enumerable#methods:
+  chain           each_slice        flat_map  max_by     slice_after
+  chunk           each_with_index   grep      member?    slice_before
+  chunk_while     each_with_object  grep_v    min_by     slice_when
+  collect_concat  entries           group_by  minmax_by  sort_by
+  each_cons       filter_map        inject    partition  tally
+  each_entry      find_all          lazy      reduce     to_set
+Array#methods:
+  &              cycle         freeze        pretty_print_cycle    slice
+  *              deconstruct   hash          product               slice!
+  +              delete        include?      push                  sort
+  -              delete_at     index         rassoc                sort!
+  <<             delete_if     insert        reject                sort_by!
+  <=>            detect        inspect       reject!               sum
+  ==             difference    intersect?    repeated_combination  take
+  []             dig           intersection  repeated_permutation  take_while
+  []=            drop          join          replace               to_a
+  all?           drop_while    keep_if       reverse               to_ary
+  any?           each          last          reverse!              to_h
+  append         each_index    length        reverse_each          to_s
+  assoc          empty?        map           rfind                 transpose
+  at             eql?          map!          rindex                union
+  bsearch        fetch         max           rotate                uniq
+  bsearch_index  fetch_values  min           rotate!               uniq!
+  clear          fill          minmax        sample                unshift
+  collect        filter        none?         select                values_at
+  collect!       filter!       one?          select!               zip
+  combination    find          pack          shelljoin             |
+  compact        find_index    permutation   shift
+  compact!       first         pop           shuffle
+  concat         flatten       prepend       shuffle!
+  count          flatten!      pretty_print  size
+```
+
+There are a few methods that add to an array. `<<` (the shovel operator), `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. Modern ruby versions all [mutate]() the array in-place instead of creating a new object.
+
+
 ## Problem 3
 ## Problem 4
