@@ -75,7 +75,7 @@ If you're using a Chromebook that your school controls, you might need to get yo
 
 For a ruby version manager, I recommend [Mise-en-place](https://mise.jdx.dev/), but if you have another tool such as asdf, rbenv, or rvm, use that instead. Our main goal in using a version manager is to make sure you're running a version of ruby that you control (e.g., not the built-in system ruby on macos), and that you can install "gems" (Ruby's word for libraries or packages) into.
 
-Once you have everything from the "things you'll need" list, open a terminal and make sure you're in your home directory. In Linux-like environments you can type the command `cd ~` to get there. After that, enter this sequence of commands (substituting mise for your version manager, if needed:
+Once you have everything from the "things you'll need" list, open a terminal and make sure you're in your home directory. In Linux-like environments you can type the command `cd ~` to get there. After that, enter this sequence of commands (substituting mise for your version manager, if needed):
 
 ```
 mkdir dev
@@ -130,23 +130,25 @@ I don't care much for the default pry prompt, but it helped when I was first sta
 
 The number at the beginning of each line is a good indicator of whether your command was accepted or not. If you hit enter and the number increments, you're good. If it doesn't, then there was a syntax error in the line. Maybe you missed a closing quote, parentheses, or bracket. If that's all it is, you can type the closing symbol on the next line and you'll be fine. If the problem is more complicated, you can press ctrl-c to break out of that line, and start again at the next prompt.
 
-If you would like, you can change pry's prompt to be just a simple `>> ` by creating the [runcom](https://superuser.com/questions/144339/vimrc-screenrc-bashrc-kshrc-etc-what-does-the-rc-mean) file `.pryrc` file and setting the default prompt. Here's a ruby command you can enter to do that:
+If you would like, you can change pry's prompt to be just a simple `>> ` by creating the [runcom](https://superuser.com/questions/144339/vimrc-screenrc-bashrc-kshrc-etc-what-does-the-rc-mean) file `.pryrc` and setting the default prompt. Here's a ruby command you can enter to do that:
 
 ```ruby
-File.open('.pryrc', 'w') { |f| f << 'Pry.config.prompt = Pry::Prompt[:simple]' }
+File.write('.pryrc', 'Pry.config.prompt = Pry::Prompt[:simple]')
 ```
 
-This line is doing a lot. It opens a file in "write" mode, then passes a block (everything inside the curly braces) to the open command. The block is saying it expects to receive a single variable that it will name `f`, that it expects to be an array, then it shovels into that array a string (everything inside the single quotes).
+`File.write` is doing a lot of operating system magic behind the scenes and hiding the details. The above line is roughly the equivalent of this:
 
-`File.open` opens a [file handle](https://en.wikipedia.org/wiki/Handle_(computing)) runs the block code, and writes whatever is in the array to the file, then closes the file handle.
+```ruby
+File.open('.pryrc', 'w') { |f| f << 'Pry.config...' }
+```
 
-We'll talk about what each of those pieces means later on.
+This method exposes some more of the mechanics behind writing to a file. We're opening a file in "write" mode, serving a [file handle](https://en.wikipedia.org/wiki/File_descriptor) (`f`) to the block, and the block "shovels" (`<<`) a [string](https://en.wikipedia.org/wiki/String_(computer_science)) to the file handle. Shoveling is a rubyism for adding to something. You shovel to write to a file, shovel to append to an array, and shovel to concatenate a string.
 
 If you decide you want a simpler prompt and enter the command above, the next time you run pry things will look like this:
 
 ```pry
-[3] pry(main)> File.open('.pryrc', 'w') { |f| f << 'Pry.config.prompt = Pry::Prompt[:simple]' }
-=> #<File:.pryrc (closed)>
+[3] pry(main)> File.write('.pryrc', 'Pry.config.prompt = Pry::Prompt[:simple]')
+=> 40
 [4] pry(main)> exit
 euler # pry
 >> 7 * 12
@@ -244,7 +246,7 @@ Don't fret over binary numbers or bitwise math. It's important to know they exis
 => true
 ```
 
-`%` is the "modulus" operator. It return the remainder part of division. So this says "if I divide 85 by 2, is the remainder 1?". You'll use modular math a lot.
+`%` is the "modulus" operator. It returns the remainder part of division. So this says "if I divide 85 by 2, is the remainder 1?". You'll use modular math a lot.
 
 Now back to the example in Problem 0, how do I iterate from 1 to 5, square all the numbers, and sum up the odd ones? The naive [imperative](https://en.wikipedia.org/wiki/Imperative_programming) way to do that would be:
 
@@ -687,7 +689,7 @@ Array#methods:
   count          flatten!      pretty_print  size
 ```
 
-There are a few methods that add to an array. `<<` (the shovel operator), `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. Modern ruby versions all [mutate]() the array in-place instead of creating a new object.
+There are a few methods that add to an array. `<<`, `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was preferred because it was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. In modern ruby versions these methods all do the same thing now, they "mutate" (change) the array in-place.
 
 
 ## Problem 3
