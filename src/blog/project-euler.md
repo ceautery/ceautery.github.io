@@ -92,7 +92,7 @@ The "install" line will take a while, and it's likely that you'll run into a pro
 
 It's in the nature of software development to run into problems installing tools. It's normal and expected. Don't give up! You're smart enough to sort through everything.
 
-The "use" line will create a `mise.toml` file to tell mise which installed version of ruby to use in that directory. You can type `ls` to see that the file is there (or `dir` if you're on Windows). The next two commands will create `Gemfile`, and add the "pry" gem to it. Pry is a "REPL" (Read, Eval, Print, Loop) which does just what it sounds like. It reads the ruby statements you enter, evaluates them (runs them), prints what they return, and does all of that in a loop until you type `exit` or press ctrl-d.
+The "use" line will create a `mise.toml` file ([Tom's Obvious Minimal Language](https://toml.io/en/)) to tell mise which installed version of ruby to use in that directory. You can type `ls` to see that the file is there (or `dir` if you're on Windows). The next two commands will create `Gemfile`, and add the "pry" gem to it. Pry is a "REPL" (Read, Eval, Print, Loop) which does just what it sounds like. It reads the ruby statements you enter, evaluates them (runs them), prints what they return, and does all of that in a loop until you type `exit` or press ctrl-d.
 
 ```
 bundle init
@@ -124,6 +124,18 @@ euler # pry
 [3] pry(main)>
 ```
 
+What's with the quotes and backslashes?
+
+Anything inside of quotes or apostrophes (or double-quotes and single-quote in programmer parlance) is a [string](https://en.wikipedia.org/wiki/String_(computer_science)). It's a way to distinguish printed text from ruby commands. In single-quotes, the characters inside are the literal characters that will get printed, written to disk, added to a database column, what have you. Inside of double-quotes, backslash has a specific meaning, an [escape character](https://en.wikipedia.org/wiki/Escape_character). The character that comes next has a special meaning. `\n` is a newline, delimiting where a printed line ends and the next one begins. `\"` means a literal double-quote, to distinguish it from the end of the string itself.
+
+What would be printed to the screen after the read command then would be:
+
+```
+[tools]
+ruby = "4.0.0"
+
+```
+
 __Extra credit__
 
 I don't care much for the default pry prompt, but it helped when I was first starting out.
@@ -142,7 +154,7 @@ File.write('.pryrc', 'Pry.config.prompt = Pry::Prompt[:simple]')
 File.open('.pryrc', 'w') { |f| f << 'Pry.config...' }
 ```
 
-This method exposes some more of the mechanics behind writing to a file. We're opening a file in "write" mode, serving a [file handle](https://en.wikipedia.org/wiki/File_descriptor) (`f`) to the block, and the block "shovels" (`<<`) a [string](https://en.wikipedia.org/wiki/String_(computer_science)) to the file handle. Shoveling is a rubyism for adding to something. You shovel to write to a file, shovel to append to an array, and shovel to concatenate a string.
+This method exposes some more of the mechanics behind writing to a file. We're opening a file in "write" mode, serving a [file handle](https://en.wikipedia.org/wiki/File_descriptor) (`f`) to the block, and the block "shovels" (`<<`) a string to the file handle. Shoveling is a rubyism for adding to something. You shovel to write to a file, shovel to append to an array, and shovel to concatenate a string.
 
 If you decide you want a simpler prompt and enter the command above, the next time you run pry things will look like this:
 
@@ -574,7 +586,7 @@ You have the tools to solve problem 0 now. So... go register your account!
 
 ## Problem 1
 
-First, since I'm a lunatic and wrote this just as one long page, I suggest you use the table of contents to navigate. This will also help keep track of your progress, since links you've visited from there should be in a different color.
+First, since I'm a lunatic and wrote this just as one long page, I suggest you use the table of contents to navigate. This will also help keep track of your progress, since links you've visited from there should be in a different color. Second, I don't want the actual answers to the problems to appear on this site, even though I'm spelling out exactly how to solve them. I'll leave off the last step in the solutions, and make sure you have the context to finish. Usually the last step is just adding up a list of numbers.
 
 And good news! You learned enough about the ruby language in problem 0 to make the rest of the problems easier. We'll still cover some new concepts in each problem, but it will be less of a firehose.
 
@@ -689,7 +701,196 @@ Array#methods:
   count          flatten!      pretty_print  size
 ```
 
-There are a few methods that add to an array. `<<`, `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was preferred because it was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. In modern ruby versions these methods all do the same thing now, they "mutate" (change) the array in-place.
+There are a few methods that add a single element to the end an array. `<<`, `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was preferred because it was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. In modern ruby versions these methods all do the same thing now, they "mutate" (change) the array in-place.
+
+```pry
+>> arr << 9
+=> [4, 3, 0, 8, 1, 9]
+```
+
+The `concat` and `+=` methods add the elements of another array to the end.
+
+```pry
+>> arr += [3, 0, 5]
+=> [4, 3, 0, 8, 1, 9, 3, 0, 5]
+```
+
+You can refer to individual elements by their index, starting at 0.
+
+```pry
+>> arr[0]
+=> 4
+>> arr[3]
+=> 8
+```
+
+Ruby also let's you see elements by negative index, with -1 being the last element, -2 being the one before that, etc.
+
+```pry
+>> arr[-1]
+=> 5
+>> arr[-2]
+=> 0
+```
+
+...which provides us a method to build an array of Fibonacci numbers: Fetch the last two digits, add them, then shovel the result into the array.
+
+```pry
+>> fib = [1, 2, 3, 5, 8]
+=> [1, 2, 3, 5, 8]
+>> fib << fib[-1] + fib[-2]
+=> [1, 2, 3, 5, 8, 13]
+```
+
+So to sole the problem properly, we need to start at `[1, 2]`, then build the length out to ten elements, and then again until the next number would be over 4 million, then sum the even ones. This problem is fiddly enough that we should solve it in a ruby file instead of in pry. Type `exit` into pry or press ctrl-d, to get back to a command prompt.
+
+Use your code editor to create a new file in the `~/dev/euler` folder, and call it `p2.rb`. When you want to test what it does, from the terminal type `ruby p2.rb`. Anything that is printed to the screen will be because you put it there with a `puts` ruby command.
+
+Here's a simple script to get the array out to 10 digits, that _looks_ like it should work:
+
+```ruby
+fib = [1, 2]
+
+def next_fib
+  fib[-1] + fib[-2]
+end
+
+fib << next_fib until fib.length == 10
+
+puts fib
+```
+
+But running it will produce an error.
+
+```
+euler # ruby p2.rb
+p2.rb:4:in 'Object#next_fib': undefined local variable or method 'fib' for main (NameError)
+
+  fib[-1] + fib[-2]
+  ^^^
+  from p2.rb:7:in '<main>'
+euler #
+```
+
+Our `next_fib` method can't see the `fib` variable declared in the main program logic. This is a [variable scope](https://www.rubyguides.com/2019/03/ruby-scope-binding/) problem. Basically methods don't have access to any variables that aren't either in the method signature (the list of variables the method expects) or declared inside the method.
+
+There are three variable types with more visibility, global, [class, and instance](https://www.ruby-lang.org/en/documentation/faq/8/) variables. Global variable are variables that every piece of a program can see and mutate, and using them is a bad practice. For a simple script using a single global variable wouldn't be the end of the world. All we would need to do is replace `fib` with `$fib` everywhere. But we can do better.
+
+`next_fib` shouldn't care about the rest of the program. It should accept any array passed to it, and not care what happens next. This is the single responsibility principle. There's a lot of comp-sci theory around SRP and "separation of concerns" that talks in terms of actors and modules, but in simpler terms a method should do one thing well. So let's give `next_fib` a signature.
+
+```ruby
+def next_fib arr
+  arr[-1] + arr[-2]
+end
+
+fib = [1, 2]
+fib << next_fib(fib) until fib.length == 10
+
+puts fib
+```
+
+And the next run is error-free.
+
+```
+euler # ruby p2.rb
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+euler #
+```
+
+To get up to 4 million, we just change our condition a little, and have the condition create a variable we can reuse.
+
+```ruby
+def next_fib arr
+  arr[-1] + arr[-2]
+end
+
+fib = [1, 2]
+
+while (n = next_fib(fib)) < 4_000_000
+  fib << n
+end
+
+puts fib
+```
+
+From here you can just select the even numbers and sum them and be done, but... I don't like the way this looks. This would look better if we could do it with functional programming somehow. Mutating an array in a loop like this is easy to get wrong, and creating a variable _inside_ a condition like that just looks clumsy.
+
+A good tool to help us out here is an enumerator.  Enumerators are functions that yields one piece of information at a time back to the caller. It's what happens when you call `.each` on something. `each` yields one item of an array at a time to the code block you pass to it. You're familiar with using `.map` on arrays and ranges. Behind the scene `map` is calling `each` and collecting the results into the array it return.
+
+Here's an example of an `each` enumerator and how you can use it.
+
+```pry
+>> e = [4, 3, 0, 8, 1].each
+=> #<Enumerator: ...>
+>> e.next
+=> 4
+>> e.next
+=> 3
+>> e.next
+=> 0
+>> e.take(2)
+=> [4, 3]
+>> e.take_while { |i| i != 1 }
+=> [4, 3, 0, 8]
+```
+
+Calling `.next` on an enumerator simply returns each element in sequence. `.take` always starts from the beginning, giving you the number of items you asked for, or the whole list if you ask for more than it has.
+
+The one we want, though, is `.take_while`, which returns elements while a condition is true. We can simply ask `take_while` to return fibonacci numbers while the values are less than 4 million. First we're going to create a specific type of enumerator: a generator. Generators have no fixed list, they are just rules for generating the next number.
+
+Change your code file to this:
+
+```ruby
+gen = Enumerator.new do |e|
+  a = 1; b = 2
+  loop do
+    e << a
+    a, b = b, a + b
+  end
+end
+
+fib = gen.take_while { |i| i < 4_000_000 }
+puts fib.select(&:even?)
+```
+
+`Enumerator.new` takes a block with a single variable that the docs call a "yielder", which I'm just calling "e" here. The variables declared in the block hold their values between calls, so all we need to do is hold onto the last two, and create one more during each call.
+
+`loop do` is explicitly declaring an infinte loop. It works the same as `while(true)`. When we shovel a value into `e`, the value gets yielded back to the caller. The last bit of magic is:
+
+```ruby
+a, b = b, a + b
+```
+
+Ruby allows you to set multiple variables this way. The values on the right of the equals sign get evaluated, and only after that do the values get assigned. This lets us do the `a + b` part without anything going haywire.
+
+Running that now should give you the same list, with the only the even ones selected. And we didn't need to mutate an array or use an extra variable in the condition logic. Generators and yielding are hard concepts to get your head around. It took me a while to get used to them, but now to me this code reads a lot cleaner than the earlier version.
+
+```
+euler # ruby p2.rb
+2
+8
+34
+144
+610
+2584
+10946
+46368
+196418
+832040
+3524578
+euler #
+```
+
+Now just add up the numbers.
 
 
 ## Problem 3
