@@ -1191,7 +1191,7 @@ def delta n
 end
 ```
 
-We're going to pass in the "n" we want to use to the program as a command line argument. These are store in the special variable `ARGV`. Variables that begin with an upper-case letter are constants, and ruby makes them visible to the entire script, class, or module that they're declared in. By convention constants are all upper-case, and by convention you shouldn't mutate them. But ruby provides sharp knives, so you _can_ mutate or reassign them. But don't.
+We're going to pass in the "n" we want to use to the program as a command line argument. These are stored in the special variable `ARGV`. Variables that begin with an upper-case letter are constants, and ruby makes them visible to the entire script, class, or module that they're declared in. By convention constants are all upper-case, and by convention you shouldn't mutate them. But ruby provides sharp knives, so you _can_ mutate or reassign them. But don't.
 
 ARGV is an array of all the command line arguments, and we only need the first. Add this to the script to see argument handling in action:
 
