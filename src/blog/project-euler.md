@@ -14,7 +14,7 @@ hasMath: true
 | <a href="#who-are-you">Who are you?</a>      | <a href="#problem-3">Problem 3</a> |
 | <a href="#getting-set-up">Getting set up</a> | <a href="#problem-4">Problem 4</a> |
 | <a href="#project-euler">Project Euler</a>   | <a href="#problem-5">Problem 5</a> |
-| <a href="#problem-0">Problem 0</a>           |                                    |
+| <a href="#problem-0">Problem 0</a>           | <a href="#problem-6">Problem 6</a> |
 
 Writing software is more fulfilling and enjoyable to me when I think of it as play. After 22 years as a professional developer, I still say "fun" in meetings much more than seems reasonable. "That looks like a fun ticket" (Project management nomenclature refers to development assignments in terms of "cards" or "tickets"), or after debugging a live production disaster with real money on the line: "That was a fun problem."
 
@@ -24,7 +24,7 @@ Many of my ilk feel the same way, and so programming puzzle websites tend to get
 
 Me, I prefer sites where the only constraint is eventually getting the right answer. The two I visit the most are [Advent of Code](https://adventofcode.com/), and [Project Euler](https://projecteuler.net/). AoC has story-based two part daily puzzles during December. You're one of Santa's helpers, and need to perform coding tasks to fix widgets and save Christmas.
 
-Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here. Right now I just have the registration puzzle and the first five problems in the archive, but I'll likely add to this over time.
+Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here. Right now I just have the registration puzzle and the first six problems in the archive, but I'll likely add to this over time.
 
 ## Who am I?
 
@@ -642,6 +642,10 @@ We need to also include the ones that are multiples of five. Just like with the 
 
 The same numbers as the example. Now we just tack on a `sum` at the end.
 
+```ruby
+(1...10).select { |n| (n % 3).zero? || (n % 5).zero? }.sum
+```
+
 ```pry
 >> (1...10).select { |n| (n % 3).zero? || (n % 5).zero? }.sum
 => 23
@@ -776,7 +780,7 @@ euler #
 
 Our `next_fib` method can't see the `fib` variable declared in the main program logic. This is a [variable scope](https://www.rubyguides.com/2019/03/ruby-scope-binding/) problem. Basically methods don't have access to any variables that aren't either in the method signature (the list of variables the method expects) or declared inside the method.
 
-There are three variable types with more visibility, global, [class, and instance](https://www.ruby-lang.org/en/documentation/faq/8/) variables. Global variable are variables that every piece of a program can see and mutate, and using them is a bad practice. For a simple script using a single global variable wouldn't be the end of the world. All we would need to do is replace `fib` with `$fib` everywhere. But we can do better.
+There are three variable types with more visibility, global, [class and instance](https://www.ruby-lang.org/en/documentation/faq/8/) variables, and constants. Global variable are variables that every piece of a program can see and mutate, and using them is a bad practice. For a simple script using a single global variable wouldn't be the end of the world. All we would need to do is replace `fib` with `$fib` everywhere. But we can do better.
 
 `next_fib` shouldn't care about the rest of the program. It should accept any array passed to it, and not care what happens next. This is the single responsibility principle. There's a lot of comp-sci theory around SRP and "separation of concerns" that talks in terms of actors and modules, but in simpler terms a method should do one thing well. So let's give `next_fib` a signature.
 
@@ -954,6 +958,13 @@ The `|a, b|` business is a good example of ruby magic. What the block receives i
 
 So ruby is good at combining and splitting things, and reversing strings for us, but we do have to teach it how to recognize a palindromic number. We'll do this by casting the integer to a string, and asking if the string is the same as its reverse.
 
+```ruby
+def palindrome? n
+  s = n.to_s
+  s.reverse == s
+end
+```
+
 ```pry
 >> def palindrome? n
 >>   s = n.to_s
@@ -981,6 +992,8 @@ It's possible to add this directly to the Integer class, so it can be called wit
 >>
 ```
 
+Notice I didn't have to call `to_s` on anything. The instance itself is the default variable. If you need to reference it directly, like calling a method in another class, it's just called `self`.
+
 Modifying somebody else's class in known as [Monkeypatching](https://en.wikipedia.org/wiki/Monkey_patch), and it's dangerous. David Hansson, creator of the Ruby on Rails framework and unmitigated asshole, wrote a blog entry [Provide sharp knives](https://signalvnoise.com/svn3/provide-sharp-knives/) where he argued in favor of monkeypatching, which rails certainly does a lot of.
 
 I don't care for it, but it's there if you want it, and harmless for toy projects like solving puzzles.
@@ -998,6 +1011,10 @@ Next we need to find all the products of two digit numbers, select the palindrom
 ```
 
 `.first` does what you expect, and I used it because there were over 100 palindromes. We can swap that with `max` to verify the example from the problem.
+
+```ruby
+(10..99).to_a.combination(2).map { |a, b| a * b }.select { |n| palindrome? n }.max
+```
 
 ```pry
 >> (10..99).to_a.combination(2).map { |a, b| a * b }.select { |n| palindrome? n }.max
@@ -1091,12 +1108,20 @@ The actual `.reduce` method keeps an accumulator between each loop, and applies 
 
 So we can get to our 2520 with:
 
+```ruby
+(1..10).reduce { |acc, n| acc.lcm n }
+```
+
 ```pry
 >> (1..10).reduce { |acc, n| acc.lcm n }
 => 2520
 ```
 
 And agin, ruby magic can handle the mechanics of that for us:
+
+```ruby
+(1..10).reduce(&:lcm)
+```
 
 ```pry
 >> (1..10).reduce(&:lcm)
@@ -1125,3 +1150,88 @@ So somewhere between 200 and 300 million. And with a better mathematical approac
  ```
 
  1e-6 seconds is a microsecond, so the "real" value at around 1.2e-5 is 12 microseconds, compared to what would have been over a minute using the naive solution.
+
+ ## Problem 6
+
+> The sum of the squares of the first ten natural numbers is,
+>
+> $$1^2 + 2^2 + ... + 10^2 = 385.$$
+>
+> The square of the sum of the first ten natural numbers is,
+>
+> $$(1 + 2 + ... + 10)^2 = 55^2 = 3025.$$
+>
+> Hence the difference between the sum of the squares of the first ten natural numbers and the square of the sum is $3025 - 385 = 2640$.
+>
+> Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.
+
+Sound familiar? This is problem 0 with a twist. Instead of being the sum of odd squares, it's the sum of all squares, and as you'd expect there is an algebraic solution:
+
+$$\sum _{i=1}^{n}i^{2}=\frac{n(n+1)(2n+1)}{6}$$
+
+Now the _square_ of the _sum_ of the first n natural numbers is going to be larger, and of course it has a formula too. I knew neither of these, I just googled them.
+
+$$\frac{n^{2}(n+1)^{2}}{4}$$
+
+And since we have easier math methods already, we don't need to tease out the naive solution that loops over all the numbers. There's enough going on in this problem that we should turn this one into a script as well. In your editor, create p6.rb.
+
+First lets turn those math formulae into ruby methods, and write a method to find their difference.
+
+```ruby
+def sum_of_squares n
+  n * (n + 1) * (2 * n + 1) / 6
+end
+
+def square_of_sum n
+  n ** 2 * (n + 1) ** 2 / 4
+end
+
+def delta n
+  square_of_sum(n) - sum_of_squares(n)
+end
+```
+
+We're going to pass in the "n" we want to use to the program as a command line argument. These are store in the special variable `ARGV`. Variables that begin with an upper-case letter are constants, and ruby makes them visible to the entire script, class, or module that they're declared in. By convention constants are all upper-case, and by convention you shouldn't mutate them. But ruby provides sharp knives, so you _can_ mutate or reassign them. But don't.
+
+ARGV is an array of all the command line arguments, and we only need the first. Add this to the script to see argument handling in action:
+
+```ruby
+puts ARGV[0]
+```
+
+And then run the script from a terminal window with an argument.
+
+```
+euler # ruby p6.rb 10
+10
+euler #
+```
+
+The argument will come into the script as a string, so we have to cast it to an integer before using it. So let's do that, and then call delta and see if it gives us the right answer. Make the entire script:
+
+```ruby
+def sum_of_squares n
+  n * (n + 1) * (2 * n + 1) / 6
+end
+
+def square_of_sum n
+  n ** 2 * (n + 1) ** 2 / 4
+end
+
+def delta n
+  square_of_sum(n) - sum_of_squares(n)
+end
+
+n = ARGV[0].to_i
+puts delta(n)
+```
+
+...and let's call it:
+
+```
+euler # ruby p6.rb 10
+2640
+euler #
+```
+
+Sure enough, 2640. Now just call it with the problem's real n.
