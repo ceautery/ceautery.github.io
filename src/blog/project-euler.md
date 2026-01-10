@@ -592,7 +592,7 @@ First, since I'm a lunatic and wrote this just as one long page, I suggest you u
 
 And good news! You learned enough about the ruby language in problem 0 to make the rest of the problems easier. We'll still cover some new concepts in each problem, but it will be less of a firehose.
 
-After you register, and each time you sign in, you should be taking to the Archives link, where you can see the names of the first 50 problems. If not, you can navigate directly to each problem by it's number with the web address format:
+After you register, and each time you sign in, you should be taken to the Archives link, where you can see the names of the first 50 problems. If not, you can navigate directly to each problem by it's number with the web address format:
 
 `projecteuler.net/problem=(problem number)`
 
