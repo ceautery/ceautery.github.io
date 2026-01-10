@@ -9,12 +9,12 @@ hasMath: true
 
 |                                              |                                    |
 | -------------------------------------------- | ---------------------------------- |
-| <a href="#who-am-i">Who am I?</a>            | <a href="#problem-0">Problem 0</a> |
-| <a href="#why-ruby">Why Ruby?</a>            | <a href="#problem-1">Problem 1</a> |
-| <a href="#who-are-you">Who are you?</a>      | <a href="#problem-2">Problem 2</a> |
-| <a href="#getting-set-up">Getting set up</a> | <a href="#problem-3">Problem 3</a> |
-| <a href="#project-euler">Project Euler</a>   | <a href="#problem-4">Problem 4</a> |
-
+| <a href="#who-am-i">Who am I?</a>            | <a href="#problem-1">Problem 1</a> |
+| <a href="#why-ruby">Why Ruby?</a>            | <a href="#problem-2">Problem 2</a> |
+| <a href="#who-are-you">Who are you?</a>      | <a href="#problem-3">Problem 3</a> |
+| <a href="#getting-set-up">Getting set up</a> | <a href="#problem-4">Problem 4</a> |
+| <a href="#project-euler">Project Euler</a>   | <a href="#problem-5">Problem 5</a> |
+| <a href="#problem-0">Problem 0</a>           |                                    |
 
 Writing software is more fulfilling and enjoyable to me when I think of it as play. After 22 years as a professional developer, I still say "fun" in meetings much more than seems reasonable. "That looks like a fun ticket" (Project management nomenclature refers to development assignments in terms of "cards" or "tickets"), or after debugging a live production disaster with real money on the line: "That was a fun problem."
 
@@ -24,7 +24,7 @@ Many of my ilk feel the same way, and so programming puzzle websites tend to get
 
 Me, I prefer sites where the only constraint is eventually getting the right answer. The two I visit the most are [Advent of Code](https://adventofcode.com/), and [Project Euler](https://projecteuler.net/). AoC has story-based two part daily puzzles during December. You're one of Santa's helpers, and need to perform coding tasks to fix widgets and save Christmas.
 
-Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here. Right now I just have the registration puzzle and the first four problems in the archive, but I'll likely add to this over time.
+Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here. Right now I just have the registration puzzle and the first five problems in the archive, but I'll likely add to this over time.
 
 ## Who am I?
 
@@ -950,7 +950,9 @@ Second, it already knows how to do basic combinatorics.
 => [6, 8, 12]
 ```
 
-But we do have to teach it how to recognize a palindromic number. We'll do this by casting the integer to a string, and asking if the string is the same as its reverse.
+The `|a, b|` business is a good example of ruby magic. What the block receives in each element of the outer array, each inner array of two elements. If I say `.map { |a| }` I'll receive `[2, 3]`, then `[2, 4]`, etc as `a` in each loop. If I `.map { |a, b| }`, the enumerator automatically splits up the inner array and assigns `a = 2; b = 3` for the first element. This saves you from writing a lot of imperative code to handle the mechanics of splitting up lists of lists.
+
+So ruby is good at combining and splitting things, and reversing strings for us, but we do have to teach it how to recognize a palindromic number. We'll do this by casting the integer to a string, and asking if the string is the same as its reverse.
 
 ```pry
 >> def palindrome? n
@@ -1004,4 +1006,122 @@ Next we need to find all the products of two digit numbers, select the palindrom
 
 And to solve, just expand the range.
 
-And hey, you could read that, couldn't you?
+And hey, you could read that, couldn't you? If you've powered through to this part in one go, now's a great time to step away and grab yourself a fat piece of congratulatory cake.
+
+## Problem 5
+
+> 2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+> What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+
+This is a good example of how a naive imperative solution will fail you at scale. The naive approach is to test the problem's claim as it is written. Start with candidate answer `c = 10`, take the modulus of `c % 1` through `c % 10`, then increment c until all the moduli are 0.
+
+```pry
+>> divisors = (1..10)
+=> 1..10
+>> (10..5000).find { |c| divisors.all? { |d| (c % d).zero? } }
+=> 2520
+```
+
+You can call `.find` on a collection and it will return the first element where the block returns true. Calling `.all?` on the divisors will return true if each block in the collection returns true. in this case seeing if the numbers divide evenly. This is nice because it stops at the first failure instead of always going from 1 to 10.
+
+Now if we expand the upper candidate range to 1 million, and the divisor range to 20, we'll see why this isn't a good approach.
+
+```pry
+>> divisors = (1..20)
+=> 1..20
+>> (20..1_000_000).find { |c| divisors.all? { |d| (c % d).zero? } }
+=> nil
+```
+
+Nothing yet? How about 100 million?
+
+```pry
+>> (20..100_000_000).find { |c| divisors.all? { |d| (c % d).zero? } }
+=> nil
+>> require 'benchmark'
+=> true
+>> Benchmark.measure { (20..100_000_000).find { |c| divisors.all? { |d| (c % d).zero? } } }
+=> #<Benchmark::Tms:0x0000000124e3ff10
+ @cstime=0.0,
+ @cutime=0.0,
+ @label="",
+ @real=25.90372099999513,
+ @stime=0.06295300000000004,
+ @total=25.903057000000004,
+ @utime=25.840104000000004>
+ ```
+
+ At this scale a bad approach to a problem becomes very clear. Almost 26 second to again not find the solution, and this is on an M4 Macbook Air I bought last year.
+
+ So what's a better approach? Combine the least common multiples of all the number pairs. We can ignore 1, so start with the LCM of 2 and 3. Naturally ruby has this an an integer built-in as well:
+
+ ```pry
+ >> 2.lcm 3
+=> 6
+```
+
+The next number in the sequence is 4, so we want the LCM of 6, the old LCM, and 4.
+
+```pry
+>> 6.lcm 4
+=> 12
+```
+
+...and continue on in the same fashion
+
+```pry
+>> 12.lcm 5
+=> 60
+>> 60.lcm 6
+=> 60
+>> # 60 is a multiple of 6
+>> 60.lcm 7
+=> 420
+>> 420.lcm 8
+=> 840
+>> 840.lcm 9
+=> 2520
+```
+
+And we can stop there. 2520 ends with a zero, so it evenly divides 10.
+
+We can automate this with a reduce function. I think reduction functions come from the matrix math idea of vector reduction, reducing the dimensions of a matrix by one. Turn a grid into a list, turn a list into a single value. It's what we've been doing with `.sum` this whole time.
+
+The actual `.reduce` method keeps an accumulator between each loop, and applies the block passed to it using the current accumulator, and the next element of the list, which is what we were doing manually above. By default the first accumulator is just the first element in the list, unless you expressly say otherwise.
+
+So we can get to our 2520 with:
+
+```pry
+>> (1..10).reduce { |acc, n| acc.lcm n }
+=> 2520
+```
+
+And agin, ruby magic can handle the mechanics of that for us:
+
+```pry
+>> (1..10).reduce(&:lcm)
+=> 2520
+```
+
+I'm not going to show the answer from 1 to 20, but I do want to round it down to the last 100 million to show how long we would have waited for the naive solution to actually find an answer. You can do this with integer division, which returns an integer instead of a float.
+
+```pry
+>> (1..20).reduce(&:lcm) / 100_000_000
+=> 2
+```
+
+So somewhere between 200 and 300 million. And with a better mathematical approach, we can get that pretty fast.
+
+```pry
+>> Benchmark.measure { (1..20).reduce(&:lcm) }
+=> #<Benchmark::Tms:0x0000000124a90158
+ @cstime=0.0,
+ @cutime=0.0,
+ @label="",
+ @real=1.1999996786471456e-05,
+ @stime=4.000000000115023e-06,
+ @total=1.8000000000295557e-05,
+ @utime=1.4000000000180535e-05>
+ ```
+
+ 1e-6 seconds is a microsecond, so the "real" value at around 1.2e-5 is 12 microseconds, compared to what would have been over a minute using the naive solution.
