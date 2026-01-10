@@ -1,7 +1,7 @@
 ---
 title: "Project Euler as an introduction to programming in Ruby"
 description: "Project Euler as an introduction to programming in Ruby"
-date: "2026-01-04"
+date: "2026-01-09"
 hasMath: true
 ---
 
@@ -24,7 +24,7 @@ Many of my ilk feel the same way, and so programming puzzle websites tend to get
 
 Me, I prefer sites where the only constraint is eventually getting the right answer. The two I visit the most are [Advent of Code](https://adventofcode.com/), and [Project Euler](https://projecteuler.net/). AoC has story-based two part daily puzzles during December. You're one of Santa's helpers, and need to perform coding tasks to fix widgets and save Christmas.
 
-Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here.
+Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here. Right now I just have the registration puzzle and the first four problems in the archive, but I'll likely add to this over time.
 
 ## Who am I?
 
@@ -892,6 +892,112 @@ euler #
 
 Now just add up the numbers.
 
-
 ## Problem 3
+
+> The prime factors of $13195$ are $5, 7, 13$ and $29$.
+> What is the largest prime factor of the number $600851475143$?
+
+We can find prime numbers with a loop like...
+
+```ruby
+primes = [2, 3]
+(5..100).step(2).each { |c| primes << c if primes.all? { |p| (c % p) > 0 } }
+```
+
+Or we could write a Sieve of Eratosthenes, which is a lot faster. And then we could iterate over primes less than the square root of a number to find its factors... but we don't need to do any of that. Finding prime factors is a solved problem, and ruby has a built-in library for finding them.
+
+```pry
+>> require 'prime'
+=> true
+>> 13.prime?
+=> true
+>> 14.prime?
+=> false
+>> 13195.prime_division
+=> [[5, 1], [7, 1], [13, 1], [29, 1]]
+>> 13195.prime_division.map(&:first).max
+=> 29
+```
+
+The output of `prime_division` is an array of arrays. The inner arrays are in the format [factor, power]. 25 is $5^2$, hence:
+
+```pry
+>> 25.prime_division
+=> [[5, 2]]
+```
+So that's it, require the prime library, do prime division on the larger number from the problem, Bob's your uncle.
+
 ## Problem 4
+
+> A palindromic number reads the same both ways. The largest palindrome made from the product of two $2$-digit numbers is $9009 = 91 \times 99$.
+> Find the largest palindrome made from the product of two $3$-digit numbers.
+
+Problems like this are where ruby really shines. First, it already knows how to reverse a string.
+
+```pry
+>> "FORD v FERRARI".reverse
+=> "IRARREF v DROF"
+```
+
+Second, it already knows how to do basic combinatorics.
+
+```pry
+>> [2, 3, 4].combination(2).to_a
+=> [[2, 3], [2, 4], [3, 4]]
+>> [2, 3, 4].combination(2).map { |a, b| a * b }
+=> [6, 8, 12]
+```
+
+But we do have to teach it how to recognize a palindromic number. We'll do this by casting the integer to a string, and asking if the string is the same as its reverse.
+
+```pry
+>> def palindrome? n
+>>   s = n.to_s
+>>   s.reverse == s
+>> end
+=> :palindrome?
+>> palindrome? 4114
+=> true
+>> palindrome? 4113
+=> false
+```
+
+It's possible to add this directly to the Integer class, so it can be called with `4114.palindrome?` or passed into enumerators with `&:`, for example `products.select(&:palindrome)`. You simply open up the class and add to it.
+
+```pry
+>> class Integer
+>>   def palindrome?
+>>     s = to_s
+>>     s.reverse == s
+>>   end
+>> end
+=> :palindrome?
+>> [4114, 4113].select(&:palindrome?)
+=> [4114]
+>>
+```
+
+Modifying somebody else's class in known as [Monkeypatching](https://en.wikipedia.org/wiki/Monkey_patch), and it's dangerous. David Hansson, creator of the Ruby on Rails framework and unmitigated asshole, wrote a blog entry [Provide sharp knives](https://signalvnoise.com/svn3/provide-sharp-knives/) where he argued in favor of monkeypatching, which rails certainly does a lot of.
+
+I don't care for it, but it's there if you want it, and harmless for toy projects like solving puzzles.
+
+Next we need to find all the products of two digit numbers, select the palindromes, and find the largest.
+
+```pry
+>> def palindrome? n
+>>   s = n.to_s
+>>   s.reverse == s
+>> end
+=> :palindrome?
+>> (10..99).to_a.combination(2).map { |a, b| a * b }.select { |n| palindrome? n }.first(10)
+=> [242, 363, 484, 616, 737, 858, 979, 1001, 252, 444]
+```
+
+`.first` does what you expect, and I used it because there were over 100 palindromes. We can swap that with `max` to verify the example from the problem.
+
+```pry
+>> (10..99).to_a.combination(2).map { |a, b| a * b }.select { |n| palindrome? n }.max
+=> 9009
+```
+
+And to solve, just expand the range.
