@@ -874,7 +874,7 @@ a, b = b, a + b
 
 Ruby allows you to set multiple variables this way. The values on the right of the equals sign get evaluated, and only after that do the values get assigned. This lets us do the `a + b` part without anything going haywire.
 
-Running that now should give you the same list, with the only the even ones selected. And we didn't need to mutate an array or use an extra variable in the condition logic. Generators and yielding are hard concepts to get your head around. It took me a while to get used to them, but now to me this code reads a lot cleaner than the earlier version.
+Running that now should give you the same list, with only the even ones selected. And we didn't need to mutate an array or use an extra variable in the condition logic. Generators and yielding are hard concepts to get your head around. It took me a while to get used to them, but now to me this code reads a lot cleaner than the earlier version.
 
 ```
 euler # ruby p2.rb
