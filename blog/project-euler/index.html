@@ -31,12 +31,16 @@ Curtis Autery, pretty ok software writer.
 
 
 
-<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><a href="#who-am-i">Who am I?</a></td><td><a href="#problem-0">Problem 0</a></td></tr><tr><td><a href="#why-ruby">Why Ruby?</a></td><td><a href="#problem-1">Problem 1</a></td></tr><tr><td><a href="#who-are-you">Who are you?</a></td><td><a href="#problem-2">Problem 2</a></td></tr><tr><td><a href="#getting-set-up">Getting set up</a></td><td><a href="#problem-3">Problem 3</a></td></tr><tr><td><a href="#project-euler">Project Euler</a></td><td><a href="#problem-4">Problem 4</a></td></tr></tbody></table>
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><a href="#who-am-i">Who am I?</a></td><td><a href="#problem-1">Problem 1</a></td></tr><tr><td><a href="#why-ruby">Why Ruby?</a></td><td><a href="#problem-2">Problem 2</a></td></tr><tr><td><a href="#who-are-you">Who are you?</a></td><td><a href="#problem-3">Problem 3</a></td></tr><tr><td><a href="#getting-set-up">Getting set up</a></td><td><a href="#problem-4">Problem 4</a></td></tr><tr><td><a href="#project-euler">Project Euler</a></td><td><a href="#problem-5">Problem 5</a></td></tr><tr><td><a href="#problem-0">Problem 0</a></td><td></td></tr></tbody></table>
 <p>Writing software is more fulfilling and enjoyable to me when I think of it as play. After 22 years as a professional developer, I still say “fun” in meetings much more than seems reasonable. “That looks like a fun ticket” (Project management nomenclature refers to development assignments in terms of “cards” or “tickets”), or after debugging a live production disaster with real money on the line: “That was a fun problem.”</p>
 <p>Because no matter what’s at stake, you either enjoy what you do, or you don’t. And I enjoy this work, whether I’m greenfielding a new project, fixing a bug, adding a button to a web page, making code easier to read, making it do less work to get to the right answer, no matter the purpose of the work, there’s a puzzle to be solved. And I like puzzles.</p>
 <p>Many of my ilk feel the same way, and so programming puzzle websites tend to get pretty popular. Sites with hard problems and strict time requirements like HackerRack and LeetCode are at their core just puzzles to be solved, but they’re also used for coding interview prep, bragging rights, and disseminating imposter syndrome. I’ve poked around on them, but the vibe seems wrong. If you decide to visit that world, go for it, and remember that hashmaps are your friend.</p>
 <p>Me, I prefer sites where the only constraint is eventually getting the right answer. The two I visit the most are <a href="https://adventofcode.com/" target="_blank" rel="noreferrer">Advent of Code</a>, and <a href="https://projecteuler.net/" target="_blank" rel="noreferrer">Project Euler</a>. AoC has story-based two part daily puzzles during December. You’re one of Santa’s helpers, and need to perform coding tasks to fix widgets and save Christmas.</p>
-<p>Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I’d like to take you through some of them here. Right now I just have the registration puzzle and the first four problems in the archive, but I’ll likely add to this over time.</p>
+<p>Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I’d like to take you through some of them here. Right now I just have the registration puzzle and the first five problems in the archive, but I’ll likely add to this over time.</p>
 <h2 id="who-am-i">Who am I?</h2>
 <p>I’m Curtis. I’m a nerd. I don’t use that word self-deprecatingly, even though it was used as a slur in my childhood. In recent years I’ve volunteered in schools teaching tech classes, and one of the things that has brought me great joy is the complete abandon that today’s kids call themselves nerds and geeks as a badge of honor.</p>
 <p>I’m nobody famous or nerd-famous. I’ve been a professional software writer since 2003. I’ve been “online” before the consumer internet boom of 1995, when that meant either using a dial-up modem to call a timeshare service like CompuServe or Prodigy, or calling a local text-only BBS.</p>
@@ -579,7 +583,8 @@ Find the largest palindrome made from the product of two <span class="katex"><sp
 <span class="line"><span style="color:#E1E4E8">=> [[</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">], [</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">], [</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">]]</span></span>
 <span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">[2, 3, 4].combination(2).map { |a, b| a * b }</span></span>
 <span class="line"><span style="color:#E1E4E8">=> [</span><span style="color:#79B8FF">6</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">12</span><span style="color:#E1E4E8">]</span></span></code></pre>
-<p>But we do have to teach it how to recognize a palindromic number. We’ll do this by casting the integer to a string, and asking if the string is the same as its reverse.</p>
+<p>The <code>|a, b|</code> business is a good example of ruby magic. What the block receives in each element of the outer array, each inner array of two elements. If I say <code>.map { |a| }</code> I’ll receive <code>[2, 3]</code>, then <code>[2, 4]</code>, etc as <code>a</code> in each loop. If I <code>.map { |a, b| }</code>, the enumerator automatically splits up the inner array and assigns <code>a = 2; b = 3</code> for the first element. This saves you from writing a lot of imperative code to handle the mechanics of splitting up lists of lists.</p>
+<p>So ruby is good at combining and splitting things, and reversing strings for us, but we do have to teach it how to recognize a palindromic number. We’ll do this by casting the integer to a string, and asking if the string is the same as its reverse.</p>
 <pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">def palindrome? n</span></span>
 <span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">  s = n.to_s</span></span>
 <span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">  s.reverse == s</span></span>
@@ -614,4 +619,76 @@ Find the largest palindrome made from the product of two <span class="katex"><sp
 <pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(10..99).to_a.combination(2).map { |a, b| a * b }.select { |n| palindrome? n }.max</span></span>
 <span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">9009</span></span></code></pre>
 <p>And to solve, just expand the range.</p>
-<p>And hey, you could read that, couldn’t you?</p>  </article> </body></html>
+<p>And hey, you could read that, couldn’t you? If you’ve powered through to this part in one go, now’s a great time to step away and grab yourself a fat piece of congratulatory cake.</p>
+<h2 id="problem-5">Problem 5</h2>
+<blockquote>
+<p>2520 is the smallest number that can be divided by each of the numbers from 1 to 10 without any remainder.
+What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?</p>
+</blockquote>
+<p>This is a good example of how a naive imperative solution will fail you at scale. The naive approach is to test the problem’s claim as it is written. Start with candidate answer <code>c = 10</code>, take the modulus of <code>c % 1</code> through <code>c % 10</code>, then increment c until all the moduli are 0.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">divisors = (1..10)</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">..</span><span style="color:#79B8FF">10</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(10..5000).find { |c| divisors.all? { |d| (c % d).zero? } }</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">2520</span></span></code></pre>
+<p>You can call <code>.find</code> on a collection and it will return the first element where the block returns true. Calling <code>.all?</code> on the divisors will return true if each block in the collection returns true. in this case seeing if the numbers divide evenly. This is nice because it stops at the first failure instead of always going from 1 to 10.</p>
+<p>Now if we expand the upper candidate range to 1 million, and the divisor range to 20, we’ll see why this isn’t a good approach.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">divisors = (1..20)</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">..</span><span style="color:#79B8FF">20</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(20..1_000_000).find { |c| divisors.all? { |d| (c % d).zero? } }</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">nil</span></span></code></pre>
+<p>Nothing yet? How about 100 million?</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(20..100_000_000).find { |c| divisors.all? { |d| (c % d).zero? } }</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">nil</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">require 'benchmark'</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">Benchmark.measure { (20..100_000_000).find { |c| divisors.all? { |d| (c % d).zero? } } }</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#6A737D">#&#x3C;Benchmark::Tms:0x0000000124e3ff10</span></span>
+<span class="line"><span style="color:#E1E4E8"> @cstime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @cutime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @label</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">""</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @real</span><span style="color:#F97583">=</span><span style="color:#79B8FF">25.90372099999513</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @stime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.06295300000000004</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @total</span><span style="color:#F97583">=</span><span style="color:#79B8FF">25.903057000000004</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @utime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">25.840104000000004</span><span style="color:#F97583">></span></span></code></pre>
+<p>At this scale a bad approach to a problem becomes very clear. Almost 26 second to again not find the solution, and this is on an M4 Macbook Air I bought last year.</p>
+<p>So what’s a better approach? Combine the least common multiples of all the number pairs. We can ignore 1, so start with the LCM of 2 and 3. Naturally ruby has this an an integer built-in as well:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">2.lcm 3</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">6</span></span></code></pre>
+<p>The next number in the sequence is 4, so we want the LCM of 6, the old LCM, and 4.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">6.lcm 4</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">12</span></span></code></pre>
+<p>…and continue on in the same fashion</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">12.lcm 5</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">60</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">60.lcm 6</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">60</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8"># 60 is a multiple of 6</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">60.lcm 7</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">420</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">420.lcm 8</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">840</span></span>
+<span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">840.lcm 9</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">2520</span></span></code></pre>
+<p>And we can stop there. 2520 ends with a zero, so it evenly divides 10.</p>
+<p>We can automate this with a reduce function. I think reduction functions come from the matrix math idea of vector reduction, reducing the dimensions of a matrix by one. Turn a grid into a list, turn a list into a single value. It’s what we’ve been doing with <code>.sum</code> this whole time.</p>
+<p>The actual <code>.reduce</code> method keeps an accumulator between each loop, and applies the block passed to it using the current accumulator, and the next element of the list, which is what we were doing manually above. By default the first accumulator is just the first element in the list, unless you expressly say otherwise.</p>
+<p>So we can get to our 2520 with:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(1..10).reduce { |acc, n| acc.lcm n }</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">2520</span></span></code></pre>
+<p>And agin, ruby magic can handle the mechanics of that for us:</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(1..10).reduce(&#x26;:lcm)</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">2520</span></span></code></pre>
+<p>I’m not going to show the answer from 1 to 20, but I do want to round it down to the last 100 million to show how long we would have waited for the naive solution to actually find an answer. You can do this with integer division, which returns an integer instead of a float.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">(1..20).reduce(&#x26;:lcm) / 100_000_000</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#79B8FF">2</span></span></code></pre>
+<p>So somewhere between 200 and 300 million. And with a better mathematical approach, we can get that pretty fast.</p>
+<pre class="astro-code syntax-theme" style="background-color:#222;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="pry"><code><span class="line"><span style="color:#FFAB70">>> </span><span style="color:#E1E4E8">Benchmark.measure { (1..20).reduce(&#x26;:lcm) }</span></span>
+<span class="line"><span style="color:#E1E4E8">=> </span><span style="color:#6A737D">#&#x3C;Benchmark::Tms:0x0000000124a90158</span></span>
+<span class="line"><span style="color:#E1E4E8"> @cstime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @cutime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @label</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">""</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @real</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1.1999996786471456e-05</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @stime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">4.000000000115023e-06</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @total</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1.8000000000295557e-05</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8"> @utime</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1.4000000000180535e-05</span><span style="color:#F97583">></span></span></code></pre>
+<p>1e-6 seconds is a microsecond, so the “real” value at around 1.2e-5 is 12 microseconds, compared to what would have been over a minute using the naive solution.</p>  </article> </body></html>
