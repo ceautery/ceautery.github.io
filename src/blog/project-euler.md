@@ -425,7 +425,9 @@ Let's run that in pry, just copy and paste the whole chunk of code into pry and 
 => ["Can't divide by zero", 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0]
 ```
 
-Using `2.0` instead of `2` for the division makes ruby treat the numbers to be floating point numbers instead of integers. More on that later. And yes, just like you can call `odd?` on a number, you can call `.zero?` on it to see if it's a zero. That does the same as `n == 0`.
+Using `2.0` instead of `2` for the division makes ruby treat the numbers to be floating point numbers instead of integers. "Floats" or "longs" are numbers that _can_ have digits after the decimal. Internally they're stored in binary, which can't perfectly represent a base 10 decimal, so sometimes they misbehave if you're not very careful.
+
+And yes, just like you can call `odd?` on a number, you can call `.zero?` on it to see if it's a zero. That does the same as `n == 0`.
 
 ```ruby
 .select(&:odd?)
@@ -499,7 +501,7 @@ def sum_odd_squares n
 end
 ```
 
-To define a method, start with `def`, give the method a name (`snake_case` is a convention for naming variables and methods in ruby), and a "signature", or the variables it expects. We just have one variable, so we don't need to wrap it in anything special. We'll get into what to do with more complicated signatures later.
+To define a method, start with `def`, give the method a name (`snake_case` is a convention for naming variables and methods in ruby), and a "signature", or the variables it expects. We just have one variable, so we don't need to wrap it in anything special. If we need more than one variable, we'll use parenthesis so it's less ambiguous, but often the ruby interpreter can sort everything out anyway.
 
 Before we run that, there's some nuance in the description: The first N odd numbers. Our original loop goes to 500,000 by twos, so that would be the first 250,000 odd numbers. We can verify that by calling `.size` after `.step`:
 
@@ -824,7 +826,7 @@ puts fib
 
 From here you can just select the even numbers and sum them and be done, but... I don't like the way this looks. This would look better if we could do it with functional programming somehow. Mutating an array in a loop like this is easy to get wrong, and creating a variable _inside_ a condition like that just looks clumsy.
 
-A good tool to help us out here is an enumerator.  Enumerators are functions that yields one piece of information at a time back to the caller. It's what happens when you call `.each` on something. `each` yields one item of an array at a time to the code block you pass to it. You're familiar with using `.map` on arrays and ranges. Behind the scene `map` is calling `each` and collecting the results into the array it return.
+A good tool to help us out here is an enumerator.  Enumerators are functions that yields one piece of information at a time back to the caller. It's what happens when you call `.each` on something. `each` yields one item of an array at a time to the code block you pass to it. You're familiar with using `.map` on arrays and ranges. Behind the scene `map` is calling `each` and collecting the results into the array it returns.
 
 Here's an example of an `each` enumerator and how you can use it.
 
