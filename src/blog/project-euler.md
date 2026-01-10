@@ -1003,3 +1003,5 @@ Next we need to find all the products of two digit numbers, select the palindrom
 ```
 
 And to solve, just expand the range.
+
+And hey, you could read that, couldn't you?
