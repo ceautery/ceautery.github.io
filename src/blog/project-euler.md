@@ -7,14 +7,13 @@ hasMath: true
 
 # Project Euler as an intro to programming in Ruby
 
-|                                              |                                    |
-| -------------------------------------------- | ---------------------------------- |
-| <a href="#who-am-i">Who am I?</a>            | <a href="#problem-1">Problem 1</a> |
-| <a href="#why-ruby">Why Ruby?</a>            | <a href="#problem-2">Problem 2</a> |
-| <a href="#who-are-you">Who are you?</a>      | <a href="#problem-3">Problem 3</a> |
-| <a href="#getting-set-up">Getting set up</a> | <a href="#problem-4">Problem 4</a> |
-| <a href="#project-euler">Project Euler</a>   | <a href="#problem-5">Problem 5</a> |
-| <a href="#problem-0">Problem 0</a>           | <a href="#problem-6">Problem 6</a> |
+|                                              |                                    |                                    |
+| -------------------------------------------- | ---------------------------------- |------------------------------------|
+| <a href="#who-am-i">Who am I?</a>            | <a href="#problem-0">Problem 0</a> | <a href="#problem-5">Problem 5</a> |
+| <a href="#why-ruby">Why Ruby?</a>            | <a href="#problem-1">Problem 1</a> | <a href="#problem-6">Problem 6</a> |
+| <a href="#who-are-you">Who are you?</a>      | <a href="#problem-2">Problem 2</a> | <a href="#problem-7">Problem 7</a> |
+| <a href="#getting-set-up">Getting set up</a> | <a href="#problem-3">Problem 3</a> | <a href="#problem-8">Problem 8</a> |
+| <a href="#project-euler">Project Euler</a>   | <a href="#problem-4">Problem 4</a> | <a href="#problem-9">Problem 9</a> |
 
 Writing software is more fulfilling and enjoyable to me when I think of it as play. After 22 years as a professional developer, I still say "fun" in meetings much more than seems reasonable. "That looks like a fun ticket" (Project management nomenclature refers to development assignments in terms of "cards" or "tickets"), or after debugging a live production disaster with real money on the line: "That was a fun problem."
 
@@ -24,7 +23,7 @@ Many of my ilk feel the same way, and so programming puzzle websites tend to get
 
 Me, I prefer sites where the only constraint is eventually getting the right answer. The two I visit the most are [Advent of Code](https://adventofcode.com/), and [Project Euler](https://projecteuler.net/). AoC has story-based two part daily puzzles during December. You're one of Santa's helpers, and need to perform coding tasks to fix widgets and save Christmas.
 
-Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here. Right now I just have the registration puzzle and the first six problems in the archive, but I'll likely add to this over time.
+Project Euler has straight math, grid, and combinatorics problems, releasing new problems at around one per week. They should hit problem 1,000 sometime this summer. The first handful of problems serve as a great introduction to software writing principles, and I'd like to take you through some of them here.
 
 ## Who am I?
 
@@ -126,7 +125,7 @@ euler # pry
 
 What's with the quotes and backslashes?
 
-Anything inside of quotes or apostrophes (or double-quotes and single-quote in programmer parlance) is a [string](https://en.wikipedia.org/wiki/String_(computer_science)). It's a way to distinguish printed text from ruby commands. In single-quotes, the characters inside are the literal characters that will get printed, written to disk, added to a database column, what have you. Inside of double-quotes, backslash has a specific meaning, an [escape character](https://en.wikipedia.org/wiki/Escape_character). The character that comes next has a special meaning. `\n` is a newline, delimiting where a printed line ends and the next one begins. `\"` means a literal double-quote, to distinguish it from the end of the string itself.
+Anything inside of quotes or apostrophes (or double-quotes and single-quote in programmer parlance) is a [string](https://en.wikipedia.org/wiki/String_(computer_science)). It's a way to distinguish printed text from ruby commands. In single-quotes, the characters inside are the literal characters that will get printed, written to disk, added to a database column, what have you. Inside of double-quotes, backslash has a specific meaning, an [escape character](https://en.wikipedia.org/wiki/Escape_character). The character that comes next has a special meaning. `\n` is a newline (or line-feed), delimiting where a printed line ends and the next one begins. `\"` means a literal double-quote, to distinguish it from the end of the string itself.
 
 What would be printed to the screen after the read command then would be:
 
@@ -1235,3 +1234,273 @@ euler #
 ```
 
 Sure enough, 2640. Now just call it with the problem's real n.
+
+## Problem 7
+
+> By listing the first six prime numbers: $2, 3, 5, 7, 11$, and $13$, we can see that the $6$th prime is $13$.
+> What is the $10\,001$st prime number?
+
+In ruby, `Prime` inherits from Enumerable, so it has a `take` method like we used back in problem 2.
+
+```ruby
+require 'prime'
+Prime.take(6).last # returns 13
+```
+
+```pry
+>> require 'prime'
+=> true
+>> Prime.take 6
+=> [2, 3, 5, 7, 11, 13]
+>> Prime.take(6).last
+=> 13
+```
+
+That's okay. Not every puzzle makes us put on our thinking caps.
+
+## Problem 8
+
+> The four adjacent digits in the $1000$-digit number that have the greatest product are $9 \times 9 \times 8 \times 9 = 5832$.
+> 
+> ```
+> 73167176531330624919225119674426574742355349194934
+> 96983520312774506326239578318016984801869478851843
+> 85861560789112949495459501737958331952853208805511
+> 12540698747158523863050715693290963295227443043557
+> 66896648950445244523161731856403098711121722383113
+> 62229893423380308135336276614282806444486645238749
+> 30358907296290491560440772390713810515859307960866
+> 70172427121883998797908792274921901699720888093776
+> 65727333001053367881220235421809751254540594752243
+> 52584907711670556013604839586446706324415722155397
+> 53697817977846174064955149290862569321978468622482
+> 83972241375657056057490261407972968652414535100474
+> 82166370484403199890008895243450658541227588666881
+> 16427171479924442928230863465674813919123162824586
+> 17866458359124566529476545682848912883142607690042
+> 24219022671055626321111109370544217506941658960408
+> 07198403850962455444362981230987879927244284909188
+> 84580156166097919133875499200524063689912560717606
+> 05886116467109405077541002256983155200055935729725
+> 71636269561882670428252483600823257530420752963450
+> ```
+> 
+> Find the thirteen adjacent digits in the $1000$-digit number that have the greatest product. What is the value of this product?
+
+One of the difficulties in this problem is getting that block of numbers into a a place where we can read and process it. You can cut and paste it out of here into a new file in your code editor, or you can right-click and save [p8input.txt](/euler-inputs/p8input.txt) here, and save it to or move it into your project directory.
+
+Good file handling is crucial in writing software, so you need to get really good at managing save dialogs, know what folder your terminal is in, and where your project is stored. Here's a tip for save dialogs on a mac: cmd-shift-g, then just type in to path you want. `~` for your home directory works there, too.
+
+Save the block of numbers as-is, the fact that it's on multiple lines isn't a big deal. Once you've got it in place, let's take a look at some of the ways we can read it in.
+
+```pry
+>> File.read 'p8input.txt'
+=> "73167176531330624919225119674426574742355349194934\n96983520312774506326239578318016984801869478851843\n85861560789112949495459501737958331952853208805511\n12540698747158523863050715693290963295227443043557\n66896648950445244523161731856403098711121722383113\n62229893423380308135336276614282806444486645238749\n30358907296290491560440772390713810515859307960866\n70172427121883998797908792274921901699720888093776\n65727333001053367881220235421809751254540594752243\n52584907711670556013604839586446706324415722155397\n53697817977846174064955149290862569321978468622482\n83972241375657056057490261407972968652414535100474\n82166370484403199890008895243450658541227588666881\n16427171479924442928230863465674813919123162824586\n17866458359124566529476545682848912883142607690042\n24219022671055626321111109370544217506941658960408\n07198403850962455444362981230987879927244284909188\n84580156166097919133875499200524063689912560717606\n05886116467109405077541002256983155200055935729725\n71636269561882670428252483600823257530420752963450\n"
+```
+
+`File.read` will read the whole file in as a single string. In the perl community we call this "slurping" a file. From here we can assign the string to a variable, and then get rid of the newlines.
+
+```pry
+>> input = File.read('p8input.txt').delete "\n"
+=> "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450"
+>> input.length
+=> 1000
+```
+
+In this case, each line is part of a larger whole. If each line was meaningful on its own, an alternate approach is to read the file in as an array of lines.
+
+```pry
+>> File.readlines('p8input.txt')
+=> ["73167176531330624919225119674426574742355349194934\n",
+ "96983520312774506326239578318016984801869478851843\n",
+ "85861560789112949495459501737958331952853208805511\n",
+ "12540698747158523863050715693290963295227443043557\n",
+ "66896648950445244523161731856403098711121722383113\n",
+ "62229893423380308135336276614282806444486645238749\n",
+ "30358907296290491560440772390713810515859307960866\n",
+ "70172427121883998797908792274921901699720888093776\n",
+ "65727333001053367881220235421809751254540594752243\n",
+ "52584907711670556013604839586446706324415722155397\n",
+ "53697817977846174064955149290862569321978468622482\n",
+ "83972241375657056057490261407972968652414535100474\n",
+ "82166370484403199890008895243450658541227588666881\n",
+ "16427171479924442928230863465674813919123162824586\n",
+ "17866458359124566529476545682848912883142607690042\n",
+ "24219022671055626321111109370544217506941658960408\n",
+ "07198403850962455444362981230987879927244284909188\n",
+ "84580156166097919133875499200524063689912560717606\n",
+ "05886116467109405077541002256983155200055935729725\n",
+ "71636269561882670428252483600823257530420752963450\n"]
+```
+
+`readlines` takes an optional [keyword argument](https://docs.ruby-lang.org/en/4.0/syntax/calling_methods_rdoc.html#label-Keyword+Arguments) (a separate set of named arguments that you send after the positional ones) "chomp" that will take care of the newlines for you.
+
+```pry
+>> File.readlines('p8input.txt', chomp: true)
+=> ["73167176531330624919225119674426574742355349194934",
+ "96983520312774506326239578318016984801869478851843",
+ "85861560789112949495459501737958331952853208805511",
+ "12540698747158523863050715693290963295227443043557",
+ "66896648950445244523161731856403098711121722383113",
+ "62229893423380308135336276614282806444486645238749",
+ "30358907296290491560440772390713810515859307960866",
+ "70172427121883998797908792274921901699720888093776",
+ "65727333001053367881220235421809751254540594752243",
+ "52584907711670556013604839586446706324415722155397",
+ "53697817977846174064955149290862569321978468622482",
+ "83972241375657056057490261407972968652414535100474",
+ "82166370484403199890008895243450658541227588666881",
+ "16427171479924442928230863465674813919123162824586",
+ "17866458359124566529476545682848912883142607690042",
+ "24219022671055626321111109370544217506941658960408",
+ "07198403850962455444362981230987879927244284909188",
+ "84580156166097919133875499200524063689912560717606",
+ "05886116467109405077541002256983155200055935729725",
+ "71636269561882670428252483600823257530420752963450"]
+ ```
+
+ But for our purposes, `File.read` is better. The next thing we want to do is turn the string into an array of integers. Strings have a method `.chars` that creates an array of each character, and from there we can map them over `to_i`.
+
+ ```pry
+ >> input = File.read('p8input.txt').delete("\n")
+=> "7316717653133062491922511967442657474235534919493496983520312774506326239578318016984801869478851843858615607891129494954595017379583319528532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450"
+>> input.chars.first 15
+=> ["7", "3", "1", "6", "7", "1", "7", "6", "5", "3", "1", "3", "3", "0", "6"]
+>> input.chars.map(&:to_i).first 15
+=> [7, 3, 1, 6, 7, 1, 7, 6, 5, 3, 1, 3, 3, 0, 6]
+```
+
+We'll be grouping numbers into sequential sets of 4 (and then 13) digits and multiplying them all together. Notice the second to last number is a zero? It will save us a lot of CPU cycles if we don't bother with groups of numbers that have a zero in them. Keep that in the back of your head for now.
+
+Ruby has two array methods to create groups of sequential numbers, `each_cons` and `each_slice`, and they behave slightly differently.
+
+```pry
+>> [1, 2, 3, 4, 5, 6, 7, 8].each_cons(4).to_a
+=> [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6], [4, 5, 6, 7], [5, 6, 7, 8]]
+>> [1, 2, 3, 4, 5, 6, 7, 8].each_slice(4).to_a
+=> [[1, 2, 3, 4], [5, 6, 7, 8]]
+```
+
+`each_cons` is the one we want, since we need to just advance the index by one to get each possible collection of 4 numbers. I don't know the origin of why "cons" is in the method name. It might just mean consecutive, or it might be a refence to the [lisp cons](https://en.wikibooks.org/wiki/Common_Lisp/Reference/cons) construct.
+
+From there we need to use reduce to create the products, then find the biggest one.
+
+```pry
+>> [1, 2, 3, 4, 5, 6, 7, 8].each_cons(4).map { |group| group.reduce { |acc, n| acc * n } }
+=> [24, 120, 360, 840, 1680]
+>> [1, 2, 3, 4, 5, 6, 7, 8].each_cons(4).map { |group| group.reduce { |acc, n| acc * n } }.max
+=> 1680
+```
+
+There's a syntax sugar version of reducing by a math expression, just put `:` before the operator.
+
+```pry
+>> [1, 2, 3, 4, 5, 6, 7, 8].each_cons(4).map { |g| g.reduce(:*) }.max
+=> 1680
+```
+
+Now create p8.rb and let's put everything together.
+
+```ruby
+input = File.read('p8input.txt').delete("\n")
+nums = input.chars.map(&:to_i);
+puts nums.each_cons(4).map { |g| g.reduce(:*) }.max
+```
+
+And just run that to get the solution to the problem's example.
+
+```
+euler # ruby p8.rb
+5832
+euler #
+```
+
+Now, back to our "0" issue. Even at groups of 13, you'd have to use `Benchmark` to see the speed difference, but we shouldn't do any multiplication on groups that have a 0 in them.
+
+```ruby
+input = File.read('p8input.txt').delete("\n")
+nums = input.chars.map(&:to_i);
+groups = nums.each_cons(4).reject { |g| g.any? { |n| n.zero? } }
+puts groups.map { |g| g.reduce(:*) }.max
+```
+
+`reject` is the opposite of `select`, anything that matches the condition is not included in the list `reject` returns. `any?` is like `all?`, but it returns true if any element in the list passes the condition.
+
+And to get your solution, just swap 4 for 13.
+
+## Problem 9
+
+> A Pythagorean triplet is a set of three natural numbers, $a \lt b \lt c$, for which,
+> 
+> $$a^2 + b^2 = c^2.$$
+> 
+> For example, $3^2 + 4^2 = 9 + 16 = 25 = 5^2$.
+> 
+> There exists exactly one Pythagorean triplet for which $a + b + c = 1000$.
+> 
+> Find the product $abc$.
+
+This is a well known math problem, and you can find the triplet in question with a simple Google search for "pythagorean triplet that sums to 1000". So because the solution is already widely available, this will be the exception that proves the rule, and I won't shy away from showing the actual triplet here.
+
+I'm sure you remember the Pythagorean theorem $a^2 + b^2 = c^2.$ from school, for finding the hypotenuse of a right triangle. Pythagorean triples are solutions to that equation where all the lengths are whole numbers.
+
+The naive solution in ruby isn't all that bad. $a$ and $b$ can be pulled from `combination(2)` of the range `1..1000`, find $c$ with arithmetic, then find the first valid triple:
+
+```pry
+>> (1..1000).to_a.combination(2).find do |a, b|
+>>   c = 1000 - (a + b)
+>>   a ** 2 + b ** 2 == c ** 2
+>> end
+=> [200, 375]
+```
+
+And then recalculate c, find `a * b * c` to get the problem's solution, and we're done. Technically this approach is wrong since half of the Cs will be negative, but it happens to give the right answer. We can doctor up that approach and make it safer, but like some of these problems, a better pure math solution already exists. There is a generator for Pythagorean triples that was introduced in Eulid's Elements. Sort of. It appears as a lemma, so we can assume it was proven before Euclid's time, and it talks about bisecting line segments and such, but the core concept is in there.
+
+Basically if you have two positive integers, m and n that are coprime to each other, where $m > n$, you can generate a Pythagorean triple $a, b, c$ with:
+
+$$a=m^{2}-n^{2}, b=2mn, c=m^{2}+n^{2}$$
+
+To find the right generator, we don't need the individual a, b, and c, just their sum, so we can simplify the generator equations.
+
+$$m^{2}-n^{2}+2mn+m^{2}+n^{2} = 2m^2 + 2mn$$
+
+```pry
+>> n, m = (1..100).to_a.combination(2).find { |n, m| 2 * m ** 2 + 2 * m * n == 1000  }
+=> [5, 20]
+>> a, b, c = m ** 2 - n ** 2, 2 * m * n, m ** 2 + n ** 2
+=> [375, 200, 425]
+>> a + b + c
+=> 1000
+>> a ** 2 + b ** 2 == c ** 2
+=> true
+```
+
+Notice my ordering of n and m here. Ruby outputs combinations with the smaller number first.
+
+That shows that this method works, now let's turn that into a script that's a little more readable. Put this into p9.rb:
+
+```ruby
+def gen(m, n)
+  [m ** 2 - n ** 2, 2 * m * n, m ** 2 + n ** 2]
+end
+
+a, b, c = (1..100).to_a.combination(2)
+  .map { |n, m| gen(m, n) }
+  .find { |arr| arr.sum == 1000 }
+
+puts a, b, c
+```
+
+In ruby files you can chain methods together on separate lines to make things easier to read.
+
+Running this produces:
+
+```
+euler # ruby p9.rb
+375
+200
+425
+euler #
+```
+
+And to get the problem's solution, just multiply those together.
