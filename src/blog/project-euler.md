@@ -31,7 +31,7 @@ I'm Curtis. I'm a nerd. I don't use that word self-deprecatingly, even though it
 
 I'm nobody famous or nerd-famous. I've been a professional software writer since 2003. I've been "online" before the consumer internet boom of 1995, when that meant either using a dial-up modem to call a timeshare service like CompuServe or Prodigy, or calling a local text-only BBS.
 
-I've been a hobbyist programmer since before Java was a programming language, Linux was an operating system, or Google was a website. I've written code in BASIC, Pascal, C, C++. Java, Javascript, APL, DYL-280, COBOL, Perl, Awk, Ruby, and languages like Bash, SQL, and JCL that arguably aren't "real" programming languages, but I think they are.
+I've been a hobbyist programmer since before Java was a programming language, Linux was an operating system, or Google was a website. I've written code in BASIC, Pascal, C, C++, Java, Javascript, APL, DYL-280, COBOL, Perl, Awk, Ruby, and languages like Bash, SQL, and JCL that arguably aren't "real" programming languages, but I think they are.
 
 The language I've liked the best out of all of them, since I started fiddling with code as a boy on my Apple // in the 1980s, is Ruby. Hands down.
 
