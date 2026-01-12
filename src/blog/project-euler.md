@@ -1289,7 +1289,7 @@ That's okay. Not every puzzle makes us put on our thinking caps.
 
 One of the difficulties in this problem is getting that block of numbers into a a place where we can read and process it. You can cut and paste it out of here into a new file in your code editor, or you can right-click and save [p8input.txt](/euler-inputs/p8input.txt) here, and save it to or move it into your project directory.
 
-Good file handling is crucial in writing software, so you need to get really good at managing save dialogs, know what folder your terminal is in, and where your project is stored. Here's a tip for save dialogs on a mac: cmd-shift-g, then just type in to path you want. `~` for your home directory works there, too.
+Good file handling is crucial in writing software, so you need to get really good at managing save dialogs, know what folder your terminal is in, and where your project is stored. Here's a tip for save dialogs on a mac: cmd-shift-g, then just type in the path you want. `~` for your home directory works there, too.
 
 Save the block of numbers as-is, the fact that it's on multiple lines isn't a big deal. Once you've got it in place, let's take a look at some of the ways we can read it in.
 
