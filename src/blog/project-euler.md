@@ -500,7 +500,7 @@ def sum_odd_squares n
 end
 ```
 
-To define a method, start with `def`, give the method a name (`snake_case` is a convention for naming variables and methods in ruby), and a "signature", or the variables it expects. We just have one variable, so we don't need to wrap it in anything special. If we need more than one variable, we'll use parenthesis so it's less ambiguous, but often the ruby interpreter can sort everything out anyway.
+To define a method, start with `def`, give the method a name (`snake_case` is a convention for naming variables and methods in ruby), and a "signature", or the variables it expects. We just have one variable, so we don't need to wrap it in anything special. If we need more than one variable, we'll use parentheses so it's less ambiguous, but often the ruby interpreter can sort everything out anyway.
 
 Before we run that, there's some nuance in the description: The first N odd numbers. Our original loop goes to 500,000 by twos, so that would be the first 250,000 odd numbers. We can verify that by calling `.size` after `.step`:
 
@@ -522,7 +522,7 @@ If you paste that into pry and hit enter, then call it with 250,000, you'll get 
 
 One of the things you probably noticed is that both methods seem to run at the same speed, even though the first one is clearly doing more work. Computers are pretty fast, and CPUs are great at doing things in a loop, so a half-million of something is child's play for today's computers.
 
-We have to look a little closer to see that the algebra method is doing a lot less work. Fortunately, ruby has a handy benchmarking class. It isn't loading into memory at first, so we have to `require` it to get it loaded.
+We have to look a little closer to see that the algebra method is doing a lot less work. Fortunately, ruby has a handy benchmarking class. It isn't loaded into memory at first, so we have to `require` it.
 
 ```pry
 >> require 'benchmark'
@@ -706,7 +706,7 @@ Array#methods:
   count          flatten!      pretty_print  size
 ```
 
-There are a few methods that add a single element to the end an array. `<<`, `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was preferred because it was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. In modern ruby versions these methods all do the same thing now, they "mutate" (change) the array in-place.
+There are a few methods that add a single element to the end of an array. `<<`, `append`, and `push` are all aliases for each other. In earlier versions of ruby, shovel was preferred because it was the only way to add to an array and keep the same [object ID](https://ruby-doc.org/current/Object.html#method-i-object_id), the other methods all created a new object, which could cause some unpredictable behavior. In modern ruby versions these methods all do the same thing now, they "mutate" (change) the array in-place.
 
 ```pry
 >> arr << 9
@@ -747,7 +747,7 @@ Ruby also let's you see elements by negative index, with -1 being the last eleme
 => [1, 2, 3, 5, 8, 13]
 ```
 
-So to sole the problem properly, we need to start at `[1, 2]`, then build the length out to ten elements, and then again until the next number would be over 4 million, then sum the even ones. This problem is fiddly enough that we should solve it in a ruby file instead of in pry. Type `exit` into pry or press ctrl-d, to get back to a command prompt.
+So to solve the problem properly, we need to start at `[1, 2]`, then build the length out to ten elements, and then again until the next number would be over 4 million, then sum the even ones. This problem is fiddly enough that we should solve it in a ruby file instead of in pry. Type `exit` into pry or press ctrl-d, to get back to a command prompt.
 
 Use your code editor to create a new file in the `~/dev/euler` folder, and call it `p2.rb`. When you want to test what it does, from the terminal type `ruby p2.rb`. Anything that is printed to the screen will be because you put it there with a `puts` ruby command.
 
@@ -779,7 +779,7 @@ euler #
 
 Our `next_fib` method can't see the `fib` variable declared in the main program logic. This is a [variable scope](https://www.rubyguides.com/2019/03/ruby-scope-binding/) problem. Basically methods don't have access to any variables that aren't either in the method signature (the list of variables the method expects) or declared inside the method.
 
-There are three variable types with more visibility, global, [class and instance](https://www.ruby-lang.org/en/documentation/faq/8/) variables, and constants. Global variable are variables that every piece of a program can see and mutate, and using them is a bad practice. For a simple script using a single global variable wouldn't be the end of the world. All we would need to do is replace `fib` with `$fib` everywhere. But we can do better.
+There are three variable types with more visibility, global, [class and instance](https://www.ruby-lang.org/en/documentation/faq/8/) variables, and constants. Global variables are variables that every piece of a program can see and mutate, and using them is a bad practice. For a simple script using a single global variable wouldn't be the end of the world. All we would need to do is replace `fib` with `$fib` everywhere. But we can do better.
 
 `next_fib` shouldn't care about the rest of the program. It should accept any array passed to it, and not care what happens next. This is the single responsibility principle. There's a lot of comp-sci theory around SRP and "separation of concerns" that talks in terms of actors and modules, but in simpler terms a method should do one thing well. So let's give `next_fib` a signature.
 
@@ -829,7 +829,7 @@ puts fib
 
 From here you can just select the even numbers and sum them and be done, but... I don't like the way this looks. This would look better if we could do it with functional programming somehow. Mutating an array in a loop like this is easy to get wrong, and creating a variable _inside_ a condition like that just looks clumsy.
 
-A good tool to help us out here is an enumerator.  Enumerators are functions that yields one piece of information at a time back to the caller. It's what happens when you call `.each` on something. `each` yields one item of an array at a time to the code block you pass to it. You're familiar with using `.map` on arrays and ranges. Behind the scene `map` is calling `each` and collecting the results into the array it returns.
+A good tool to help us out here is an enumerator.  Enumerators are functions that yields one piece of information at a time back to the caller. It's what happens when you call `.each` on something. `each` yields one item of an array at a time to the code block you pass to it. You're familiar with using `.map` on arrays and ranges. Behind the scenes `map` is calling `each` and collecting the results into the array it returns.
 
 Here's an example of an `each` enumerator and how you can use it.
 
@@ -953,7 +953,7 @@ Second, it already knows how to do basic combinatorics.
 => [6, 8, 12]
 ```
 
-The `|a, b|` business is a good example of ruby magic. What the block receives in each element of the outer array, each inner array of two elements. If I say `.map { |a| }` I'll receive `[2, 3]`, then `[2, 4]`, etc as `a` in each loop. If I `.map { |a, b| }`, the enumerator automatically splits up the inner array and assigns `a = 2; b = 3` for the first element. This saves you from writing a lot of imperative code to handle the mechanics of splitting up lists of lists.
+The `|a, b|` business is a good example of ruby magic. What the block receives is each inner array of two elements. If I say `.map { |a| }` I'll receive `[2, 3]`, then `[2, 4]`, etc as `a` in each loop. If I `.map { |a, b| }`, the enumerator automatically splits up the inner array and assigns `a = 2; b = 3` for the first element. This saves you from writing a lot of imperative code to handle the mechanics of splitting up lists of lists.
 
 So ruby is good at combining and splitting things, and reversing strings for us, but we do have to teach it how to recognize a palindromic number. We'll do this by casting the integer to a string, and asking if the string is the same as its reverse.
 
